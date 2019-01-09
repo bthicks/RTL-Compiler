@@ -1,0 +1,14 @@
+# Executables #
+a.out
+
+# Mac Specific #
+.DS_Store
+
+# Class Files #
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
