@@ -74,15 +74,17 @@ def check_args():
 
 
 def main():
-    """Run the parser on the given RTL file.
+    """Run the parser on the given RTL file and output to a file.
 
-    Return:
-        JSON: The JSON version of the parsed file.
+    TODO:
+        - Allow for user to input their own outfile name
+        - Take outfile name from given file if not specified
     """
     check_args()
 
-    return json.dumps(parse(sys.argv[1]))
+    with open('rtl.json', 'w') as outfile:
+        json.dump(parse(sys.argv[1]), outfile)
 
 
 if __name__ == '__main__':
-    print(main())
+    main()
