@@ -1,5 +1,10 @@
+PARSER=RTLparser.py
+
+
 all:
-    @python RTLparser.py
+	@python3 $(PARSER)
 
 test:
-    python RTLparser.py
+	python3 $(PARSER)
+
+
