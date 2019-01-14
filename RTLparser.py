@@ -70,7 +70,7 @@ def parse(file_name):
 def check_args():
     """Show usage message if program called incorrectly."""
     if len(sys.argv) != 2:
-        sys.exit(f"Usage: {sys.argv[0]} file_name")
+        sys.exit("Usage: {fname} file_name".format(fname=sys.argv[0]))
 
 
 def main():
