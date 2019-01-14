@@ -63,6 +63,11 @@ def parse(file_name):
         - Write tests
     """
     with open(file_name, 'r') as infile:
+        for line in infile:
+            print(line)
+            if ";; Full RTL generated for this function:" in line:
+                break
+
         word_generator = (letter for line in infile for letter in line)
         return parse_helper(word_generator, [])
 
