@@ -4,6 +4,7 @@
 # Class:      CPE 431                     #
 ###########################################
 import json
+import re
 import sys
 
 
@@ -33,12 +34,12 @@ def parse_helper(gen, token_list):
         except StopIteration:  # Better to ask for forgiveness than permission
             return token_list
 
-        if letter == "(":
+        if letter in ["(", "["]:
             if buffer:  # Check if there is something in the buffer
                 token_list.append(''.join(buffer))
                 buffer = []
             token_list.append(parse_helper(gen, []))
-        elif letter == ")":
+        elif letter in [")", "]"]:
             if buffer:  # Check if there is something in the buffer
                 token_list.append(''.join(buffer))
             return token_list
@@ -57,19 +58,55 @@ def parse(file_name):
         file_name (str): The name of the file
 
     Returns:
-         List(str): The result from parse_helper.
+         List(str): The parsed list of instructions.
 
     TODO:
         - Write tests
     """
     with open(file_name, 'r') as infile:
         for line in infile:
-            print(line)
             if ";; Full RTL generated for this function:" in line:
                 break
 
         word_generator = (letter for line in infile for letter in line)
+
+        for _ in range(2):  # Remove trailing comments
+            next(word_generator, None)
+
         return parse_helper(word_generator, [])
+
+
+def process(instructions):
+    """Strip unnecessary bits of the instructions.
+
+    Args:
+        instructions (List[str]): The parsed list of instructions.
+
+    Returns:
+        List(str): The processed list of instructions.
+    """
+    result = []
+    for instruction in instructions:
+        if instruction[0] == "note":
+            if instruction[-1] != "NOTE_INSN_DELETED":
+                result.append(instruction[:5] + [instruction[-1]])
+        elif instruction[0] == "insn":
+            if instruction[-1] == ['nil']:
+                result.append(instruction[:6])
+            else:
+                result.append(instruction[:6] + instruction[-1])
+        elif instruction[0] == "jump_insn":
+            new_instruction = []
+            new_instruction.append(
+                instruction[:6] + [{"label_ref": instruction[-1]}]
+            )
+            result.append(new_instruction)
+        elif instruction[0] == "code_label":
+            result.append(instruction[:5])
+        else:
+            result.append(instruction)
+
+    return result
 
 
 def check_args():
@@ -88,7 +125,7 @@ def main():
     check_args()
 
     with open('rtl.json', 'w') as outfile:
-        json.dump(parse(sys.argv[1]), outfile)
+        json.dump(process(parse(sys.argv[1])), outfile, indent=4)
 
 
 if __name__ == '__main__':
