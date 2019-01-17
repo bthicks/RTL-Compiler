@@ -87,22 +87,72 @@ def process(instructions):
     """
     result = []
     for instruction in instructions:
+        new_instruction = {}
+
+        if instruction[0] in ["note", "insn", "jump_insn", "call_insn", "code_label", "barrier"]:
+            new_instruction = {
+                "type": instruction[0],
+                "uid": instruction[1],
+                "prev": instruction[2],
+                "next": instruction[3],
+            }
+
         if instruction[0] == "note":
             if instruction[-1] != "NOTE_INSN_DELETED":
-                result.append(instruction[:5] + [instruction[-1]])
+                new_instruction.update({
+                    "block": instruction[4],
+                    "note_type": instruction[-1]
+                })
+
+                result.append(new_instruction)
+        elif instruction[0] == "barrier":
+            result.append(new_instruction)
         elif instruction[0] == "insn":
-            if instruction[-1] == ['nil']:
-                result.append(instruction[:6])
-            else:
-                result.append(instruction[:6] + instruction[-1])
+            new_instruction.update({
+                "block": instruction[4],
+                "expr": {"type": instruction[5][0], "rest": instruction[5][1:]}
+            })
+
+            match = re.search(r"^reg:(?P<type>[A-Z]I)$", instruction[5][1][0])
+            if match:
+                new_instruction["expr"]["target"] = "r{number}:{type}".format(
+                    number=instruction[5][1][1],
+                    type=match.group('type'))
+
+                if instruction[5][-1][0] == "const_int":
+                    new_instruction["expr"]["source"] = [instruction[5][2][1]]
+
+            match = re.search(r"^reg:(?P<type>[A-Z]I)$", instruction[5][-1][0])
+            if match:
+                string = "r{number}:{type}".format(
+                    number=instruction[5][-1][1],
+                    type=match.group('type'))
+
+                if "source" in new_instruction:
+                    new_instruction["expr"]["source"] += [string]
+                else:
+                    new_instruction["expr"]["source"] = [string]
+
+            if instruction[-1] != ['nil']:
+                new_instruction["expr_list"] = instruction[-1]
+
+            result.append(new_instruction)
+        elif instruction[0] == "call_insn":
+            new_instruction.update({
+                "block": instruction[4],
+                "rest": instruction[5:]
+            })
+            result.append(new_instruction)
         elif instruction[0] == "jump_insn":
-            new_instruction = []
-            new_instruction.append(
-                instruction[:6] + [{"label_ref": instruction[-1]}]
-            )
+            new_instruction.update({
+                "block": instruction[4],
+                "expr": {"type": instruction[5][0], "rest": instruction[5][1:]},
+                "label_ref": instruction[-1]
+            })
             result.append(new_instruction)
         elif instruction[0] == "code_label":
-            result.append(instruction[:5])
+            new_instruction["block"] = instruction[4]
+            result.append(new_instruction)
         else:
             result.append(instruction)
 
