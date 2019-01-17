@@ -174,7 +174,9 @@ def main():
     """
     check_args()
 
-    with open('rtl.json', 'w') as outfile:
+    i = sys.argv[1].index('.')  # Index of first period
+
+    with open("{infile}.json".format(infile=sys.argv[1][:i]), 'w') as outfile:
         json.dump(process(parse(sys.argv[1])), outfile, indent=4)
 
 
