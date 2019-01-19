@@ -89,69 +89,126 @@ def process(instructions):
     for instruction in instructions:
         new_instruction = {}
 
-        if instruction[0] in ["note", "insn", "jump_insn", "call_insn", "code_label", "barrier"]:
+        if instruction[0] in ["note", "insn", "jump_insn", "call_insn",
+                              "code_label", "barrier"]:
             new_instruction = {
                 "type": instruction[0],
-                "uid": instruction[1],
-                "prev": instruction[2],
-                "next": instruction[3],
+                "uid": int(instruction[1]),
+                "prev": int(instruction[2]),
+                "next": int(instruction[3]),
             }
+
+            if len(instruction) >= 5 and instruction[4].isdigit():
+                new_instruction["block"] = int(instruction[4])
 
         if instruction[0] == "note":
             if instruction[-1] != "NOTE_INSN_DELETED":
-                new_instruction.update({
-                    "block": instruction[4],
-                    "note_type": instruction[-1]
-                })
+                new_instruction["note_type"] = instruction[-1]
 
                 result.append(new_instruction)
         elif instruction[0] == "barrier":
             result.append(new_instruction)
         elif instruction[0] == "insn":
-            new_instruction.update({
-                "block": instruction[4],
-                "expr": {"type": instruction[5][0], "rest": instruction[5][1:]}
-            })
+            new_instruction["expr"] = {
+                "type": instruction[5][0], "rest": instruction[5][1:]
+            }
 
-            match = re.search(r"^reg:(?P<type>[A-Z]I)$", instruction[5][1][0])
+            match = re.match(r"reg(/\w)*:(?P<type>[A-Z]I)",
+                             instruction[5][1][0])
             if match:
-                new_instruction["expr"]["target"] = "r{number}:{type}".format(
-                    number=instruction[5][1][1],
-                    type=match.group('type'))
+                new_instruction["expr"]["target"] = {
+                    "value": "r{number}:{type}".format(
+                        number=instruction[5][1][1],
+                        type=match.group('type')),
+                    "offset": 0
+                }
 
                 if instruction[5][-1][0] == "const_int":
-                    new_instruction["expr"]["source"] = [instruction[5][2][1]]
+                    new_instruction["expr"]["sources"] = [{
+                        "value": instruction[5][2][1],
+                        "offset": 0
+                    }]
 
-            match = re.search(r"^reg:(?P<type>[A-Z]I)$", instruction[5][-1][0])
+            if re.match(r"mem(/([a-z]|[A-Z]))*:[A-Z]{2}",
+                        instruction[5][1][0]):
+
+                match = re.match(r"(?P<type>\w*):[A-Z]{2}",
+                                 instruction[5][1][1][0])
+                if match:
+                    new_instruction['expr']['mem'] = {
+                        'type': match.group('type'),
+                        'rest': instruction[5][1][1][1:]
+                    }
+
+                    match = re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
+                                     instruction[5][1][1][1][0])
+                    if match:
+                        string = "r{number}:{type}".format(
+                            number=instruction[5][1][1][1][1],
+                            type=match.group('type'))
+
+                        if 'target' not in new_instruction:
+                            if instruction[5][1][1][2][0] == 'const_int':
+                                new_instruction['target'] = {
+                                    "value": string,
+                                    "offset": int(instruction[5][1][1][2][1])
+                                }
+                            else:
+                                new_instruction['target'] = {
+                                    "value": string,
+                                    "offset": 0
+                                }
+                        else:
+                            if instruction[5][1][1][2][0] == 'const_int':
+                                new_instruction['sources'] = [{
+                                    "value": string,
+                                    "offset": int(instruction[5][1][1][2][1])
+                                }]
+                            else:
+                                new_instruction['sources'] = [{
+                                    "value": string,
+                                    "offset": 0
+                                }]
+                else:
+                    new_instruction['expr']['mem'] = instruction[5][1][1:]
+
+            match = re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
+                             instruction[5][-1][0])
             if match:
                 string = "r{number}:{type}".format(
                     number=instruction[5][-1][1],
                     type=match.group('type'))
 
                 if "source" in new_instruction:
-                    new_instruction["expr"]["source"] += [string]
+                    new_instruction["sources"] += [{
+                        "value": string,
+                        "offset": 0
+                    }]
                 else:
-                    new_instruction["expr"]["source"] = [string]
+                    new_instruction["sources"] = [{
+                        "value": string,
+                        "offset": 0
+                    }]
 
             if instruction[-1] != ['nil']:
                 new_instruction["expr_list"] = instruction[-1]
 
             result.append(new_instruction)
         elif instruction[0] == "call_insn":
-            new_instruction.update({
-                "block": instruction[4],
-                "rest": instruction[5:]
-            })
+            new_instruction["rest"] = instruction[5:]
+
             result.append(new_instruction)
         elif instruction[0] == "jump_insn":
             new_instruction.update({
-                "block": instruction[4],
-                "expr": {"type": instruction[5][0], "rest": instruction[5][1:]},
+                "expr": {
+                    "type": instruction[5][0],
+                    "target": instruction[5][1][0],
+                    "rest": instruction[5][2:]
+                },
                 "label_ref": instruction[-1]
             })
             result.append(new_instruction)
         elif instruction[0] == "code_label":
-            new_instruction["block"] = instruction[4]
             result.append(new_instruction)
         else:
             result.append(instruction)
