@@ -10,6 +10,6 @@
 * org.json
   
 ## Build
-  1. Run program with: `make`
-  2. Clean up with: `make clean`
+  * Run program with: `make`
+  * Clean up with: `make clean`
 
