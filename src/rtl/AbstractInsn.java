@@ -1,4 +1,4 @@
-package RTL;
+package rtl;
 
 public abstract class AbstractInsn implements Insn {
 

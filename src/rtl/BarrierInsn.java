@@ -1,4 +1,4 @@
-package RTL;
+package rtl;
 
 public class BarrierInsn extends AbstractInsn {
 

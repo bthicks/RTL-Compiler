@@ -1,32 +1,19 @@
-import java.io.FileNotFoundException;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.List;
+
+import rtl.Insn;
+
+// TODO: barrier block = -1
+// TODO: reformat json file
+// TODO: sources as array
 
 public class Driver {
 
     public static void main(String[] args) {
-        String filename = "science.bitch";
+        String filename = "fib/fib.json";
+        List<Insn> insns = JSONParser.parse(filename);
 
-    }
-
-    public static String readFile(String filename) {
-        String result = "";
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(filename));
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
-            while (line != null) {
-                sb.append(line);
-                line = br.readLine();
-            }
-            result = sb.toString();
-        } catch(Exception e) {
-            e.printStackTrace();
+        for (Insn insn : insns) {
+            System.out.print(insn.toString());
         }
-
-        return result;
     }
 }

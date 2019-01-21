@@ -12,4 +12,7 @@ a.out
 *.war
 *.ear
 
+# IntelliJ files #
+idea/
+
 *.json

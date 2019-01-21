@@ -1,4 +1,4 @@
-package RTL;
+package rtl;
 
 public class RegisterValue extends AbstractValue {
 
@@ -13,7 +13,7 @@ public class RegisterValue extends AbstractValue {
         if (offset == 0) {
             return this.getValue();
         } else {
-            return "[" + this.getValue() + "-" + Integer.toString(offset) + "]";
+            return "[" + this.getValue() + Integer.toString(offset) + "]";
         }
     }
 }

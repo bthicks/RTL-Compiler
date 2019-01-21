@@ -1,4 +1,4 @@
-package RTL;
+package rtl;
 
 public class NoteInsn extends AbstractInsn {
 
