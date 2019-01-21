@@ -211,11 +211,11 @@ def process(instructions, file_name):
                         key = 'sources' if 'target' in new_instruction else 'target'
 
                         if instruction[5][2][2][0] == 'const_int':
-                            new_instruction[key] = {
+                            new_instruction[key] = [{
                                 "value": string,
                                 "offset": int(
                                     instruction[5][2][2][1])
-                            }
+                            }]
                         elif re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
                                       instruction[5][2][2][0]):
 
