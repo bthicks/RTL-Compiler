@@ -3,21 +3,21 @@ import java.util.List;
 
 public class DefaultInsn extends AbstractInsn {
 
-    private Value target;
-    private List<Value> sources;
+    private AbstractValue target;
+    private List<AbstractValue> sources;
 
     public DefaultInsn(String expCode, int uid, int prevInsn, int nextInsn, int basicBlock,
-                Value target, List<Value> sources) {
+                AbstractValue target, List<AbstractValue> sources) {
         super(expCode, uid, prevInsn, nextInsn, basicBlock);
         this.target = target;
         this.sources = sources;
     }
 
-    public Value getTarget() {
+    public AbstractValue getTarget() {
         return target;
     }
 
-    public List<Value> getSources() {
+    public List<AbstractValue> getSources() {
         return sources;
     }
 
@@ -25,7 +25,7 @@ public class DefaultInsn extends AbstractInsn {
     public String toString() {
         List<String> sourceStrings = new ArrayList<>();
 
-        for (Value source : sources) {
+        for (AbstractValue source : sources) {
             sourceStrings.add(source.toString());
         }
 

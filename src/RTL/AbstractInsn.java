@@ -1,4 +1,4 @@
-public class AbstractInsn implements Insn {
+public abstract class AbstractInsn implements Insn {
 
     private String expCode;
     private int uid;
@@ -34,7 +34,6 @@ public class AbstractInsn implements Insn {
         return basicBlock;
     }
 
-    public String toString() {
-        return null;
-    }
+    public abstract String toString();
+
 }

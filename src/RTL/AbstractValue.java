@@ -1,4 +1,4 @@
-public class AbstractValue implements Value {
+public abstract class AbstractValue implements Value {
 
     private String value;
     private int offset;
@@ -16,7 +16,5 @@ public class AbstractValue implements Value {
         return offset;
     }
 
-    public String toString() {
-        return null;
-    }
+    public abstract String toString();
 }
