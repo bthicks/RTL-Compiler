@@ -1,16 +1,20 @@
+package RTL;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class CallInsn extends AbstractInsn {
+public class JumpInsn extends AbstractInsn {
 
     private Value target;
     private List<Value> sources;
+    private int labelRef;
 
-    public CallInsn(String expCode, int uid, int prevInsn, int nextInsn, int basicBlock,
-                Value target, List<Value> sources) {
+    public JumpInsn(String expCode, int uid, int prevInsn, int nextInsn, int basicBlock,
+                    Value target, List<Value> sources, int labelRef) {
         super(expCode, uid, prevInsn, nextInsn, basicBlock);
         this.target = target;
         this.sources = sources;
+        this.labelRef = labelRef;
     }
 
     public Value getTarget() {
@@ -19,6 +23,10 @@ public class CallInsn extends AbstractInsn {
 
     public List<Value> getSources() {
         return sources;
+    }
+
+    public int getLabelRef() {
+        return labelRef;
     }
 
     @Override
@@ -30,6 +38,6 @@ public class CallInsn extends AbstractInsn {
         }
 
         return Integer.toString(this.getUid()) + ": " + target.toString()
-                + "=" + String.join("+", sourceStrings) + "\n";
+                + "=" + String.join("+", sourceStrings) + " " + labelRef + "\n";
     }
 }

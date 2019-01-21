@@ -1,23 +1,25 @@
+package RTL;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class DefaultInsn extends AbstractInsn {
+public class CallInsn extends AbstractInsn {
 
-    private AbstractValue target;
-    private List<AbstractValue> sources;
+    private Value target;
+    private List<Value> sources;
 
-    public DefaultInsn(String expCode, int uid, int prevInsn, int nextInsn, int basicBlock,
-                AbstractValue target, List<AbstractValue> sources) {
+    public CallInsn(String expCode, int uid, int prevInsn, int nextInsn, int basicBlock,
+                Value target, List<Value> sources) {
         super(expCode, uid, prevInsn, nextInsn, basicBlock);
         this.target = target;
         this.sources = sources;
     }
 
-    public AbstractValue getTarget() {
+    public Value getTarget() {
         return target;
     }
 
-    public List<AbstractValue> getSources() {
+    public List<Value> getSources() {
         return sources;
     }
 
@@ -25,7 +27,7 @@ public class DefaultInsn extends AbstractInsn {
     public String toString() {
         List<String> sourceStrings = new ArrayList<>();
 
-        for (AbstractValue source : sources) {
+        for (Value source : sources) {
             sourceStrings.add(source.toString());
         }
 

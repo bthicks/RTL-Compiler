@@ -1,3 +1,5 @@
+package RTL;
+
 public interface Insn {
 
     public String getExpCode();

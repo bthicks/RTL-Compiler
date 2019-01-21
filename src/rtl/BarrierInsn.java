@@ -1,3 +1,5 @@
+package RTL;
+
 public class BarrierInsn extends AbstractInsn {
 
     public BarrierInsn(String expCode, int uid, int prevInsn, int nextInsn, int basicBlock) {
