@@ -2,10 +2,6 @@ import java.util.List;
 
 import rtl.Insn;
 
-// TODO: barrier block = -1
-// TODO: reformat json file
-// TODO: sources as array
-
 public class Driver {
 
     public static void main(String[] args) {
