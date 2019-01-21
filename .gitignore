@@ -13,6 +13,8 @@ a.out
 *.ear
 
 # IntelliJ files #
-.idea/
+.idea/*
+*.xml
+*.iml
 
 *.json
