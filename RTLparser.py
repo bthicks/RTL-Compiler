@@ -76,12 +76,11 @@ def parse(file_name):
         return parse_helper(word_generator, [])
 
 
-def process(instructions, file_name):
+def process(instructions):
     """Strip unnecessary bits of the instructions.
 
     Args:
         instructions (List[str]): The parsed list of instructions.
-        file_name (str): The name of the file
 
     Returns:
         List(str): The processed list of instructions.
@@ -160,6 +159,9 @@ def process(instructions, file_name):
                                 "value": string,
                                 "offset": 0
                             }
+
+                        if key == 'sources':
+                            new_instruction[key] = [new_instruction[key]]
                 else:
                     new_instruction['expr']['mem'] = instruction[5][1][1:]
 
@@ -196,6 +198,9 @@ def process(instructions, file_name):
                                     "value": string,
                                     "offset": 0
                                 }
+
+                            if key == 'sources':
+                                new_instruction[key] = [new_instruction[key]]
                     else:
                         new_instruction['expr']['mem'] = instruction[5][2][1:]
                 elif re.match(r"([a-z]|[A-Z])+:[A-Z]{2}",
@@ -211,11 +216,14 @@ def process(instructions, file_name):
                         key = 'sources' if 'target' in new_instruction else 'target'
 
                         if instruction[5][2][2][0] == 'const_int':
-                            new_instruction[key] = [{
+                            new_instruction[key] = {
                                 "value": string,
                                 "offset": int(
                                     instruction[5][2][2][1])
-                            }]
+                            }
+
+                            if key == 'sources':
+                                new_instruction[key] = [new_instruction[key]]
                         elif re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
                                       instruction[5][2][2][0]):
 
@@ -241,7 +249,7 @@ def process(instructions, file_name):
                     number=instruction[5][-1][1],
                     type=match.group('type'))
 
-                if "source" in new_instruction:
+                if "sources" in new_instruction:
                     new_instruction["sources"] += [{
                         "value": string,
                         "offset": 0
@@ -275,7 +283,7 @@ def process(instructions, file_name):
         else:
             result.append(instruction)
 
-    return {file_name: result}
+    return result
 
 
 def check_args():
@@ -296,7 +304,7 @@ def main():
     file_name = sys.argv[1][:sys.argv[1].index('.')]
 
     with open("{infile}.json".format(infile=file_name), 'w') as outfile:
-        json.dump(process(parse(sys.argv[1]), file_name), outfile, indent=4)
+        json.dump(process(parse(sys.argv[1])), outfile, indent=4)
 
 
 if __name__ == '__main__':
