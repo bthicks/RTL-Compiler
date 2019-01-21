@@ -9,7 +9,6 @@ public class Driver {
     public static void main(String[] args) {
         String filename = "science.bitch";
 
-
     }
 
     public static String readFile(String filename) {

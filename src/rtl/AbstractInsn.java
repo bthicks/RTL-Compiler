@@ -1,3 +1,5 @@
+package RTL;
+
 public abstract class AbstractInsn implements Insn {
 
     private String expCode;
@@ -35,5 +37,4 @@ public abstract class AbstractInsn implements Insn {
     }
 
     public abstract String toString();
-
 }
