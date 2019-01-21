@@ -116,7 +116,7 @@ def process(instructions):
             match = re.match(r"reg(/\w)*:(?P<type>[A-Z]I)",
                              instruction[5][1][0])
             if match:
-                new_instruction["expr"]["target"] = {
+                new_instruction["target"] = {
                     "value": "r{number}:{type}".format(
                         number=instruction[5][1][1],
                         type=match.group('type')),
@@ -124,7 +124,7 @@ def process(instructions):
                 }
 
                 if instruction[5][-1][0] == "const_int":
-                    new_instruction["expr"]["sources"] = [{
+                    new_instruction["sources"] = [{
                         "value": instruction[5][2][1],
                         "offset": 0
                     }]
@@ -147,30 +147,91 @@ def process(instructions):
                             number=instruction[5][1][1][1][1],
                             type=match.group('type'))
 
-                        if 'target' not in new_instruction:
-                            if instruction[5][1][1][2][0] == 'const_int':
-                                new_instruction['target'] = {
-                                    "value": string,
-                                    "offset": int(instruction[5][1][1][2][1])
-                                }
-                            else:
-                                new_instruction['target'] = {
-                                    "value": string,
-                                    "offset": 0
-                                }
+                        key = 'sources' if 'target' in new_instruction else 'target'
+
+                        if instruction[5][1][1][2][0] == 'const_int':
+                            new_instruction[key] = {
+                                "value": string,
+                                "offset": int(instruction[5][1][1][2][1])
+                            }
                         else:
-                            if instruction[5][1][1][2][0] == 'const_int':
-                                new_instruction['sources'] = [{
-                                    "value": string,
-                                    "offset": int(instruction[5][1][1][2][1])
-                                }]
-                            else:
-                                new_instruction['sources'] = [{
-                                    "value": string,
-                                    "offset": 0
-                                }]
+                            new_instruction[key] = {
+                                "value": string,
+                                "offset": 0
+                            }
                 else:
                     new_instruction['expr']['mem'] = instruction[5][1][1:]
+
+            if len(instruction[5]) >= 3:
+                if re.match(
+                        r"mem(/([a-z]|[A-Z]))*:[A-Z]{2}",
+                        instruction[5][2][0]):
+
+                    match = re.match(r"(?P<type>\w*):[A-Z]{2}",
+                                     instruction[5][2][1][0])
+                    if match:
+                        new_instruction['expr']['mem'] = {
+                            'type': match.group('type'),
+                            'rest': instruction[5][2][1][1:]
+                        }
+
+                        match = re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
+                                         instruction[5][2][1][1][0])
+                        if match:
+                            string = "r{number}:{type}".format(
+                                number=instruction[5][2][1][1][1],
+                                type=match.group('type'))
+
+                            key = 'sources' if 'target' in new_instruction else 'target'
+
+                            if instruction[5][2][1][2][0] == 'const_int':
+                                new_instruction[key] = {
+                                    "value": string,
+                                    "offset": int(
+                                        instruction[5][2][1][2][1])
+                                }
+                            else:
+                                new_instruction[key] = {
+                                    "value": string,
+                                    "offset": 0
+                                }
+                    else:
+                        new_instruction['expr']['mem'] = instruction[5][2][1:]
+                elif re.match(r"([a-z]|[A-Z])+:[A-Z]{2}",
+                              instruction[5][2][0]):
+
+                    match = re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
+                                     instruction[5][2][1][0])
+                    if match:
+                        string = "r{number}:{type}".format(
+                            number=instruction[5][2][1][1],
+                            type=match.group('type'))
+
+                        key = 'sources' if 'target' in new_instruction else 'target'
+
+                        if instruction[5][2][2][0] == 'const_int':
+                            new_instruction[key] = {
+                                "value": string,
+                                "offset": int(
+                                    instruction[5][2][2][1])
+                            }
+                        elif re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
+                                      instruction[5][2][2][0]):
+
+                            string2 = "r{number}:{type}".format(
+                                number=instruction[5][2][1][1],
+                                type=match.group('type'))
+
+                            new_instruction[key] = [
+                                {
+                                    "value": string,
+                                    "offset": 0
+                                },
+                                {
+                                    "value": string2,
+                                    "offset": 0
+                                },
+                            ]
 
             match = re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
                              instruction[5][-1][0])
