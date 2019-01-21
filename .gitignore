@@ -14,5 +14,7 @@ a.out
 
 # IntelliJ files #
 .idea/*
+*.xml
+*.iml
 
 *.json
