@@ -76,11 +76,12 @@ def parse(file_name):
         return parse_helper(word_generator, [])
 
 
-def process(instructions):
+def process(instructions, file_name):
     """Strip unnecessary bits of the instructions.
 
     Args:
         instructions (List[str]): The parsed list of instructions.
+        file_name (str): The name of the file
 
     Returns:
         List(str): The processed list of instructions.
@@ -274,7 +275,7 @@ def process(instructions):
         else:
             result.append(instruction)
 
-    return result
+    return {file_name: result}
 
 
 def check_args():
@@ -292,10 +293,10 @@ def main():
     """
     check_args()
 
-    i = sys.argv[1].index('.')  # Index of first period
+    file_name = sys.argv[1][:sys.argv[1].index('.')]
 
-    with open("{infile}.json".format(infile=sys.argv[1][:i]), 'w') as outfile:
-        json.dump(process(parse(sys.argv[1])), outfile, indent=4)
+    with open("{infile}.json".format(infile=file_name), 'w') as outfile:
+        json.dump(process(parse(sys.argv[1]), file_name), outfile, indent=4)
 
 
 if __name__ == '__main__':
