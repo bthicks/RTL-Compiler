@@ -129,6 +129,11 @@ def process(instructions):
                         "value": instruction[5][2][1],
                         "offset": 0
                     }]
+            elif instruction[5][1][0] == "reg:CC":
+                new_instruction["target"] = {
+                    "value": "cc:CC",
+                    "offset": 0,
+                }
 
             if re.match(r"mem(/([a-z]|[A-Z]))*:[A-Z]{2}",
                         instruction[5][1][0]):
