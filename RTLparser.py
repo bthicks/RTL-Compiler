@@ -107,6 +107,7 @@ def process(instructions):
 
                 result.append(new_instruction)
         elif instruction[0] == "barrier":
+            new_instruction["block"] = -1
             result.append(new_instruction)
         elif instruction[0] == "insn":
             new_instruction["expr"] = {
