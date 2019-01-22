@@ -134,9 +134,8 @@ def process(instructions):
                     "value": "cc:CC",
                     "offset": 0,
                 }
-
-            if re.match(r"mem(/([a-z]|[A-Z]))*:[A-Z]{2}",
-                        instruction[5][1][0]):
+            elif re.match(r"mem(/([a-z]|[A-Z]))*:[A-Z]{2}",
+                          instruction[5][1][0]):
 
                 match = re.match(r"(?P<type>\w*):[A-Z]{2}",
                                  instruction[5][1][1][0])
@@ -212,41 +211,44 @@ def process(instructions):
                 elif re.match(r"([a-z]|[A-Z])+:[A-Z]{2}",
                               instruction[5][2][0]):
 
-                    match = re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
-                                     instruction[5][2][1][0])
-                    if match:
-                        string = "r{number}:{type}".format(
-                            number=instruction[5][2][1][1],
-                            type=match.group('type'))
-
-                        key = 'sources' if 'target' in new_instruction else 'target'
-
-                        if instruction[5][2][2][0] == 'const_int':
-                            new_instruction[key] = {
-                                "value": string,
-                                "offset": int(
-                                    instruction[5][2][2][1])
-                            }
-
-                            if key == 'sources':
-                                new_instruction[key] = [new_instruction[key]]
-                        elif re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
-                                      instruction[5][2][2][0]):
-
-                            string2 = "r{number}:{type}".format(
+                    if type(instruction[5][2][1][0]) is list:
+                        new_instruction['unparsed'] = instruction[5][2][1]
+                    else:
+                        match = re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
+                                        instruction[5][2][1][0])
+                        if match:
+                            string = "r{number}:{type}".format(
                                 number=instruction[5][2][1][1],
                                 type=match.group('type'))
 
-                            new_instruction[key] = [
-                                {
+                            key = 'sources' if 'target' in new_instruction else 'target'
+
+                            if instruction[5][2][2][0] == 'const_int':
+                                new_instruction[key] = {
                                     "value": string,
-                                    "offset": 0
-                                },
-                                {
-                                    "value": string2,
-                                    "offset": 0
-                                },
-                            ]
+                                    "offset": int(
+                                        instruction[5][2][2][1])
+                                }
+
+                                if key == 'sources':
+                                    new_instruction[key] = [new_instruction[key]]
+                            elif re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
+                                          instruction[5][2][2][0]):
+
+                                string2 = "r{number}:{type}".format(
+                                    number=instruction[5][2][1][1],
+                                    type=match.group('type'))
+
+                                new_instruction[key] = [
+                                    {
+                                        "value": string,
+                                        "offset": 0
+                                    },
+                                    {
+                                        "value": string2,
+                                        "offset": 0
+                                    },
+                                ]
 
             match = re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
                              instruction[5][-1][0])
