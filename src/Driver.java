@@ -9,7 +9,12 @@ import rtl.JumpInsn;
 public class Driver {
 
     public static void main(String[] args) {
-        String filename = "fib/fib.json";
+        if (args.length != 1) {
+            System.out.println("Usage: java Driver <filename>");
+            System.exit(0);
+        }
+
+        String filename = args[0];
         List<Insn> insns = JSONParser.parse(filename);
         CFG cfg = generateCFG("main", insns);
 
@@ -22,24 +27,28 @@ public class Driver {
         for (Insn insn : insns) {
             cfg.addInsn(insn);
 
+            // ignore successors for last insn and barrier insns
             if (insn.getNextInsn() == 0 || insn.getExpCode().equals("barrier")) {
                 continue;
             }
+
             Insn next = getInsn(insn.getNextInsn(), insns);
+            BasicBlock predecessor = cfg.getBasicBlock(insn.getBasicBlock());
+            BasicBlock successor;
 
+            // add successor for jump to new block
             if (insn instanceof JumpInsn) {
-                BasicBlock predecessor = cfg.getBasicBlock(insn.getBasicBlock());
                 int label = ((JumpInsn) insn).getLabelRef();
+                successor = cfg.addBasicBlock(new BasicBlock(getLabelUid(label, insns)));
 
-                BasicBlock successor = cfg.addBasicBlock(new BasicBlock(getBasicBlock(label, insns)));
                 predecessor.addSuccessor(successor);
                 successor.addPredecessor((predecessor));
             }
+            // add successor when next insn is in a different basic block
             if (insn.getBasicBlock() != next.getBasicBlock() && next.getBasicBlock() != -1) {
-                BasicBlock predecessor = cfg.getBasicBlock(insn.getBasicBlock());
                 int nextBlock = next.getBasicBlock();
+                successor = cfg.addBasicBlock(new BasicBlock(nextBlock));
 
-                BasicBlock successor = cfg.addBasicBlock(new BasicBlock(nextBlock));
                 predecessor.addSuccessor(successor);
                 successor.addPredecessor((predecessor));
             }
@@ -57,7 +66,7 @@ public class Driver {
         return null;
     }
 
-    private static int getBasicBlock(int label, List<Insn> insns) {
+    private static int getLabelUid(int label, List<Insn> insns) {
         for (Insn insn : insns) {
             if (insn instanceof CodeLabelInsn && insn.getUid() == label) {
                 return insn.getBasicBlock();
