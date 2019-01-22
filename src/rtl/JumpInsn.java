@@ -38,6 +38,6 @@ public class JumpInsn extends AbstractInsn {
         }
 
         return Integer.toString(this.getUid()) + ": " + target.toString()
-                + "=" + String.join("+", sourceStrings) + " " + labelRef + "\n";
+                + "=" + String.join("+", sourceStrings) + "\n";
     }
 }
