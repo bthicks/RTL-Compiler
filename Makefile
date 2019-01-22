@@ -1,10 +1,16 @@
 PARSER=RTLparser.py
+RTL=rtl.json
 
+all: $(RTL)
+	javac src/*.java
 
-all:
-	@python3 $(PARSER)
+$(RTL):
+	@python3 $(PARSER) $(FILE)
+
 
 test:
-	python3 $(PARSER)
+	python3 $(PARSER) $(FILE)
 
+clean:
+	rm $(RTL)
 
