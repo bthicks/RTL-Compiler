@@ -33,6 +33,7 @@ public class JSONParser {
             JSONObject jsonInsn = jsonInsns.getJSONObject(i);
             String expCode = jsonInsn.getString("type");
             int uid = jsonInsn.getInt("uid");
+            System.out.println(uid);
             int prevInsn = jsonInsn.getInt("prev");
             int nextInsn = jsonInsn.getInt("next");
             int basicBlock = jsonInsn.getInt("block");
@@ -53,6 +54,7 @@ public class JSONParser {
                     insns.add(new JumpInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target,
                               sources, labelRef));
                     break;
+                case "call_insn/i":
                 case "call_insn":
                     target = parseTarget(jsonInsn.optJSONObject("target"));
                     sources = parseSources(jsonInsn.getJSONArray("sources"));

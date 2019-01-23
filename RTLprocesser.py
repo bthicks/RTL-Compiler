@@ -112,44 +112,61 @@ class RTLprocesser:
                 "value": "cc:CC",
                 "offset": 0,
             }
-        elif re.match(r"mem(/([a-z]|[A-Z]))*:[A-Z]{2}",
-                      instruction[5][1][0]):
+        elif re.match(r"mem(/([a-z]|[A-Z]))*:[A-Z]{2}", instruction[5][1][0]):
 
             match = re.match(r"(?P<type>\w*):[A-Z]{2}",
                              instruction[5][1][1][0])
             if match:
-                new_instruction['expr']['mem'] = {
-                    'type': match.group('type'),
-                    'rest': instruction[5][1][1][1:]
+                if match.group('type') != 'reg':
+                    new_instruction['expr']['mem'] = {
+                        'type': match.group('type'),
+                        'rest': instruction[5][1][1][1:]
+                    }
+
+                    match = re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
+                                     instruction[5][1][1][1][0])
+                    if match:
+                        string = "r{number}:{type}".format(
+                            number=instruction[5][1][1][1][1],
+                            type=match.group('type'))
+
+                        key = 'sources' if 'target' in new_instruction else 'target'
+
+                        if instruction[5][1][1][2][0] == 'const_int':
+                            new_instruction[key] = {
+                                "value": string,
+                                "offset": int(instruction[5][1][1][2][1])
+                            }
+                        else:
+                            new_instruction[key] = {
+                                "value": string,
+                                "offset": 0
+                            }
+
+                        if key == 'sources':
+                            new_instruction[key] = [new_instruction[key]]
+                else:
+                    new_instruction['target'] = {
+                    "value": RTLprocesser._get_register(instruction[5][1][1]),
+                    "offset": 0
                 }
-
-                match = re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
-                                 instruction[5][1][1][1][0])
-                if match:
-                    string = "r{number}:{type}".format(
-                        number=instruction[5][1][1][1][1],
-                        type=match.group('type'))
-
-                    key = 'sources' if 'target' in new_instruction else 'target'
-
-                    if instruction[5][1][1][2][0] == 'const_int':
-                        new_instruction[key] = {
-                            "value": string,
-                            "offset": int(instruction[5][1][1][2][1])
-                        }
-                    else:
-                        new_instruction[key] = {
-                            "value": string,
-                            "offset": 0
-                        }
-
-                    if key == 'sources':
-                        new_instruction[key] = [new_instruction[key]]
+            elif RTLprocesser._get_register(instruction[5][1][1]):
+                new_instruction['target'] = {
+                    "value": RTLprocesser._get_register(instruction[5][1][1]),
+                    "offset": 0
+                }
             else:
                 new_instruction['expr']['mem'] = instruction[5][1][1:]
 
         if len(instruction[5]) >= 3:
-            if re.match(
+            if instruction[5][2][0] == "unspec:SI":
+                new_instruction['sources'] = [
+                    {
+                        "value": "symbol_ref",
+                        "offset": 0,
+                    }
+                ]
+            elif re.match(
                     r"mem(/([a-z]|[A-Z]))*:[A-Z]{2}",
                     instruction[5][2][0]):
 
@@ -184,6 +201,13 @@ class RTLprocesser:
 
                         if key == 'sources':
                             new_instruction[key] = [new_instruction[key]]
+                elif re.match(r"mem(/([a-z]|[A-Z]))*:[A-Z]{2}", instruction[5][2][0]):
+                    new_instruction['sources'] = [
+                        {
+                            "value": RTLprocesser._get_register(instruction[5][2][1]),
+                            "offset": 0,
+                        }
+                    ]
                 else:
                     new_instruction['expr']['mem'] = instruction[5][2][1:]
             elif re.match(r"([a-z]|[A-Z])+:[A-Z]{2}",
@@ -229,6 +253,13 @@ class RTLprocesser:
                                     "offset": 0
                                 },
                             ]
+            elif "zero_extend" in instruction[5][2][0]:
+                new_instruction['sources'] = [
+                    {
+                        "value": "zero_extend([" + RTLprocesser._get_register(instruction[5][2][1][1]) + "])",
+                        "offset": 0
+                    }
+                ]
 
         match = re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)",
                          instruction[5][-1][0])
@@ -247,6 +278,13 @@ class RTLprocesser:
                     "value": string,
                     "offset": 0
                 }]
+        elif "subreg" in instruction[5][-1][0]:
+            new_instruction["sources"] = [
+                {
+                    "value": RTLprocesser._get_register(instruction[5][-1][1]) + "#" + instruction[5][-1][-1],
+                    "offset": 0
+                }
+            ]
 
         if instruction[-1] != ['nil']:
             new_instruction["expr_list"] = instruction[-1]
@@ -254,10 +292,29 @@ class RTLprocesser:
         return new_instruction
 
     @staticmethod
+    def _process_parallel(instruction):
+        new_instruction = {}
+
+        new_instruction["target"] = {
+            "value": RTLprocesser._get_register(instruction[0][1]),
+            "offset": 0,
+        }
+
+        return new_instruction
+
+    @staticmethod
     def _process_call_insn(instruction):
         new_instruction = RTLprocesser._preprocess(instruction)
 
-        new_instruction["rest"] = instruction[5:]
+        if instruction[5][0] == "parallel":
+            new_instruction.update(**RTLprocesser._process_parallel(instruction[5][1]))
+
+        new_instruction["sources"] = [
+            {
+                "value": "symbol_ref",
+                "offset": 0
+            }
+        ]
 
         return new_instruction
 
