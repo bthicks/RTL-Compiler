@@ -13,4 +13,6 @@ public interface Insn {
     public int getBasicBlock();
 
     public String toString();
+
+    public String toDot();
 }

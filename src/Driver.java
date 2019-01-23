@@ -2,6 +2,7 @@ import java.util.List;
 
 import cfg.BasicBlock;
 import cfg.CFG;
+import cfg.Dot;
 import rtl.CodeLabelInsn;
 import rtl.Insn;
 import rtl.JumpInsn;
@@ -17,6 +18,7 @@ public class Driver {
         String filename = args[0];
         List<Insn> insns = JSONParser.parse(filename);
         CFG cfg = generateCFG("main", insns);
+        Dot.toDot(filename, cfg);
 
         cfg.printCFG();
     }

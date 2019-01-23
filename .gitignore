@@ -18,6 +18,7 @@ a.out
 *.iml
 
 *.json
+*.dot
 
 # Python files
 __pycache/

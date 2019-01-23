@@ -10,4 +10,9 @@ public class BarrierInsn extends AbstractInsn {
     public String toString() {
         return "";
     }
+
+    @Override
+    public String toDot() {
+        return "";
+    }
 }

@@ -10,4 +10,10 @@ public class CodeLabelInsn extends AbstractInsn {
     public String toString() {
         return Integer.toString(this.getUid()) + ": L" + Integer.toString(this.getUid()) + ":\n";
     }
+
+    @Override
+    public String toDot() {
+        return "|\\ \\ \\ " + Integer.toString(this.getUid()) + ":\\ L"
+                + Integer.toString(this.getUid()) + ":\\l\\\n";
+    }
 }

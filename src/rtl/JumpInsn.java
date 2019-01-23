@@ -40,4 +40,16 @@ public class JumpInsn extends AbstractInsn {
         return Integer.toString(this.getUid()) + ": " + target.toString()
                 + "=" + String.join("+", sourceStrings) + "\n";
     }
+
+    @Override
+    public String toDot() {
+        List<String> sourceStrings = new ArrayList<>();
+
+        for (Value source : sources) {
+            sourceStrings.add(source.toString());
+        }
+
+        return "|\\ \\ \\ " + Integer.toString(this.getUid()) + ":\\ " + target.toString()
+                + "=" + String.join("+", sourceStrings) + "\\l\\\n";
+    }
 }
