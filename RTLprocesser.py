@@ -270,7 +270,7 @@ class RTLprocesser:
                 "offset": 0
             },
             "sources": [{"value": instruction[-1], "offset": 0}],
-            "label_ref": instruction[5][1][0],
+            "label_ref": int(instruction[5][1][0]),
         })
 
         if instruction[5][2][0] == "if_then_else":
