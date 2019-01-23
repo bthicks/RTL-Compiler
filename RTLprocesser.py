@@ -215,7 +215,7 @@ class RTLprocesser:
                                       instruction[5][2][2][0]):
 
                             string2 = "r{number}:{type}".format(
-                                number=instruction[5][2][1][1],
+                                number=instruction[5][2][2][1],
                                 type=match.group('type'))
 
                             new_instruction[key] = [
@@ -265,12 +265,60 @@ class RTLprocesser:
         new_instruction = RTLprocesser._preprocess(instruction)
 
         new_instruction.update({
-            "target": instruction[5][1][0],
+            "target": {
+                "value": instruction[5][1][0],
+                "offset": 0
+            },
             "sources": [{"value": instruction[-1], "offset": 0}],
-            "rest": instruction[5][2:],
         })
 
+        if instruction[5][2][0] == "if_then_else":
+            new_instruction['sources'][0]['value'] = RTLprocesser._process_if_then_else(instruction[5][2])
+
         return new_instruction
+
+    @staticmethod
+    def _process_if_then_else(instruction):
+        operators = {
+            "ge": ">=",
+            "gt": ">",
+            "le": "<=",
+            "lt": "<",
+            "eq": "==",
+            "ne": "!="
+        }
+
+        # Get condition
+        result = ["{", "(", RTLprocesser._get_register(instruction[1][1]),
+                  operators.get(instruction[1][0], ""),
+                  RTLprocesser._get_register(instruction[1][2]), ")?"]
+
+        # Get Then and Else
+        if instruction[2][0] == "label_ref":
+            result.append("L{num}:".format(num=instruction[2][1]))
+            result.append(instruction[3][0])
+        else:
+            result.append(instruction[3][0])
+            result.append("L{num}:".format(num=instruction[2][1]))
+
+        result.append("}")
+
+        return ''.join(result)
+
+    @staticmethod
+    def _get_register(instruction):
+        match = re.match(r"^reg(/\w)*:(?P<type>[A-Z]I)", instruction[0])
+
+        if match:
+            return "r{number}:{type}".format(
+                number=instruction[1],
+                type=match.group('type'))
+        elif instruction[0] == "reg:CC":
+            return "cc:CC"
+        elif instruction[0] == "const_int":
+            return instruction[1]
+
+        return ""
 
     @staticmethod
     def _process_code_label(instruction):
