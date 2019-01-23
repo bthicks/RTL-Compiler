@@ -19,7 +19,7 @@ class RTLprocesser:
             List(str): The processed list of instructions.
         """
         functions = {
-            "note": RTLprocesser._process_barrier,
+            "note": RTLprocesser._process_note,
             "barrier": RTLprocesser._process_barrier,
             "insn": RTLprocesser._process_insn,
             "call_insn": RTLprocesser._process_call_insn,
