@@ -208,7 +208,7 @@ class RTLprocesser:
                                     "offset": 0
                                 },
                                 {
-                                    "value": int(instruction[5][2][2][1]),
+                                    "value": instruction[5][2][2][1],
                                     "offset": 0
                                 }
                             ]
