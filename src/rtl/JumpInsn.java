@@ -46,7 +46,18 @@ public class JumpInsn extends AbstractInsn {
         List<String> sourceStrings = new ArrayList<>();
 
         for (Value source : sources) {
-            sourceStrings.add(source.toString());
+            String nonescaped = source.toString();
+            StringBuilder escaped = new StringBuilder();
+
+            for (int i = 0; i < nonescaped.length(); i++) {
+                if (nonescaped.charAt(i) == '{' || nonescaped.charAt(i) == '}'
+                        || nonescaped.charAt(i) == '<' || nonescaped.charAt(i) == '>') {
+                    escaped.append("\\");
+                }
+                escaped.append(nonescaped.charAt(i));
+            }
+
+            sourceStrings.add(escaped.toString());
         }
 
         return "|\\ \\ \\ " + Integer.toString(this.getUid()) + ":\\ " + target.toString()

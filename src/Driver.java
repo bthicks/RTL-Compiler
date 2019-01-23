@@ -6,6 +6,7 @@ import cfg.Dot;
 import rtl.CodeLabelInsn;
 import rtl.Insn;
 import rtl.JumpInsn;
+import rtl.NoteInsn;
 
 public class Driver {
 
@@ -25,6 +26,8 @@ public class Driver {
 
     private static CFG generateCFG(String functionName, List<Insn> insns) {
         CFG cfg = new CFG(functionName);
+        cfg.addBasicBlock(new BasicBlock(0));
+        cfg.addBasicBlock(new BasicBlock(1));
 
         for (Insn insn : insns) {
             cfg.addInsn(insn);
@@ -55,6 +58,16 @@ public class Driver {
                 successor.addPredecessor((predecessor));
             }
         }
+
+        // point entry block to first block
+        int first = insns.get(0).getBasicBlock();
+        cfg.getBasicBlock(0).addSuccessor(cfg.getBasicBlock(first));
+        cfg.getBasicBlock(first).addPredecessor(cfg.getBasicBlock(0));
+
+        // point last block to exit block
+        int last = insns.get(insns.size() - 1).getBasicBlock();
+        cfg.getBasicBlock(last).addSuccessor(cfg.getBasicBlock(1));
+        cfg.getBasicBlock(1).addPredecessor(cfg.getBasicBlock(last));
 
         return cfg;
     }

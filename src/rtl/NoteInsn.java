@@ -23,7 +23,7 @@ public class NoteInsn extends AbstractInsn {
 
     @Override
     public String toDot() {
-        return "|\\ \\ \\ " + Integer.toString(this.getUid()) + ":\\ " + noteLineNumber + "\\ "
+        return "|\\ \\ \\ " + Integer.toString(this.getUid()) + ":\\ " + noteLineNumber
                 + (noteLineNumber.equals("NOTE_INSN_BASIC_BLOCK")
                 ? "\\ " + Integer.toString(this.getBasicBlock()) : "") + "\\l\\\n";
     }
