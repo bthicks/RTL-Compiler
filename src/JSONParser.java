@@ -36,28 +36,39 @@ public class JSONParser {
             int prevInsn = jsonInsn.getInt("prev");
             int nextInsn = jsonInsn.getInt("next");
             int basicBlock = jsonInsn.getInt("block");
+            Value target;
+            List<Value> sources;
 
             switch (expCode) {
                 case "insn":
-                    Value target = parseTarget(jsonInsn.optJSONObject("target"));
-                    List<Value> sources = parseSources(jsonInsn.getJSONArray("sources"));
-                    insns.add(new DefaultInsn(expCode, uid, prevInsn, nextInsn, basicBlock,
-                            target, sources));
+                    target = parseTarget(jsonInsn.optJSONObject("target"));
+                    sources = parseSources(jsonInsn.getJSONArray("sources"));
+                    insns.add(new DefaultInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target,
+                            sources));
                     break;
-                case "barrier":
-                    insns.add(new BarrierInsn(expCode, uid, prevInsn, nextInsn, basicBlock));
+                case "jump_insn":
+                    target = parseTarget(jsonInsn.optJSONObject("target"));
+                    sources = parseSources(jsonInsn.getJSONArray("sources"));
+                    int labelRef = jsonInsn.getInt("label_ref");
+                    insns.add(new JumpInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target,
+                              sources, labelRef));
+                    break;
+                case "call_insn":
+                    target = parseTarget(jsonInsn.optJSONObject("target"));
+                    sources = parseSources(jsonInsn.getJSONArray("sources"));
+                    insns.add(new CallInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target,
+                            sources));
                     break;
                 case "code_label":
                     insns.add(new CodeLabelInsn(expCode, uid, prevInsn, nextInsn, basicBlock));
                     break;
-                case "jump_insn":
+                case "barrier":
+                    insns.add(new BarrierInsn(expCode, uid, prevInsn, nextInsn, basicBlock));
                     break;
                 case "note":
                     String noteLineNumber = jsonInsn.getString("note_type");
                     insns.add(new NoteInsn(expCode, uid, prevInsn, nextInsn, basicBlock,
                             noteLineNumber));
-                    break;
-                case "call_insn":
                     break;
             }
         }
