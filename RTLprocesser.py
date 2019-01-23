@@ -23,13 +23,20 @@ class RTLprocesser:
             "barrier": RTLprocesser._process_barrier,
             "insn": RTLprocesser._process_insn,
             "call_insn": RTLprocesser._process_call_insn,
+            "call_insn/i": RTLprocesser._process_call_insn,
             "jump_insn": RTLprocesser._process_jump_insn,
             "code_label": RTLprocesser._process_code_label,
         }
 
         result = []
         for instruction in instructions:
-            new_insn = functions.get(instruction[0])(instruction)
+            function = functions.get(instruction[0])
+
+            if function is None:
+                print(instruction[0])
+                new_insn = RTLprocesser._process_other(instruction)
+            else:
+                new_insn = function(instruction)
 
             if new_insn is not None:
                 result.append(new_insn)
