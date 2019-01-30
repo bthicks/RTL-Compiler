@@ -60,6 +60,9 @@ public class JSONParser {
                     insns.add(new CallInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target,
                             sources));
                     break;
+                case "cmp_insn":
+                    sources = parseSources(jsonInsn.getJSONArray("sources"));
+                    insns.add(new CmpInsn(expCode, uid, prevInsn, nextInsn, basicBlock, sources));
                 case "code_label":
                     insns.add(new CodeLabelInsn(expCode, uid, prevInsn, nextInsn, basicBlock));
                     break;
