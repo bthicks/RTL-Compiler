@@ -2,7 +2,7 @@ package rtl;
 
 public class RegisterValue extends AbstractValue {
 
-    public RegisterValue(String value, int offset) {
+    public RegisterValue(int value, int offset) {
         super(value, offset);
     }
 
@@ -11,7 +11,7 @@ public class RegisterValue extends AbstractValue {
         int offset = this.getOffset();
 
         if (offset == 0) {
-            return this.getValue();
+            return Integer.toString(this.getValue());
         } else {
             return "[" + this.getValue() + Integer.toString(offset) + "]";
         }

@@ -95,11 +95,12 @@ public class JSONParser {
     }
 
     private static Value parseValue(JSONObject jsonValue) {
-        String val = jsonValue.getString("value");
+        String type = jsonValue.getString("type");
+        int val = jsonValue.getInt("value");
         int offset = jsonValue.getInt("offset");
         Value value;
 
-        if (val.startsWith("r")) {
+        if (type.equals("register")) {
             value = new RegisterValue(val, offset);
         } else {
             value = new ImmediateValue(val, offset);

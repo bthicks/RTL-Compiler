@@ -2,12 +2,12 @@ package rtl;
 
 public class ImmediateValue extends AbstractValue {
 
-    public ImmediateValue(String value, int offset) {
+    public ImmediateValue(int value, int offset) {
         super(value, offset);
     }
 
     @Override
     public String toString() {
-        return this.getValue();
+        return Integer.toString(this.getValue());
     }
 }

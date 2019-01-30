@@ -2,15 +2,15 @@ package rtl;
 
 public abstract class AbstractValue implements Value {
 
-    private String value;
+    private int value;
     private int offset;
 
-    public AbstractValue(String value, int offset) {
+    public AbstractValue(int value, int offset) {
         this.value = value;
         this.offset = offset;
     }
 
-    public String getValue() {
+    public int getValue() {
         return value;
     }
 

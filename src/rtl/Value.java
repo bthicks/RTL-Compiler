@@ -2,7 +2,7 @@ package rtl;
 
 public interface Value {
 
-    public String getValue();
+    public int getValue();
 
     public int getOffset();
 
