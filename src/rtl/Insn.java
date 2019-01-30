@@ -15,4 +15,6 @@ public interface Insn {
     public String toString();
 
     public String toDot();
+
+    public String toARM();
 }
