@@ -4,9 +4,89 @@
 # Class:      CPE 431                     #
 ###########################################
 import re
+import sys
 
 
 class RTLprocesser:
+    codes = {
+        "addr_diff_vec": _process_addr_diff_vec,
+        "addr_vec": _process_addr_vec,
+        "asm_input": _process_asm_input,
+        "asm_output": _process_asm_output,
+        "call": _process_call,
+        "clobber": _process_clobber,
+        "cond_exec": _process_cond_exec,
+        "parallel": _process_parallel,
+        "return": _process_return,
+        "sequence": _process_sequence,
+        "set": _process_set,
+        "simple_return": _process_simple_return,
+        "trap_if": _process_trap_if,
+        "unspec": _process_unspec,
+        "unspec_volatile": _process_unspec_volatile,
+        "use": _process_use,
+    }
+
+    @staticmethod
+    def _process_set():
+        pass
+
+    @staticmethod
+    def _process_return():
+        pass
+
+    @staticmethod
+    def _process_call():
+        pass
+
+    @staticmethod
+    def _process_use():
+        pass
+
+    @staticmethod
+    def _process_clobber():
+        pass
+
+    @staticmethod
+    def _process_simple_return():
+        pass
+
+    @staticmethod
+    def _process_asm_input():
+        pass
+
+    @staticmethod
+    def _process_asm_output():
+        pass
+
+    @staticmethod
+    def _process_addr_vec():
+        pass
+
+    @staticmethod
+    def _process_addr_diff_vec():
+        pass
+
+    @staticmethod
+    def _process_trap_if():
+        pass
+
+    @staticmethod
+    def _process_unspec():
+        pass
+
+    @staticmethod
+    def _process_unspec_volatile():
+        pass
+
+    @staticmethod
+    def _process_cond_exec():
+        pass
+
+    @staticmethod
+    def _process_sequence():
+        pass
+
     # noinspection SpellCheckingInspection
     @staticmethod
     def process(instructions):
@@ -39,7 +119,7 @@ class RTLprocesser:
             else:
                 function(instruction, new_insn)
 
-            if new_insn is not None:
+            if new_insn:
                 result.append(new_insn)
 
         return result
@@ -76,6 +156,15 @@ class RTLprocesser:
         new_insn["block"] = -1
 
     @staticmethod
+    def _process_insn2(instruction, new_insn):
+        method = RTLprocesser.codes.get(instruction[0])
+
+        if method is not None:
+            method(instruction[1:], new_insn)
+        else:
+            print("UNRECOGNIZED INSTRUCTION:", instruction, file=sys.stderr)
+
+    @staticmethod
     def _process_insn(instruction, new_insn):
         RTLprocesser._preprocess(instruction, new_insn)
 
@@ -88,8 +177,8 @@ class RTLprocesser:
         if match:
             new_insn["target"] = {
                 "value": "r{number}:{type}".format(
-                    number=instruction[5][1][1],
-                    type=match.group('type')),
+                    number = instruction[5][1][1],
+                    type = match.group('type')),
                 "offset": 0
             }
 
@@ -118,8 +207,8 @@ class RTLprocesser:
                                      instruction[5][1][1][1][0])
                     if match:
                         string = "r{number}:{type}".format(
-                            number=instruction[5][1][1][1][1],
-                            type=match.group('type'))
+                            number = instruction[5][1][1][1][1],
+                            type = match.group('type'))
 
                         key = 'sources' if 'target' in new_insn else 'target'
 
@@ -144,7 +233,8 @@ class RTLprocesser:
                     }
             elif RTLprocesser._get_register(instruction[5][1][1], new_insn):
                 new_insn['target'] = {
-                    "value": RTLprocesser._get_register(instruction[5][1][1], new_insn),
+                    "value": RTLprocesser._get_register(instruction[5][1][1],
+                                                        new_insn),
                     "offset": 0
                 }
             else:
@@ -174,8 +264,8 @@ class RTLprocesser:
                                      instruction[5][2][1][1][0])
                     if match:
                         string = "r{number}:{type}".format(
-                            number=instruction[5][2][1][1][1],
-                            type=match.group('type'))
+                            number = instruction[5][2][1][1][1],
+                            type = match.group('type'))
 
                         key = 'sources' if 'target' in new_insn else 'target'
 
@@ -214,8 +304,8 @@ class RTLprocesser:
                                      instruction[5][2][1][0])
                     if match:
                         string = "r{number}:{type}".format(
-                            number=instruction[5][2][1][1],
-                            type=match.group('type'))
+                            number = instruction[5][2][1][1],
+                            type = match.group('type'))
 
                         key = 'sources' if 'target' in new_insn else 'target'
 
@@ -234,8 +324,8 @@ class RTLprocesser:
                                       instruction[5][2][2][0]):
 
                             string2 = "r{number}:{type}".format(
-                                number=instruction[5][2][2][1],
-                                type=match.group('type'))
+                                number = instruction[5][2][2][1],
+                                type = match.group('type'))
 
                             new_insn[key] = [
                                 {
@@ -260,8 +350,8 @@ class RTLprocesser:
                          instruction[5][-1][0])
         if match:
             string = "r{number}:{type}".format(
-                number=instruction[5][-1][1],
-                type=match.group('type'))
+                number = instruction[5][-1][1],
+                type = match.group('type'))
 
             if "sources" in new_insn:
                 new_insn["sources"] += [{
@@ -277,7 +367,8 @@ class RTLprocesser:
             new_insn["sources"] = [
                 {
                     "value": RTLprocesser._get_register(
-                        instruction[5][-1][1], new_insn) + "#" + instruction[5][-1][-1],
+                        instruction[5][-1][1], new_insn) + "#" +
+                             instruction[5][-1][-1],
                     "offset": 0
                 }
             ]
@@ -321,7 +412,8 @@ class RTLprocesser:
 
         if instruction[5][2][0] == "if_then_else":
             new_insn['sources'][0][
-                'value'] = RTLprocesser._process_if_then_else(instruction[5][2], new_insn)
+                'value'] = RTLprocesser._process_if_then_else(instruction[5][2],
+                                                              new_insn)
 
     @staticmethod
     def _process_if_then_else(instruction, new_insn):
@@ -335,17 +427,18 @@ class RTLprocesser:
         }
 
         # Get condition
-        result = ["{", "(", RTLprocesser._get_register(instruction[1][1], new_insn),
+        result = ["{", "(",
+                  RTLprocesser._get_register(instruction[1][1], new_insn),
                   operators.get(instruction[1][0], ""),
                   RTLprocesser._get_register(instruction[1][2], new_insn), ")?"]
 
         # Get Then and Else
         if instruction[2][0] == "label_ref":
-            result.append("L{num}:".format(num=instruction[2][1]))
+            result.append("L{num}:".format(num = instruction[2][1]))
             result.append(instruction[3][0])
         else:
             result.append(instruction[3][0])
-            result.append("L{num}:".format(num=instruction[2][1]))
+            result.append("L{num}:".format(num = instruction[2][1]))
 
         result.append("}")
 
@@ -353,9 +446,11 @@ class RTLprocesser:
 
     @staticmethod
     def _get_register(instruction, new_insn):
-        match = re.match(r"^reg(/\w)*:[A-Z]I", instruction[0])
-
-        if match:
+        new_insn["target"] = {
+            "value": RTLprocesser._get_register(instruction[0][1], new_insn),
+            "offset": 0,
+        }
+        if re.match(r"^reg(/\w)*:[A-Z]I", instruction[0]):
             return instruction[1]
         elif instruction[0] == "reg:CC":
             new_insn['type'] = 'cmp_insn'
