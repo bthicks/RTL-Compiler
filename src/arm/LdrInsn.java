@@ -1,21 +1,21 @@
 package arm;
 
 public class LdrInsn extends AbstractInsn {
-    private String r1;
-    private String offset;
+    private Value r1;
+    private Value offset;
 
-    public LdrInsn(String r1, String offset) {
+    public LdrInsn(Value r1, Value offset) {
         this.r1 = r1;
         this.offset = offset;
     }
 
     @Override
     public String toARM() {
-        if (offset.startsWith("r")) {
-            return "ldr\t" + r1 + ", [" + offset + "]\n";
+        if (offset instanceof RegisterValue) {
+            return "ldr\t" + r1.toString() + ", [" + offset.toString() + "]\n";
         }
         else {
-            return "ldr\t" + r1 + ", [fp, " + offset + "]\n";
+            return "ldr\t" + r1.toString() + ", [fp, " + offset.toString() + "]\n";
         }
     }
 

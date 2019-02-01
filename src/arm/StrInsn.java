@@ -1,21 +1,21 @@
 package arm;
 
 public class StrInsn extends AbstractInsn {
-    private String r1;
-    private String address;
+    private Value r1;
+    private Value address;
 
-    public StrInsn(String r1, String address) {
+    public StrInsn(Value r1, Value address) {
         this.r1 = r1;
         this.address = address;
     }
 
     @Override
     public String toARM() {
-        if (address.startsWith("#")) {
-            return "str\t" + r1 + ", [fp, " + address + "]\n";
+        if (address instanceof RegisterValue) {
+            return "str\t" + r1.toString() + ", [fp, " + address.toString() + "]\n";
         }
         else {
-            return "str\t" + r1 + ", [" + address + "]\n";
+            return "str\t" + r1.toString() + ", [" + address.toString() + "]\n";
         }
     }
 

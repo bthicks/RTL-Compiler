@@ -3,15 +3,15 @@ package arm;
 import java.util.List;
 
 public class PushInsn extends AbstractInsn {
-    private List<String> registers;
+    private List<Value> registers;
 
-    public PushInsn(List<String> registers) {
+    public PushInsn(List<Value> registers) {
         this.registers = registers;
     }
 
     @Override
     public String toARM() {
-        return "push\t{" + String.join(",", registers) + "}\n";
+        return "push\t{" + String.join(",", registers.toString()) + "}\n";
     }
 
     @Override

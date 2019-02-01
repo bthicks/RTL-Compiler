@@ -1,11 +1,11 @@
 package arm;
 
 public class AddInsn extends AbstractInsn {
-    private String r1;
-    private String r2;
-    private String operand2;
+    private Value r1;
+    private Value r2;
+    private Value operand2;
 
-    public AddInsn(String r1, String r2, String operand2) {
+    public AddInsn(Value r1, Value r2, Value operand2) {
         this.r1 = r1;
         this.r2 = r2;
         this.operand2 = operand2;
@@ -13,7 +13,7 @@ public class AddInsn extends AbstractInsn {
 
     @Override
     public String toARM() {
-        return "add\t" + r1 + ", " + r2 + ", " + operand2 + "\n";
+        return "add\t" + r1.toString() + ", " + r2.toString() + ", " + operand2.toString() + "\n";
     }
 
     @Override

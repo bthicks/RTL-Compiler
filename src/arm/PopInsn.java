@@ -3,15 +3,15 @@ package arm;
 import java.util.List;
 
 public class PopInsn extends AbstractInsn {
-    private List<String> registers;
+    private List<Value> registers;
 
-    public PopInsn(List<String> registers) {
+    public PopInsn(List<Value> registers) {
         this.registers = registers;
     }
 
     @Override
     public String toARM() {
-        return "pop\t{" + String.join(",", registers) + "}\n";
+        return "pop\t{" + String.join(",", registers.toString()) + "}\n";
     }
 
     @Override
