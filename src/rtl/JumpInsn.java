@@ -63,4 +63,9 @@ public class JumpInsn extends AbstractInsn {
         return "|\\ \\ \\ " + Integer.toString(this.getUid()) + ":\\ " + target.toString()
                 + "=" + String.join("+", sourceStrings) + "\\l\\\n";
     }
+
+    @Override
+    public String toARM() {
+        return "";
+    }
 }

@@ -39,4 +39,6 @@ public abstract class AbstractInsn implements Insn {
     public abstract String toString();
 
     public abstract String toDot();
+
+    public abstract String toARM();
 }

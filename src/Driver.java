@@ -1,12 +1,13 @@
+import java.util.LinkedList;
 import java.util.List;
 
+import cfg.ARMGenerator;
 import cfg.BasicBlock;
 import cfg.CFG;
-import cfg.Dot;
+import cfg.DotGenerator;
 import rtl.CodeLabelInsn;
 import rtl.Insn;
 import rtl.JumpInsn;
-import rtl.NoteInsn;
 
 public class Driver {
 
@@ -19,7 +20,11 @@ public class Driver {
         String filename = args[0];
         List<Insn> insns = JSONParser.parse(filename);
         CFG cfg = generateCFG("main", insns);
-        Dot.toDot(filename, cfg);
+        List<CFG> program = new LinkedList<>();
+        program.add(cfg);
+
+        DotGenerator.toDot(filename, cfg);
+        ARMGenerator.toARM(filename, program);
 
         cfg.printCFG();
     }

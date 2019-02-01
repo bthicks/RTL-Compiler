@@ -40,4 +40,9 @@ public class CmpInsn extends AbstractInsn {
         return "|\\ \\ \\ " + Integer.toString(this.getUid()) + ":\\ cc:CC="
                 + String.join(",", sourceStrings) + "\\l\\\n";
     }
+
+    @Override
+    public String toARM() {
+        return "";
+    }
 }

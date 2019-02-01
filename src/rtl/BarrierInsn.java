@@ -15,4 +15,9 @@ public class BarrierInsn extends AbstractInsn {
     public String toDot() {
         return "";
     }
+
+    @Override
+    public String toARM() {
+        return "";
+    }
 }

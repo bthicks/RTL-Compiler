@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Dot {
+public class DotGenerator {
 
     public static void toDot(String filename, CFG cfg) {
         filename = filename.replace(".json", ".dot");

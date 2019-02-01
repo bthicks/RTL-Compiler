@@ -16,4 +16,9 @@ public class CodeLabelInsn extends AbstractInsn {
         return "|\\ \\ \\ " + Integer.toString(this.getUid()) + ":\\ L"
                 + Integer.toString(this.getUid()) + ":\\l\\\n";
     }
+
+    @Override
+    public String toARM() {
+        return "";
+    }
 }

@@ -27,4 +27,9 @@ public class NoteInsn extends AbstractInsn {
                 + (noteLineNumber.equals("NOTE_INSN_BASIC_BLOCK")
                 ? "\\ " + Integer.toString(this.getBasicBlock()) : "") + "\\l\\\n";
     }
+
+    @Override
+    public String toARM() {
+        return "";
+    }
 }
