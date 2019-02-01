@@ -10,7 +10,7 @@ public abstract class AbstractInsn implements Insn {
 
     //public abstract List<Integer> getSources();
 
-    //public abstract void allocateTarget(String real);
+    public abstract void allocateTarget(String real);
 
-    //public abstract void allocateSource(String virtual, String real);
+    public abstract void allocateSource(String virtual, String real);
 }

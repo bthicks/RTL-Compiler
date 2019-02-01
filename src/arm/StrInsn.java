@@ -9,6 +9,7 @@ public class StrInsn extends AbstractInsn {
         this.address = address;
     }
 
+    @Override
     public String toARM() {
         if (address.startsWith("#")) {
             return "str\t" + r1 + ", [fp, " + address + "]\n";
@@ -16,6 +17,15 @@ public class StrInsn extends AbstractInsn {
         else {
             return "str\t" + r1 + ", [" + address + "]\n";
         }
+    }
+
+    @Override
+    public void allocateTarget(String real) {
+
+    }
+
+    @Override
+    public void allocateSource(String virtual, String real) {
 
     }
 }

@@ -11,7 +11,18 @@ public class AddInsn extends AbstractInsn {
         this.operand2 = operand2;
     }
 
+    @Override
     public String toARM() {
         return "add\t" + r1 + ", " + r2 + ", " + operand2 + "\n";
+    }
+
+    @Override
+    public void allocateTarget(String real) {
+
+    }
+
+    @Override
+    public void allocateSource(String virtual, String real) {
+
     }
 }

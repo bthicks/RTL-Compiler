@@ -9,7 +9,7 @@ public interface Insn {
 
     //public List<Integer> getSources();
 
-    //public void allocateTarget(int real);
+    public void allocateTarget(String real);
 
-    //public void allocateSource(int virtual, int real);
+    public void allocateSource(String virtual, String real);
 }
