@@ -8,13 +8,15 @@ public class JumpInsn extends AbstractInsn {
     private Value target;
     private List<Value> sources;
     private int labelRef;
+    private String condition;
 
     public JumpInsn(String expCode, int uid, int prevInsn, int nextInsn, int basicBlock,
-                    Value target, List<Value> sources, int labelRef) {
+                    Value target, List<Value> sources, int labelRef, String condition) {
         super(expCode, uid, prevInsn, nextInsn, basicBlock);
         this.target = target;
         this.sources = sources;
         this.labelRef = labelRef;
+        this.condition = condition;
     }
 
     public Value getTarget() {
@@ -27,6 +29,10 @@ public class JumpInsn extends AbstractInsn {
 
     public int getLabelRef() {
         return labelRef;
+    }
+
+    public String getCondition() {
+        return condition;
     }
 
     @Override

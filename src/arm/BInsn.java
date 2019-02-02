@@ -2,15 +2,17 @@ package arm;
 
 public class BInsn extends AbstractInsn {
     private final Value label;
+    private final String condition;
 
-    public BInsn(Value label)
+    public BInsn(Value label, String condition)
     {
         this.label = label;
+        this.condition = condition;
     }
 
     @Override
     public String toARM()
     {
-        return "b\t." + label.toString() + "\n";
+        return "b" + condition + "\t." + label.toString() + "\n";
     }
 }
