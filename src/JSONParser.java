@@ -38,6 +38,7 @@ public class JSONParser {
             int basicBlock = jsonInsn.getInt("block");
             Value target;
             List<Value> sources;
+            String condition;
 
             switch (expCode) {
                 case "insn":
@@ -49,9 +50,10 @@ public class JSONParser {
                 case "jump_insn":
                     target = parseTarget(jsonInsn.optJSONObject("target"));
                     sources = parseSources(jsonInsn.getJSONArray("sources"));
+                    condition = jsonInsn.getString("condition");
                     int labelRef = jsonInsn.getInt("label_ref");
                     insns.add(new JumpInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target,
-                              sources, labelRef));
+                              sources, labelRef, condition));
                     break;
                 case "call_insn/i":
                 case "call_insn":
