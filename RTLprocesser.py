@@ -72,6 +72,7 @@ class RTLprocesser:
             "plus": RTLprocesser._process_plus,
             "mem": RTLprocesser._process_mem,
             "compare": RTLprocesser._process_compare,
+            "unspec": RTLprocesser._process_unspec,
         }
 
         result = dict_get(instruction[0][0], functions)
@@ -178,7 +179,7 @@ class RTLprocesser:
 
     @staticmethod
     def _process_unspec(instruction, new_insn):
-        pass
+        RTLprocesser._get_register(instruction[1][0][1][1][1][1][1][1][0], new_insn)
 
     @staticmethod
     def _process_unspec_volatile(instruction, new_insn):
