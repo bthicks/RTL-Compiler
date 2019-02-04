@@ -1,5 +1,7 @@
 package rtl;
 
+import java.util.List;
+
 public class BarrierInsn extends AbstractInsn {
 
     public BarrierInsn(String expCode, int uid, int prevInsn, int nextInsn, int basicBlock) {
@@ -17,7 +19,5 @@ public class BarrierInsn extends AbstractInsn {
     }
 
     @Override
-    public String toARM() {
-        return "";
-    }
+    public void generateARMInsns() {}
 }

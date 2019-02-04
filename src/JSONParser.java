@@ -39,6 +39,7 @@ public class JSONParser {
             Value target;
             List<Value> sources;
             String condition;
+            String function;
 
             switch (expCode) {
                 case "insn":
@@ -59,8 +60,9 @@ public class JSONParser {
                 case "call_insn":
                     target = parseTarget(jsonInsn.optJSONObject("target"));
                     sources = parseSources(jsonInsn.getJSONArray("sources"));
+                    function = jsonInsn.getString("function");
                     insns.add(new CallInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target,
-                            sources));
+                            sources, function));
                     break;
                 case "cmp_insn":
                     sources = parseSources(jsonInsn.getJSONArray("sources"));

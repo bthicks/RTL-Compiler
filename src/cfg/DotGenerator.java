@@ -33,7 +33,7 @@ public class DotGenerator {
 
                 fw.write("\tbb_" + block.getLabel() + " [shape=record,label=\n\"{");
 
-                for (Insn insn : block.getInsns()) {
+                for (rtl.Insn insn : block.getRtlInsns()) {
                     fw.write(insn.toDot());
                 }
 

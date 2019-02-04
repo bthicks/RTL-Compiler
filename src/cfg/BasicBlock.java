@@ -10,13 +10,15 @@ import java.util.Set;
 public class BasicBlock {
 
     private int label;
-    private List<Insn> insns;
+    private List<rtl.Insn> rtlInsns;
+    private List<arm.Insn> armInsns;
     private Set<BasicBlock> predecessors;
     private Set<BasicBlock> successors;
 
     public BasicBlock(int label) {
         this.label = label;
-        this.insns = new LinkedList<>();
+        this.rtlInsns = new LinkedList<>();
+        this.armInsns = new LinkedList<>();
         this.predecessors = new LinkedHashSet<>();
         this.successors = new LinkedHashSet<>();
     }
@@ -25,8 +27,12 @@ public class BasicBlock {
         return label;
     }
 
-    public List<Insn> getInsns() {
-        return insns;
+    public List<rtl.Insn> getRtlInsns() {
+        return rtlInsns;
+    }
+
+    public List<arm.Insn> getArmInsns() {
+        return armInsns;
     }
 
     public Set<BasicBlock> getPredecessors() {
@@ -37,8 +43,12 @@ public class BasicBlock {
         return successors;
     }
 
-    public void addInsn(Insn insn) {
-        insns.add(insn);
+    public void addRtlInsn(rtl.Insn insn) {
+        rtlInsns.add(insn);
+    }
+
+    public void addArmInsn(arm.Insn insn) {
+        armInsns.add(insn);
     }
 
     public void addPredecessor(BasicBlock predecessor) {

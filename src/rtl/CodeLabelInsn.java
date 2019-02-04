@@ -18,7 +18,7 @@ public class CodeLabelInsn extends AbstractInsn {
     }
 
     @Override
-    public String toARM() {
-        return "";
+    public void generateARMInsns() {
+        // TODO
     }
 }

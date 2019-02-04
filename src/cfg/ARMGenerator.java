@@ -23,10 +23,21 @@ public class ARMGenerator {
         for (CFG cfg : program) {
             // set up stack
 
-            // generate insns
+            // write insns
             for (BasicBlock block : cfg.getBasicBlocks()) {
-                for (Insn rtlInsn : block.getInsns()) {
-                    armCode.append(rtlInsn.toARM());
+                // create ARM insns for each RTL insn
+                for (rtl.Insn rtlInsn : block.getRtlInsns()) {
+                    rtlInsn.generateARMInsns();
+                    List<arm.Insn> armInsns = rtlInsn.getARMInsns();
+
+                    for (arm.Insn insn : armInsns) {
+                        block.addArmInsn(insn);
+                    }
+                }
+
+                // write each ARM insn
+                for (arm.Insn armInsn : block.getArmInsns()) {
+                    armCode.append(armInsn.toString());
                 }
             }
 

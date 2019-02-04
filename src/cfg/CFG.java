@@ -51,18 +51,18 @@ public class CFG {
         return false;
     }
 
-    public void addInsn(Insn insn) {
+    public void addRtlInsn(Insn insn) {
         int label = insn.getBasicBlock();
 
         for (BasicBlock block : basicBlocks) {
             if (label == block.getLabel()) {
-                block.addInsn(insn);
+                block.addRtlInsn(insn);
                 return;
             }
         }
 
         BasicBlock block = new BasicBlock(label);
-        block.addInsn(insn);
+        block.addRtlInsn(insn);
         this.addBasicBlock(block);
     }
 
@@ -83,7 +83,7 @@ public class CFG {
             }
             System.out.println();
 
-            for (Insn insn : block.getInsns()) {
+            for (Insn insn : block.getRtlInsns()) {
                 System.out.print("\t" + insn.toString());
             }
         }

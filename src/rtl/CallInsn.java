@@ -1,5 +1,7 @@
 package rtl;
 
+import arm.BInsn;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,12 +9,14 @@ public class CallInsn extends AbstractInsn {
 
     private Value target;
     private List<Value> sources;
+    private String function;
 
     public CallInsn(String expCode, int uid, int prevInsn, int nextInsn, int basicBlock,
-                Value target, List<Value> sources) {
+                Value target, List<Value> sources, String function) {
         super(expCode, uid, prevInsn, nextInsn, basicBlock);
         this.target = target;
         this.sources = sources;
+        this.function = function;
     }
 
     public Value getTarget() {
@@ -48,7 +52,7 @@ public class CallInsn extends AbstractInsn {
     }
 
     @Override
-    public String toARM() {
-        return "";
+    public void generateARMInsns() {
+        // TODO
     }
 }

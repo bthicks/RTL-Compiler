@@ -29,7 +29,5 @@ public class NoteInsn extends AbstractInsn {
     }
 
     @Override
-    public String toARM() {
-        return "";
-    }
+    public void generateARMInsns() {}
 }

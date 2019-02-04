@@ -1,5 +1,7 @@
 package rtl;
 
+import java.util.List;
+
 public interface Insn {
 
     public String getExpCode();
@@ -12,9 +14,12 @@ public interface Insn {
 
     public int getBasicBlock();
 
+    public List<arm.Insn> getARMInsns();
+
     public String toString();
 
     public String toDot();
 
-    public String toARM();
+    public void generateARMInsns();
+
 }

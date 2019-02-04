@@ -34,8 +34,8 @@ public class Driver {
         cfg.addBasicBlock(new BasicBlock(0));
         cfg.addBasicBlock(new BasicBlock(1));
 
-        for (Insn insn : insns) {
-            cfg.addInsn(insn);
+        for (rtl.Insn insn : insns) {
+            cfg.addRtlInsn(insn);
 
             // ignore successors for last insn and barrier insns
             if (insn.getNextInsn() == 0 || insn.getExpCode().equals("barrier")) {

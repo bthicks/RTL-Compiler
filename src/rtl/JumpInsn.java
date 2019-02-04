@@ -71,7 +71,7 @@ public class JumpInsn extends AbstractInsn {
     }
 
     @Override
-    public String toARM() {
-        return "";
+    public void generateARMInsns() {
+        // TODO
     }
 }

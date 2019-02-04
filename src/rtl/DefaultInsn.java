@@ -48,7 +48,7 @@ public class DefaultInsn extends AbstractInsn {
     }
 
     @Override
-    public String toARM() {
-        return "";
+    public void generateARMInsns() {
+        // TODO
     }
 }
