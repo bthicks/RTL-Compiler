@@ -1,15 +1,17 @@
 PARSER=RTLparser.py
 
-all: $(RTL)
+all: $(RTL) $(PLAINFILE) $(RTL)
     javac src/*.java
+
+$(PLAINFILE): $(FILE)
+    IFS='.'
+    read -ra ADDR <<< $(FILE)
+    for i in "${ADDR[@]}"
+        echo "$i"
+    done
 
 $(RTL):
     python3 $(PARSER) $(FILE)
-
-    IFS='.'
-
-
-
 
 test:
 	python3 $(PARSER) $(FILE)
