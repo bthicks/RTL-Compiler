@@ -24,7 +24,8 @@ public class Driver {
         program.add(cfg);
 
         DotGenerator.toDot(filename, cfg);
-        ARMGenerator.toARM(filename, program);
+        ARMGenerator.toARM(program);
+        ARMGenerator.writeARM(filename, program);
 
         cfg.printCFG();
     }

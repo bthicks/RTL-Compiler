@@ -1,6 +1,5 @@
 package rtl;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public abstract class AbstractInsn implements Insn {
@@ -10,7 +9,6 @@ public abstract class AbstractInsn implements Insn {
     private int prevInsn;
     private int nextInsn;
     private int basicBlock;
-    private List<arm.Insn> armInsns;
 
     public AbstractInsn(String expCode, int uid, int prevInsn, int nextInsn, int basicBlock) {
         this.expCode = expCode;
@@ -18,7 +16,6 @@ public abstract class AbstractInsn implements Insn {
         this.prevInsn = prevInsn;
         this.nextInsn = nextInsn;
         this.basicBlock = basicBlock;
-        this.armInsns = new LinkedList<>();
     }
 
     public String getExpCode() {
@@ -41,13 +38,9 @@ public abstract class AbstractInsn implements Insn {
         return basicBlock;
     }
 
-    public List<arm.Insn> getARMInsns() {
-        return armInsns;
-    }
-
     public abstract String toString();
 
     public abstract String toDot();
 
-    public abstract void generateARMInsns();
+    public abstract List<arm.Insn> toARM();
 }

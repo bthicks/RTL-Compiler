@@ -1,5 +1,9 @@
 package rtl;
 
+import arm.Insn;
+
+import java.util.List;
+
 public class CodeLabelInsn extends AbstractInsn {
 
     public CodeLabelInsn(String expCode, int uid, int prevInsn, int nextInsn, int basicBlock) {
@@ -18,7 +22,8 @@ public class CodeLabelInsn extends AbstractInsn {
     }
 
     @Override
-    public void generateARMInsns() {
+    public List<Insn> toARM() {
         // TODO
+        return null;
     }
 }

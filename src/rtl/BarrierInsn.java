@@ -19,5 +19,7 @@ public class BarrierInsn extends AbstractInsn {
     }
 
     @Override
-    public void generateARMInsns() {}
+    public List<arm.Insn> toARM() {
+        return null;
+    }
 }

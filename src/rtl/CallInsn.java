@@ -52,7 +52,8 @@ public class CallInsn extends AbstractInsn {
     }
 
     @Override
-    public void generateARMInsns() {
+    public List<arm.Insn> toARM() {
         // TODO
+        return null;
     }
 }

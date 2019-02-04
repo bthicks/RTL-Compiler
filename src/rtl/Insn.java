@@ -14,12 +14,10 @@ public interface Insn {
 
     public int getBasicBlock();
 
-    public List<arm.Insn> getARMInsns();
-
     public String toString();
 
     public String toDot();
 
-    public void generateARMInsns();
+    public List<arm.Insn> toARM();
 
 }

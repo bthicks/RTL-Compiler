@@ -1,5 +1,9 @@
 package rtl;
 
+import arm.Insn;
+
+import java.util.List;
+
 public class NoteInsn extends AbstractInsn {
 
     private String noteLineNumber;
@@ -29,5 +33,7 @@ public class NoteInsn extends AbstractInsn {
     }
 
     @Override
-    public void generateARMInsns() {}
+    public List<Insn> toARM() {
+        return null;
+    }
 }
