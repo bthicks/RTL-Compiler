@@ -1,11 +1,14 @@
 PARSER=RTLparser.py
-RTL=rtl.json
 
 all: $(RTL)
-	javac src/*.java
+    javac src/*.java
 
 $(RTL):
-	@python3 $(PARSER) $(FILE)
+    python3 $(PARSER) $(FILE)
+
+    IFS='.'
+
+
 
 
 test:
