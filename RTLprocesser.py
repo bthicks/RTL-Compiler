@@ -39,7 +39,7 @@ class RTLprocesser:
     @staticmethod
     @debug_prints(debug=False)
     def _process_symbol_ref(instruction, new_insn):
-        new_insn["name"] = instruction[1][0].replace('"', '')
+        new_insn["function"] = instruction[1][0].replace('"', '')
 
     @staticmethod
     @debug_prints(debug=False)
