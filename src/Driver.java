@@ -1,9 +1,16 @@
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import cfg.ARMGenerator;
 import cfg.BasicBlock;
 import cfg.CFG;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import rtl.CodeLabelInsn;
 import rtl.Insn;
 import rtl.JumpInsn;
@@ -17,18 +24,42 @@ public class Driver {
         }
 
         String filename = args[0];
-        List<Insn> insns = JSONParser.parse(filename);
-        int maxVirtualRegister = JSONParser.parseMaxRegister(filename);
-
-        CFG cfg = generateCFG("main", insns, maxVirtualRegister);
-        List<CFG> program = new LinkedList<>();
-        program.add(cfg);
+        List<CFG> program = parseJSON(filename);
 
         //DotGenerator.toDot(filename, cfg);
         ARMGenerator.toARM(program);
         ARMGenerator.writeARM(filename, program);
 
-        cfg.printCFG();
+        for (CFG cfg : program) {
+            cfg.printCFG();
+        }
+    }
+
+    private static List<CFG> parseJSON(String filename) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            JSONTokener tokener = new JSONTokener(reader);
+            JSONArray jsonArray = new JSONArray(tokener);
+
+            List<CFG> program = new LinkedList<>();
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject function = jsonArray.getJSONObject(i);
+                JSONArray jsonInsns = function.getJSONArray("insns");
+
+                String functionName = function.getString("name");
+                List<Insn> insns = JSONParser.parseInsns(jsonInsns);
+                int maxVirtualRegister = function.getInt("max");
+
+                CFG cfg = generateCFG(functionName, insns, maxVirtualRegister);
+                program.add(cfg);
+            }
+
+            return program;
+        } catch (FileNotFoundException e) {
+            System.exit(0);
+            return null;
+        }
     }
 
     private static CFG generateCFG(String functionName, List<Insn> insns, int maxVirtualRegister) {

@@ -1,49 +1,14 @@
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 import rtl.*;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class JSONParser {
 
-    public static List<Insn> parse(String filename) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(filename));
-            JSONTokener tokener = new JSONTokener(reader);
-            JSONObject jsonObject = new JSONObject(tokener);
-            JSONArray jsonInsns = jsonObject.getJSONArray("insns");
-            int min = jsonObject.getInt("min");
-            int max = jsonObject.getInt("max");
-
-            return parseInsns(jsonInsns);
-        } catch (FileNotFoundException e) {
-            System.exit(0);
-            return null;
-        }
-    }
-
-    // This is bad bc we read from the file multiple times but this method won't be needed once we
-    // implemenet register allocation
-    public static int parseMaxRegister(String filename) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(filename));
-            JSONTokener tokener = new JSONTokener(reader);
-            JSONObject jsonObject = new JSONObject(tokener);
-
-            return jsonObject.getInt("max");
-        } catch (FileNotFoundException e) {
-            System.exit(0);
-            return -1;
-        }
-    }
-
-    private static List<Insn> parseInsns(JSONArray jsonInsns) {
+    public static List<Insn> parseInsns(JSONArray jsonInsns) {
         List<Insn> insns = new LinkedList<>();
 
         for (int i = 0; i < jsonInsns.length(); i++) {
@@ -121,7 +86,7 @@ public class JSONParser {
         int offset = jsonValue.getInt("offset");
         Value value;
 
-        if (type.equals("register")) {
+        if (type.equals("reg")) {
             value = new RegisterValue(val, offset);
         } else {
             value = new ImmediateValue(val, offset);

@@ -1,5 +1,9 @@
 package rtl;
 
+import arm.ImmediateValue;
+import arm.LdrInsn;
+import arm.MovInsn;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -47,9 +51,21 @@ public class CmpInsn extends AbstractInsn {
     public List<arm.Insn> toARM(HashMap<Integer, Integer> stack) {
         // TODO
         List<arm.Insn> insns = new LinkedList<>();
-        //insns.add(new arm.CmpInsn());
+
         // load sources into r0 and r1
         // cmp r0 and r1
+        for (int i = 0; i < 2; i++) {
+            Value source = sources.get(i);
+
+            if (source instanceof RegisterValue) {
+                int offset = stack.get(source.getValue());
+                insns.add(new LdrInsn(new arm.RegisterValue(i), new ImmediateValue(offset)));
+            } else {
+                insns.add(new MovInsn(new arm.RegisterValue(i),
+                        new arm.ImmediateValue(source.getValue()), ""));
+            }
+        }
+        insns.add(new arm.CmpInsn(new arm.RegisterValue(0), new arm.RegisterValue(1)));
 
         return insns;
     }
