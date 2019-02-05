@@ -6,6 +6,8 @@
 import re
 import sys
 
+from functools import wraps
+
 
 def dict_get(key, a_dict):
     for k in a_dict.keys():
@@ -14,7 +16,22 @@ def dict_get(key, a_dict):
     return None
 
 
+def debug_prints(debug=False):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if debug:
+                print(func.__name__.upper(), args[1]["uid"], args[0],
+                      file=sys.stderr)
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
+
+
 class RTLprocesser:
+    debug = False
     max_register = 0
     min_register = float("inf")
     used_registers = set()
@@ -41,6 +58,7 @@ class RTLprocesser:
         RTLprocesser._get_register(instruction[2], new_insn)
 
     @staticmethod
+    @debug_prints(debug=debug)
     def _process_set(instruction, new_insn):
         """An RTL instruction of form: (set lval x).
 
@@ -82,13 +100,13 @@ class RTLprocesser:
         if result is not None:
             result(instruction[0], new_insn)
         else:
-            print("SET", new_insn["uid"], instruction[0], file = sys.stderr)
+            print("SET", new_insn["uid"], instruction[0], file=sys.stderr)
 
         result = dict_get(instruction[1][0], functions)
         if result is not None:
             result(instruction[1], new_insn)
         else:
-            print("SET", new_insn["uid"], instruction[1], file = sys.stderr)
+            print("SET", new_insn["uid"], instruction[1], file=sys.stderr)
 
     @staticmethod
     def _process_return(*args):
@@ -159,8 +177,6 @@ class RTLprocesser:
         expressions—expressions of code set, call, return, simple_return,
         clobber use or clobber_high.
         """
-        print("PARALLEL", new_insn["uid"], instruction)
-
         functions = {
             "set": RTLprocesser._process_set,
             "call": RTLprocesser._process_call,
@@ -183,7 +199,8 @@ class RTLprocesser:
 
     @staticmethod
     def _process_unspec(instruction, new_insn):
-        RTLprocesser._get_register(instruction[1][0][1][1][1][1][1][1][0], new_insn)
+        RTLprocesser._get_register(instruction[1][0][1][1][1][1][1][1][0],
+                                   new_insn)
 
     @staticmethod
     def _process_unspec_volatile(instruction, new_insn):
@@ -232,12 +249,18 @@ class RTLprocesser:
             if new_insn:
                 result.append(new_insn)
 
-        return {
+        result = {
             "insns": result,
             "max": RTLprocesser.max_register,
             "min": RTLprocesser.min_register,
             "used": list(RTLprocesser.used_registers),
         }
+
+        RTLprocesser.max_register = 0
+        RTLprocesser.min_register = float("inf")
+        RTLprocesser.used_registers.clear()
+
+        return result
 
     @staticmethod
     def _preprocess(instruction, new_insn):
@@ -364,13 +387,15 @@ class RTLprocesser:
     @staticmethod
     def _get_register(instruction, new_insn, mem=False):
         if mem:
-            RTLprocesser._set_register(new_insn, 'reg', int(instruction[1][1]), int(instruction[2][1]))
+            RTLprocesser._set_register(new_insn, 'reg', int(instruction[1][1]),
+                                       int(instruction[2][1]))
         elif re.match(r"^reg(/\w)*:[A-Z]I", instruction[0]):
             RTLprocesser._set_register(new_insn, 'reg', int(instruction[1]), 0)
         elif instruction[0] == "reg:CC":
             RTLprocesser._set_register(new_insn, 'reg', int(instruction[1]), 0)
         elif instruction[0] == "const_int":
-            RTLprocesser._set_register(new_insn, 'const', int(instruction[1]), 0)
+            RTLprocesser._set_register(new_insn, 'const', int(instruction[1]),
+                                       0)
         else:
             print("GET_REGISTER", new_insn["uid"], instruction)
 

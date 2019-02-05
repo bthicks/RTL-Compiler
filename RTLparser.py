@@ -4,6 +4,7 @@
 # Class:      CPE 431                     #
 ###########################################
 import json
+import re
 import sys
 
 from RTLprocesser import RTLprocesser
@@ -59,22 +60,45 @@ def parse(file_name):
         file_name (str): The name of the file
 
     Returns:
-         List(str): The parsed list of instructions.
+         Dict(str): The parsed list of instructions.
 
     TODO:
         - Write tests
     """
+    result = {}
     with open(file_name, 'r') as infile:
-        for line in infile:
-            if ";; Full RTL generated for this function:" in line:
-                break
+        while True:
+            name = ""
+            for line in infile:
+                match = re.match(";; Function (?P<name>([A-Z]|[a-z])*)", line)
+                if match:
+                    name = match.group('name')
+                elif ";; Full RTL generated for this function:" in line:
+                    break
+            else:
+                return result
 
-        word_generator = (letter for line in infile for letter in line)
+            for _ in range(1):
+                infile.readline()
 
-        for _ in range(2):  # Remove trailing comments
-            next(word_generator, None)
+            word_generator = generate_instructions(infile)
+            #
+            # for _ in range(2):  # Remove trailing comments
+            #     next(word_generator, None)
 
-        return parse_helper(word_generator, [])
+            result[name] = parse_helper(word_generator, [])
+
+
+def generate_instructions(infile):
+    for line in infile:
+        if line not in ("\n", "\r\n"):
+            for letter in line:
+                yield letter
+        else:
+            print(line)
+            break
+
+    raise StopIteration
 
 
 def check_args():
@@ -92,7 +116,10 @@ def main():
     """
     check_args()
 
-    result = RTLprocesser.process(parse(sys.argv[1]))
+    result = {}
+    parsed = parse(sys.argv[1])
+    for name, insns in parsed.items():
+        result[name] = RTLprocesser.process(insns)
 
     file_name = sys.argv[1][:sys.argv[1].index('.')]
     with open("{infile}.json".format(infile=file_name), 'w') as outfile:
