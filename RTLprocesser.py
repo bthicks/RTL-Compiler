@@ -216,7 +216,7 @@ class RTLprocesser:
 
     # noinspection SpellCheckingInspection
     @staticmethod
-    def process(instructions):
+    def process(instructions, name):
         """Strip unnecessary bits of the instructions.
 
         Args:
@@ -254,6 +254,7 @@ class RTLprocesser:
             "max": RTLprocesser.max_register,
             "min": RTLprocesser.min_register,
             "used": list(RTLprocesser.used_registers),
+            "name": name,
         }
 
         RTLprocesser.max_register = 0

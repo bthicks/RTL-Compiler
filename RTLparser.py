@@ -116,10 +116,10 @@ def main():
     """
     check_args()
 
-    result = {}
+    result = []
     parsed = parse(sys.argv[1])
     for name, insns in parsed.items():
-        result[name] = RTLprocesser.process(insns)
+        result.append(RTLprocesser.process(insns, name))
 
     file_name = sys.argv[1][:sys.argv[1].index('.')]
     with open("{infile}.json".format(infile=file_name), 'w') as outfile:
