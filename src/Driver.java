@@ -23,7 +23,7 @@ public class Driver {
         List<CFG> program = new LinkedList<>();
         program.add(cfg);
 
-        DotGenerator.toDot(filename, cfg);
+        //DotGenerator.toDot(filename, cfg);
         ARMGenerator.toARM(program);
         ARMGenerator.writeARM(filename, program);
 

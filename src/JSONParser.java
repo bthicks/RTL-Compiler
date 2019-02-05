@@ -49,12 +49,12 @@ public class JSONParser {
                             sources));
                     break;
                 case "jump_insn":
-                    target = parseTarget(jsonInsn.optJSONObject("target"));
-                    sources = parseSources(jsonInsn.getJSONArray("sources"));
+                    //target = parseTarget(jsonInsn.optJSONObject("target"));
+                    //sources = parseSources(jsonInsn.getJSONArray("sources"));
                     condition = jsonInsn.getString("condition");
                     int labelRef = jsonInsn.getInt("label_ref");
-                    insns.add(new JumpInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target,
-                              sources, labelRef, condition));
+                    insns.add(new JumpInsn(expCode, uid, prevInsn, nextInsn, basicBlock, null,
+                              null, labelRef, condition));
                     break;
                 case "call_insn/i":
                 case "call_insn":

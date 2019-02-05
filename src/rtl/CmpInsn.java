@@ -1,6 +1,7 @@
 package rtl;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class CmpInsn extends AbstractInsn {
@@ -44,6 +45,6 @@ public class CmpInsn extends AbstractInsn {
     @Override
     public List<arm.Insn> toARM() {
         // TODO
-        return null;
+        return new LinkedList<>();
     }
 }

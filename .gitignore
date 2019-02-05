@@ -19,6 +19,8 @@ a.out
 
 *.json
 *.dot
+*.s
+*.text
 
 # Python files
 __pycache/

@@ -2,6 +2,7 @@ package rtl;
 
 import arm.Insn;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class CodeLabelInsn extends AbstractInsn {
@@ -24,6 +25,6 @@ public class CodeLabelInsn extends AbstractInsn {
     @Override
     public List<Insn> toARM() {
         // TODO
-        return null;
+        return new LinkedList<>();
     }
 }

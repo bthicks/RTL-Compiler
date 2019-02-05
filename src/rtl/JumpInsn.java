@@ -1,6 +1,7 @@
 package rtl;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class JumpInsn extends AbstractInsn {
@@ -39,12 +40,14 @@ public class JumpInsn extends AbstractInsn {
     public String toString() {
         List<String> sourceStrings = new ArrayList<>();
 
-        for (Value source : sources) {
+        /*for (Value source : sources) {
             sourceStrings.add(source.toString());
-        }
+        }*/
 
-        return Integer.toString(this.getUid()) + ": " + target.toString()
-                + "=" + String.join("+", sourceStrings) + "\n";
+        /*return Integer.toString(this.getUid()) + ": cc:CC" + target.toString()
+                + "=" + String.join("+", sourceStrings) + "\n";*/
+        return Integer.toString(this.getUid()) + ": cc:CC=L" + Integer.toString(labelRef)
+                + " cond=" + condition + " \n";
     }
 
     @Override
@@ -73,6 +76,6 @@ public class JumpInsn extends AbstractInsn {
     @Override
     public List<arm.Insn> toARM() {
         // TODO
-        return null;
+        return new LinkedList<>();
     }
 }

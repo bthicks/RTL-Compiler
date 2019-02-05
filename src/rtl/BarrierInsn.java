@@ -1,5 +1,6 @@
 package rtl;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class BarrierInsn extends AbstractInsn {
@@ -20,6 +21,6 @@ public class BarrierInsn extends AbstractInsn {
 
     @Override
     public List<arm.Insn> toARM() {
-        return null;
+        return new LinkedList<>();
     }
 }

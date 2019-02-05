@@ -2,6 +2,7 @@ package rtl;
 
 import arm.Insn;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class NoteInsn extends AbstractInsn {
@@ -34,6 +35,6 @@ public class NoteInsn extends AbstractInsn {
 
     @Override
     public List<Insn> toARM() {
-        return null;
+        return new LinkedList<>();
     }
 }
