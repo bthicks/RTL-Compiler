@@ -95,7 +95,6 @@ def generate_instructions(infile):
             for letter in line:
                 yield letter
         else:
-            print(line)
             break
 
     raise StopIteration

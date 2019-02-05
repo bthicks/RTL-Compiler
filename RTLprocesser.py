@@ -37,11 +37,17 @@ class RTLprocesser:
     used_registers = set()
 
     @staticmethod
+    @debug_prints(debug=False)
+    def _process_symbol_ref(instruction, new_insn):
+        new_insn["name"] = instruction[1][0].replace('"', '')
+
+    @staticmethod
+    @debug_prints(debug=False)
     def _process_mem(instruction, new_insn):
         if "plus" in instruction[1][0]:
             RTLprocesser._process_plus(instruction[1], new_insn, mem=True)
-        else:
-            print("MEM", instruction)
+        elif "symbol" in instruction[1][0]:
+            RTLprocesser._process_symbol_ref(instruction[1], new_insn)
 
     @staticmethod
     def _process_plus(instruction, new_insn, mem=False):
@@ -58,7 +64,7 @@ class RTLprocesser:
         RTLprocesser._get_register(instruction[2], new_insn)
 
     @staticmethod
-    @debug_prints(debug=debug)
+    @debug_prints(debug=False)
     def _process_set(instruction, new_insn):
         """An RTL instruction of form: (set lval x).
 
@@ -94,6 +100,7 @@ class RTLprocesser:
             "mem": RTLprocesser._process_mem,
             "compare": RTLprocesser._process_compare,
             "unspec": RTLprocesser._process_unspec,
+            "call": RTLprocesser._process_call,
         }
 
         result = dict_get(instruction[0][0], functions)
@@ -128,8 +135,10 @@ class RTLprocesser:
         pass
 
     @staticmethod
+    @debug_prints(debug=False)
     def _process_call(instruction, new_insn):
-        pass
+        if "mem" in instruction[1][0]:
+            RTLprocesser._process_mem(instruction[1:][0], new_insn)
 
     @staticmethod
     def _process_use(instruction, new_insn):
@@ -189,9 +198,8 @@ class RTLprocesser:
             function = functions.get(insn[0])
 
             if function is not None:
-                function(insn, new_insn)
+                function(insn[1:], new_insn)
         RTLprocesser._get_register(instruction[0][1], new_insn)
-        # new_insn["function"] =
 
     @staticmethod
     def _process_trap_if(instruction, new_insn):
