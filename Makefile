@@ -1,21 +1,23 @@
 PARSER=RTLparser.py
+BUILD=build
+JAR=lib/json-20180813.jar
+SOURCE=sources.txt
+DRIVER=Driver
 
-all: $(RTL) $(PLAINFILE) $(RTL)
-    javac src/*.java
 
-$(PLAINFILE): $(FILE)
-    IFS='.'
-    read -ra ADDR <<< $(FILE)
-    for i in "${ADDR[@]}"
-        echo "$i"
-    done
+all: $(DRIVER)
+	java -cp $(BUILD) $(DRIVER) $(FILE2)
 
-$(RTL):
-    python3 $(PARSER) $(FILE)
+$(DRIVER): $(SOURCE)
+	python3 $(PARSER) $(FILE)
+	javac -cp $(JAR) @$(SOURCE) -d $(BUILD)
+
+$(SOURCE):
+	find -name "*.java" > $(SOURCE)
 
 test:
 	python3 $(PARSER) $(FILE)
 
 clean:
-	rm $(RTL)
+	rm -rf $(BUILD)/* $(SOURCE)
 
