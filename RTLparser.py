@@ -92,10 +92,11 @@ def main():
     """
     check_args()
 
-    file_name = sys.argv[1][:sys.argv[1].index('.')]
+    result = RTLprocesser.process(parse(sys.argv[1]))
 
+    file_name = sys.argv[1][:sys.argv[1].index('.')]
     with open("{infile}.json".format(infile=file_name), 'w') as outfile:
-        json.dump(RTLprocesser.process(parse(sys.argv[1])), outfile, indent=4)
+        json.dump(result, outfile, indent=4)
 
     # with open("rtl.json", 'w') as outfile:
     #     json.dump(RTLprocesser.process(parse(sys.argv[1])), outfile, indent=4)

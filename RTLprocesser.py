@@ -15,6 +15,10 @@ def dict_get(key, a_dict):
 
 
 class RTLprocesser:
+    max_register = 0
+    min_register = float("inf")
+    used_registers = set()
+
     @staticmethod
     def _process_mem(instruction, new_insn):
         if "plus" in instruction[1][0]:
@@ -228,7 +232,12 @@ class RTLprocesser:
             if new_insn:
                 result.append(new_insn)
 
-        return result
+        return {
+            "insns": result,
+            "max": RTLprocesser.max_register,
+            "min": RTLprocesser.min_register,
+            "used": list(RTLprocesser.used_registers),
+        }
 
     @staticmethod
     def _preprocess(instruction, new_insn):
@@ -333,6 +342,12 @@ class RTLprocesser:
 
     @staticmethod
     def _set_register(new_insn, reg_type, value, offset):
+        # Set max and min registers
+        if reg_type == "reg" and value >= 105:
+            RTLprocesser.max_register = max(value, RTLprocesser.max_register)
+            RTLprocesser.min_register = min(value, RTLprocesser.min_register)
+            RTLprocesser.used_registers.add(value)
+
         info = {
             'type': reg_type,
             'value': value,
@@ -352,17 +367,12 @@ class RTLprocesser:
             RTLprocesser._set_register(new_insn, 'reg', int(instruction[1][1]), int(instruction[2][1]))
         elif re.match(r"^reg(/\w)*:[A-Z]I", instruction[0]):
             RTLprocesser._set_register(new_insn, 'reg', int(instruction[1]), 0)
-            return instruction[1]
         elif instruction[0] == "reg:CC":
             RTLprocesser._set_register(new_insn, 'reg', int(instruction[1]), 0)
-            return "cc"
         elif instruction[0] == "const_int":
             RTLprocesser._set_register(new_insn, 'const', int(instruction[1]), 0)
-            return instruction[1]
         else:
             print("GET_REGISTER", new_insn["uid"], instruction)
-
-        return ""
 
     @staticmethod
     def _process_code_label(instruction, new_insn):
