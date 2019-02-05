@@ -16,13 +16,30 @@ public class JSONParser {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(filename));
             JSONTokener tokener = new JSONTokener(reader);
-            JSONArray jsonInsns = new JSONArray(tokener);
+            JSONObject jsonObject = new JSONObject(tokener);
+            JSONArray jsonInsns = jsonObject.getJSONArray("insns");
+            int min = jsonObject.getInt("min");
+            int max = jsonObject.getInt("max");
 
             return parseInsns(jsonInsns);
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             System.exit(0);
             return null;
+        }
+    }
+
+    // This is bad bc we read from the file multiple times but this method won't be needed once we
+    // implemenet register allocation
+    public static int parseMaxRegister(String filename) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            JSONTokener tokener = new JSONTokener(reader);
+            JSONObject jsonObject = new JSONObject(tokener);
+
+            return jsonObject.getInt("max");
+        } catch (FileNotFoundException e) {
+            System.exit(0);
+            return -1;
         }
     }
 

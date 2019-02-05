@@ -12,10 +12,12 @@ public class ARMGenerator {
     public static void toARM(List<CFG> program) {
         // for every function in program
         for (CFG cfg : program) {
+            HashMap<Integer, Integer> stack = getLookUpTable(cfg.getMaxVirtualRegister());
+
             // for every RTL insn, add its corresponding ARM insns to list in basic block
             for (BasicBlock block : cfg.getBasicBlocks()) {
                 for (rtl.Insn rtlInsn : block.getRtlInsns()) {
-                    List<arm.Insn> armInsns = rtlInsn.toARM();
+                    List<arm.Insn> armInsns = rtlInsn.toARM(stack);
 
                     for (arm.Insn insn : armInsns) {
                         block.addArmInsn(insn);
@@ -38,13 +40,10 @@ public class ARMGenerator {
 
         // for every function in program
         for (CFG cfg : program) {
-            int maxVirtualRegister = 118; // TODO
-            HashMap<Integer, Integer> stack = getLookUpTable(maxVirtualRegister);
-
             // set up stack
             armCode.append("\tpush\t{fp, lr}\n");
             armCode.append("\tmov\tfp, sp\n");
-            armCode.append("\tsub\tsp, sp, #" + Integer.toString((maxVirtualRegister - 104) * 4) + "\n");
+            armCode.append("\tsub\tsp, sp, #" + Integer.toString((cfg.getMaxVirtualRegister() - 104) * 4) + "\n");
 
             // write ARM insns
             for (BasicBlock block : cfg.getBasicBlocks()) {
@@ -54,7 +53,7 @@ public class ARMGenerator {
             }
 
             // tear down stack
-            armCode.append("\tadd\tsp, sp, #" + Integer.toString((maxVirtualRegister - 104) * 4) + "\n");
+            armCode.append("\tadd\tsp, sp, #" + Integer.toString((cfg.getMaxVirtualRegister() - 104) * 4) + "\n");
             armCode.append("\tpop\t{fp, pc}\n");
         }
 

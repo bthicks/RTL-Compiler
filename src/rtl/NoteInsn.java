@@ -2,6 +2,7 @@ package rtl;
 
 import arm.Insn;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class NoteInsn extends AbstractInsn {
     }
 
     @Override
-    public List<Insn> toARM() {
+    public List<Insn> toARM(HashMap<Integer, Integer> stack) {
         return new LinkedList<>();
     }
 }
