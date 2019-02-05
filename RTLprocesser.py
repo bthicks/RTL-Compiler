@@ -24,7 +24,6 @@ class RTLprocesser:
 
     @staticmethod
     def _process_plus(instruction, new_insn, mem=False):
-        print("PLUS", new_insn["uid"], mem, instruction)
         if mem:
             RTLprocesser._get_register(instruction, new_insn, mem)
         else:
@@ -112,7 +111,8 @@ class RTLprocesser:
 
     @staticmethod
     def _process_use(instruction, new_insn):
-        new_insn.clear()
+        RTLprocesser._get_register(instruction[0], new_insn)
+        RTLprocesser._set_register(new_insn, "const", 0, 0)
 
     @staticmethod
     def _process_clobber(instruction, new_insn):
