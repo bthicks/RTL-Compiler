@@ -4,7 +4,6 @@ import java.util.List;
 import cfg.ARMGenerator;
 import cfg.BasicBlock;
 import cfg.CFG;
-import cfg.DotGenerator;
 import rtl.CodeLabelInsn;
 import rtl.Insn;
 import rtl.JumpInsn;
@@ -19,7 +18,9 @@ public class Driver {
 
         String filename = args[0];
         List<Insn> insns = JSONParser.parse(filename);
-        CFG cfg = generateCFG("main", insns);
+        int maxVirtualRegister = JSONParser.parseMaxRegister(filename);
+
+        CFG cfg = generateCFG("main", insns, maxVirtualRegister);
         List<CFG> program = new LinkedList<>();
         program.add(cfg);
 
@@ -30,8 +31,8 @@ public class Driver {
         cfg.printCFG();
     }
 
-    private static CFG generateCFG(String functionName, List<Insn> insns) {
-        CFG cfg = new CFG(functionName);
+    private static CFG generateCFG(String functionName, List<Insn> insns, int maxVirtualRegister) {
+        CFG cfg = new CFG(functionName, maxVirtualRegister);
         cfg.addBasicBlock(new BasicBlock(0));
         cfg.addBasicBlock(new BasicBlock(1));
 

@@ -4,6 +4,7 @@ import arm.BInsn;
 import arm.LabelValue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public class JumpInsn extends AbstractInsn {
     }
 
     @Override
-    public List<arm.Insn> toARM() {
+    public List<arm.Insn> toARM(HashMap<Integer, Integer> stack) {
         List<arm.Insn> insns = new LinkedList<>();
         insns.add(new BInsn(new arm.LabelValue(labelRef), condition));
 

@@ -9,10 +9,12 @@ public class CFG {
 
     private String functionName;
     private List<BasicBlock> basicBlocks;
+    private int maxVirtualRegister;
 
-    public CFG(String functionName) {
+    public CFG(String functionName, int maxVirtualRegister) {
         this.functionName = functionName;
         this.basicBlocks = new LinkedList<>();
+        this.maxVirtualRegister = maxVirtualRegister;
     }
 
     public String getFunctionName() {
@@ -30,6 +32,10 @@ public class CFG {
             }
         }
         return null;
+    }
+
+    public int getMaxVirtualRegister() {
+        return maxVirtualRegister;
     }
 
     public BasicBlock addBasicBlock(BasicBlock basicBlock) {

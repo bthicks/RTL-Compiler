@@ -1,5 +1,6 @@
 package rtl;
 
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class AbstractInsn implements Insn {
@@ -42,5 +43,5 @@ public abstract class AbstractInsn implements Insn {
 
     public abstract String toDot();
 
-    public abstract List<arm.Insn> toARM();
+    public abstract List<arm.Insn> toARM(HashMap<Integer, Integer> stack);
 }

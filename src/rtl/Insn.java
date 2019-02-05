@@ -1,5 +1,6 @@
 package rtl;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface Insn {
@@ -18,6 +19,6 @@ public interface Insn {
 
     public String toDot();
 
-    public List<arm.Insn> toARM();
+    public List<arm.Insn> toARM(HashMap<Integer, Integer> stack);
 
 }
