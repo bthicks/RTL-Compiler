@@ -111,8 +111,8 @@ class RTLprocesser:
 
     @staticmethod
     def _process_use(instruction, new_insn):
-        RTLprocesser._get_register(instruction[0], new_insn)
-        RTLprocesser._set_register(new_insn, "const", 0, 0)
+        new_insn['type'] = 'barrier'
+        new_insn['block'] = -1
 
     @staticmethod
     def _process_clobber(instruction, new_insn):
