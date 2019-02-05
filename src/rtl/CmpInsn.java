@@ -45,6 +45,11 @@ public class CmpInsn extends AbstractInsn {
     @Override
     public List<arm.Insn> toARM() {
         // TODO
-        return new LinkedList<>();
+        List<arm.Insn> insns = new LinkedList<>();
+        //insns.add(new arm.CmpInsn());
+        // load sources into r0 and r1
+        // cmp r0 and r1
+
+        return insns;
     }
 }

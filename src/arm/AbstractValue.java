@@ -1,6 +1,6 @@
 package arm;
 
-public abstract class AbstractValue {
+public abstract class AbstractValue implements Value {
     private int value;
 
     public AbstractValue(int value) {

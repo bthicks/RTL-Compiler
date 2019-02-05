@@ -11,7 +11,7 @@ public class CmpInsn extends AbstractInsn {
 
     @Override
     public String toARM() {
-        return "cmp\t" + r1.toString() + ", " + operand2.toString() + "\n";
+        return "\tcmp\t" + r1.toString() + ", " + operand2.toString() + "\n";
     }
 
     @Override

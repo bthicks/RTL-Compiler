@@ -11,7 +11,7 @@ public class PopInsn extends AbstractInsn {
 
     @Override
     public String toARM() {
-        return "pop\t{" + String.join(",", registers.toString()) + "}\n";
+        return "\tpop\t{" + String.join(",", registers.toString()) + "}\n";
     }
 
     @Override
