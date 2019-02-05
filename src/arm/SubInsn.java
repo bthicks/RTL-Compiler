@@ -13,7 +13,7 @@ public class SubInsn extends AbstractInsn {
 
     @Override
     public String toARM() {
-        return "sub\t" + r1.toString() + ", " + r2.toString() + ", " + operand2.toString() + "\n";
+        return "\tsub\t" + r1.toString() + ", " + r2.toString() + ", " + operand2.toString() + "\n";
     }
 
     @Override

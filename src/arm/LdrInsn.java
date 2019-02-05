@@ -12,10 +12,10 @@ public class LdrInsn extends AbstractInsn {
     @Override
     public String toARM() {
         if (offset instanceof RegisterValue) {
-            return "ldr\t" + r1.toString() + ", [" + offset.toString() + "]\n";
+            return "\tldr\t" + r1.toString() + ", [" + offset.toString() + "]\n";
         }
         else {
-            return "ldr\t" + r1.toString() + ", [fp, " + offset.toString() + "]\n";
+            return "\tldr\t" + r1.toString() + ", [fp, " + offset.toString() + "]\n";
         }
     }
 

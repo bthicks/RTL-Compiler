@@ -1,5 +1,8 @@
 package rtl;
 
+import arm.BInsn;
+import arm.LabelValue;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -75,7 +78,9 @@ public class JumpInsn extends AbstractInsn {
 
     @Override
     public List<arm.Insn> toARM() {
-        // TODO
-        return new LinkedList<>();
+        List<arm.Insn> insns = new LinkedList<>();
+        insns.add(new BInsn(new arm.LabelValue(labelRef), condition));
+
+        return insns;
     }
 }

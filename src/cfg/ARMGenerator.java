@@ -3,6 +3,7 @@ package cfg;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 public class ARMGenerator {
@@ -33,21 +34,28 @@ public class ARMGenerator {
         // append ARM file header
         armCode.append(".arch\tarmv7-a\n");
         armCode.append(".text\n");
-        armCode.append(".global\tmain\n");
+        armCode.append(".global\tmain\n\n");
 
         // for every function in program
         for (CFG cfg : program) {
+            int maxVirtualRegister = 118; // TODO
+            HashMap<Integer, Integer> stack = getLookUpTable(maxVirtualRegister);
+
             // set up stack
+            armCode.append("\tpush\t{fp, lr}\n");
+            armCode.append("\tmov\tfp, sp\n");
+            armCode.append("\tsub\tsp, sp, #" + Integer.toString((maxVirtualRegister - 104) * 4) + "\n");
 
             // write ARM insns
             for (BasicBlock block : cfg.getBasicBlocks()) {
                 for (arm.Insn insn : block.getArmInsns()) {
-                    armCode.append(insn.toString());
+                    armCode.append(insn.toARM());
                 }
             }
 
             // tear down stack
-
+            armCode.append("\tadd\tsp, sp, #" + Integer.toString((maxVirtualRegister - 104) * 4) + "\n");
+            armCode.append("\tpop\t{fp, pc}\n");
         }
 
         // write ARM code to .s file
@@ -56,5 +64,20 @@ public class ARMGenerator {
         } catch (IOException e) {
             System.err.println("IOException: " + e.getMessage());
         }
+    }
+
+    // returns mapping of virtual register numbers to their offset on the stack
+    private static HashMap<Integer, Integer> getLookUpTable(int max) {
+        HashMap<Integer, Integer> stack = new HashMap<>();
+        int offset = 4;
+        int min = 105; // 105 is the smallest virtual register seen in RTL
+
+        while (max >= min) {
+            stack.put(max, offset);
+            offset += 4;
+            max--;
+        }
+
+        return stack;
     }
 }

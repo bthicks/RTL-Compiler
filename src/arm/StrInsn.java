@@ -12,10 +12,10 @@ public class StrInsn extends AbstractInsn {
     @Override
     public String toARM() {
         if (address instanceof RegisterValue) {
-            return "str\t" + r1.toString() + ", [fp, " + address.toString() + "]\n";
+            return "\tstr\t" + r1.toString() + ", [fp, " + address.toString() + "]\n";
         }
         else {
-            return "str\t" + r1.toString() + ", [" + address.toString() + "]\n";
+            return "\tstr\t" + r1.toString() + ", [" + address.toString() + "]\n";
         }
     }
 
