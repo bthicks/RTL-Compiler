@@ -1,6 +1,8 @@
 package rtl;
 
 import arm.BInsn;
+import arm.LabelValue;
+import arm.SpecialValue;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,7 +57,9 @@ public class CallInsn extends AbstractInsn {
 
     @Override
     public List<arm.Insn> toARM(HashMap<Integer, Integer> stack) {
-        // TODO
-        return new LinkedList<>();
+        List<arm.Insn> insns = new LinkedList<>();
+        insns.add(new BInsn(new SpecialValue(function), ""));
+
+        return insns;
     }
 }

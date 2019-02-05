@@ -2,7 +2,7 @@ package arm;
 
 public class RegisterValue extends AbstractValue {
 
-    public RegisterValue(int value) {
+    public RegisterValue(String value) {
         super(value);
     }
 

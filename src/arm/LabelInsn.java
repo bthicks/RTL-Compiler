@@ -1,14 +1,14 @@
 package arm;
 
 public class LabelInsn extends AbstractInsn {
-    private String label;
+    private Value label;
 
-    public LabelInsn(String label) {
+    public LabelInsn(Value label) {
         this.label = label;
     }
 
     @Override
     public String toARM() {
-        return ".L" + label + ":\n";
+        return "." + label.toString() + ":\n";
     }
 }

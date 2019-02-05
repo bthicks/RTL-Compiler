@@ -2,7 +2,7 @@ package arm;
 
 public class ImmediateValue extends AbstractValue {
 
-    public ImmediateValue(int value) {
+    public ImmediateValue(String value) {
         super(value);
     }
 

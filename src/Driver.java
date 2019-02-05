@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,6 +56,7 @@ public class Driver {
 
             return program;
         } catch (FileNotFoundException e) {
+            System.out.println("Unable to find JSON file: " + filename);
             System.exit(0);
             return null;
         }

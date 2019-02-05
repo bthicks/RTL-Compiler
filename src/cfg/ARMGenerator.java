@@ -1,8 +1,11 @@
 package cfg;
 
+import arm.*;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,6 +16,15 @@ public class ARMGenerator {
         // for every function in program
         for (CFG cfg : program) {
             HashMap<Integer, Integer> stack = getLookUpTable(cfg.getMaxVirtualRegister());
+            BasicBlock entry = cfg.getBasicBlock(0);
+            BasicBlock exit = cfg.getBasicBlock(1);
+
+            // stack setup
+            entry.addArmInsn(new LabelInsn(new SpecialValue(cfg.getFunctionName())));
+            entry.addArmInsn(new PushInsn(Arrays.asList(new SpecialValue("fp"), new SpecialValue("lr"))));
+            entry.addArmInsn(new MovInsn(new SpecialValue("fp"), new SpecialValue("sp"), ""));
+            entry.addArmInsn(new SubInsn(new SpecialValue("sp"), new SpecialValue("sp"),
+                    new ImmediateValue(Integer.toString((cfg.getMaxVirtualRegister() - 104) * 4))));
 
             // for every RTL insn, add its corresponding ARM insns to list in basic block
             for (BasicBlock block : cfg.getBasicBlocks()) {
@@ -24,12 +36,18 @@ public class ARMGenerator {
                     }
                 }
             }
+
+            // stack teardown
+            exit.addArmInsn(new AddInsn(new SpecialValue("sp"), new SpecialValue("sp"),
+                    new ImmediateValue(Integer.toString((cfg.getMaxVirtualRegister() - 104) * 4))));
+            exit.addArmInsn(new PopInsn(Arrays.asList(new SpecialValue("fp"), new SpecialValue("pc"))));
         }
     }
 
     // write ARM insns in CFG to .s file
     public static void writeARM(String filename, List<CFG> program) {
         filename = filename.replace(".json", ".s");
+        System.out.println(filename);
         File file = new File(filename);
         StringBuilder armCode = new StringBuilder();
 
@@ -40,21 +58,12 @@ public class ARMGenerator {
 
         // for every function in program
         for (CFG cfg : program) {
-            // set up stack
-            armCode.append("\tpush\t{fp, lr}\n");
-            armCode.append("\tmov\tfp, sp\n");
-            armCode.append("\tsub\tsp, sp, #" + Integer.toString((cfg.getMaxVirtualRegister() - 104) * 4) + "\n");
-
             // write ARM insns
             for (BasicBlock block : cfg.getBasicBlocks()) {
                 for (arm.Insn insn : block.getArmInsns()) {
                     armCode.append(insn.toARM());
                 }
             }
-
-            // tear down stack
-            armCode.append("\tadd\tsp, sp, #" + Integer.toString((cfg.getMaxVirtualRegister() - 104) * 4) + "\n");
-            armCode.append("\tpop\t{fp, pc}\n");
         }
 
         // write ARM code to .s file

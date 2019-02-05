@@ -2,6 +2,7 @@ package rtl;
 
 import arm.Insn;
 import arm.LabelInsn;
+import arm.LabelValue;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,7 +28,7 @@ public class CodeLabelInsn extends AbstractInsn {
     @Override
     public List<Insn> toARM(HashMap<Integer, Integer> stack) {
         List<arm.Insn> insns = new LinkedList<>();
-        insns.add(new LabelInsn(Integer.toString(this.getUid())));
+        insns.add(new LabelInsn(new LabelValue(Integer.toString(this.getUid()))));
 
         return insns;
     }

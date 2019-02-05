@@ -1,13 +1,13 @@
 package arm;
 
 public abstract class AbstractValue implements Value {
-    private int value;
+    private String value;
 
-    public AbstractValue(int value) {
+    public AbstractValue(String value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
