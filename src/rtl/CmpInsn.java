@@ -49,7 +49,6 @@ public class CmpInsn extends AbstractInsn {
 
     @Override
     public List<arm.Insn> toARM(HashMap<Integer, Integer> stack) {
-        // TODO
         List<arm.Insn> insns = new LinkedList<>();
 
         // load sources into r0 and r1

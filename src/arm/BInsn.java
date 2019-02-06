@@ -11,8 +11,7 @@ public class BInsn extends AbstractInsn {
     }
 
     @Override
-    public String toARM()
-    {
+    public String toARM() {
         return "\tb" + condition + "\t." + label.toString() + "\n";
     }
 }
