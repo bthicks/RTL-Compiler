@@ -6,6 +6,10 @@ public abstract class AbstractInsn implements Insn {
 
     protected int uid;
 
+    protected String formatARM(String instruction, String parameters) {
+        return String.format("\t%4s %15s %8s", instruction, parameters, "@ insn" + uid);
+    }
+
     public abstract String toARM();
 
     //public abstract List<Integer> getTargets();
