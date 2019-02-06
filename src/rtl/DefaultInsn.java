@@ -69,46 +69,46 @@ public class DefaultInsn extends AbstractInsn {
 
         switch (operation) {
             case "add":
-                insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
+                insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue()))), this.getUid()));
 
                 if (sources.get(1) instanceof rtl.RegisterValue) {
-                    insns.add(new LdrInsn(r2, new ImmediateValue(Integer.toString(stack.get(sources.get(1).getValue())))));
+                    insns.add(new LdrInsn(r2, new ImmediateValue(Integer.toString(stack.get(sources.get(1).getValue()))), this.getUid()));
                 } else {
-                    insns.add(new MovInsn(r2, new ImmediateValue(Integer.toString(sources.get(1).getValue())), ""));
+                    insns.add(new MovInsn(r2, new ImmediateValue(Integer.toString(sources.get(1).getValue())), "", this.getUid()));
                 }
 
                 insns.add(new AddInsn(r0, r1, r2, this.getUid()));
-                insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
+                insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue()))), this.getUid()));
                 break;
             case "load":
-                insns.add(new LdrInsn(r0, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
-                if (target instanceof  rtl.RegisterValue && target.getValue() <= 3) {
+                insns.add(new LdrInsn(r0, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue()))), this.getUid()));
+                if (target instanceof rtl.RegisterValue && target.getValue() <= 3) {
                     //insns.add(new StrInsn(r0, new RegisterValue(Integer.toString(target.getValue()))));
                 } else {
-                    insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
+                    insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue()))), this.getUid()));
                 }
                 break;
             case "move":
                 if (sources.get(0) instanceof rtl.RegisterValue) {
                     if (target.getValue() <= 3) {
-                        insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
-                        insns.add(new MovInsn(r0, r1, ""));
+                        insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue()))), this.getUid()));
+                        insns.add(new MovInsn(r0, r1, "", this.getUid()));
                     } else {
-                        insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
-                        insns.add(new MovInsn(r0, r1, ""));
-                        insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
+                        insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue()))), this.getUid()));
+                        insns.add(new MovInsn(r0, r1, "", this.getUid()));
+                        insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue()))), this.getUid()));
                     }
                 } else {
-                    insns.add(new MovInsn(r0, new ImmediateValue(Integer.toString(sources.get(0).getValue())), ""));
-                    insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
+                    insns.add(new MovInsn(r0, new ImmediateValue(Integer.toString(sources.get(0).getValue())), "", this.getUid()));
+                    insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue()))), this.getUid()));
                 }
 
                 break;
             case "store":
                 if (sources.get(0) instanceof rtl.RegisterValue) {
-                    insns.add(new LdrInsn(r0, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
+                    insns.add(new LdrInsn(r0, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue()))), this.getUid()));
                 } else {
-                    insns.add(new MovInsn(r0, new ImmediateValue(Integer.toString(sources.get(0).getValue())), ""));
+                    insns.add(new MovInsn(r0, new ImmediateValue(Integer.toString(sources.get(0).getValue())), "", this.getUid()));
                 }
 
                 if (target.getValue() == 105) {
@@ -119,9 +119,9 @@ public class DefaultInsn extends AbstractInsn {
                         stack.put(target.getValue() + offset / 4, stack.get(sources.get(0).getValue()));
                     }
 
-                    insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
+                    insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue()))), this.getUid()));
                 } else {
-                    insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
+                    insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue()))), this.getUid()));
                 }
                 break;
         }
