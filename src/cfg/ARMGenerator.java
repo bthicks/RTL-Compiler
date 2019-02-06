@@ -49,8 +49,9 @@ public class ARMGenerator {
             // write ARM insns
             for (BasicBlock block : cfg.getBasicBlocks()) {
                 for (arm.Insn insn : block.getArmInsns()) {
-                    armCode.append(insn.toARM() + "\n");
+                    armCode.append(insn.toARM());
                 }
+                armCode.append("\n");
             }
 
             // stack teardown
