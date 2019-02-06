@@ -4,18 +4,19 @@ public class LdrInsn extends AbstractInsn {
     private Value r1;
     private Value offset;
 
-    public LdrInsn(Value r1, Value offset) {
+    public LdrInsn(Value r1, Value offset, int uid) {
         this.r1 = r1;
         this.offset = offset;
+        this.uid = uid;
     }
 
     @Override
     public String toARM() {
         if (offset instanceof RegisterValue) {
-            return "\tldr\t" + r1.toString() + ", [" + offset.toString() + "]\n";
+            return formatARM("ldr", r1.toString() + ", [" + offset.toString() + "]");
         }
         else {
-            return "\tldr\t" + r1.toString() + ", [fp, " + offset.toString() + "]\n";
+            return formatARM("ldr", r1.toString() + ", [fp, " + offset.toString() + "]");
         }
     }
 
