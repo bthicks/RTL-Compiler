@@ -58,10 +58,10 @@ public class CmpInsn extends AbstractInsn {
 
             if (source instanceof RegisterValue) {
                 String offset = Integer.toString(stack.get(source.getValue()));
-                insns.add(new LdrInsn(new arm.RegisterValue(Integer.toString(i)), new ImmediateValue(offset)));
+                insns.add(new LdrInsn(new arm.RegisterValue(Integer.toString(i)), new ImmediateValue(offset), this.getUid()));
             } else {
                 insns.add(new MovInsn(new arm.RegisterValue(Integer.toString(i)),
-                        new arm.ImmediateValue(Integer.toString(source.getValue())), ""));
+                        new arm.ImmediateValue(Integer.toString(source.getValue())), "", this.getUid()));
             }
         }
         insns.add(new arm.CmpInsn(new arm.RegisterValue("0"), new arm.RegisterValue("1")));
