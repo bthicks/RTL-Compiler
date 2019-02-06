@@ -81,7 +81,7 @@ public class DefaultInsn extends AbstractInsn {
             case "move":
                 if (sources.get(0) instanceof rtl.RegisterValue) {
                     if (target.getValue() <= 3) {
-                        insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(sources.get(0).getValue()))));
+                        insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
                         insns.add(new MovInsn(r0, r1, ""));
                     } else {
                         insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
