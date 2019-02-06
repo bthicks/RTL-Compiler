@@ -41,7 +41,7 @@ public class ARMGenerator {
         // for every function in program
         for (CFG cfg : program) {
             // stack setup
-            armCode.append(cfg.getFunctionName() + ":\n");
+            armCode.append(cfg.getFunctionName()).append(":\n");
             armCode.append("\tpush\t{fp, lr}\n");
             armCode.append("\tmov\tfp, sp\n");
             armCode.append("\tsub\tsp, sp, #" + Integer.toString((cfg.getMaxVirtualRegister() - 104) * 4) + "\n");

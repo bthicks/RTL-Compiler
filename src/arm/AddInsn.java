@@ -14,7 +14,7 @@ public class AddInsn extends AbstractInsn {
 
     @Override
     public String toARM() {
-        return "\tadd\t" + r1.toString() + ", " + r2.toString() + ", " + operand2.toString() + "\t@" + uid + "\n";
+        return "\tadd\t" + r1.toString() + ", " + r2.toString() + ", " + operand2.toString() + "\t@ insn " + uid + "\n";
     }
 
     @Override
