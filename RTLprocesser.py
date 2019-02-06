@@ -167,6 +167,8 @@ class RTLprocesser:
     def _process_call(instruction, new_insn):
         if "mem" in instruction[0][0]:
             RTLprocesser._process_mem(instruction[0], new_insn)
+        elif "call" in instruction[0] and "mem" in instruction[1][0]:
+            RTLprocesser._process_mem(instruction[1], new_insn)
         else:
             print("PROCESS_CALL", new_insn["uid"], instruction)
 
