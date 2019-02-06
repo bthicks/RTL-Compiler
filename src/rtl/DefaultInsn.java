@@ -71,7 +71,7 @@ public class DefaultInsn extends AbstractInsn {
             case "add":
                 insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
                 insns.add(new LdrInsn(r2, new ImmediateValue(Integer.toString(stack.get(sources.get(1).getValue())))));
-                insns.add(new AddInsn(r0, r1, r2));
+                insns.add(new AddInsn(r0, r1, r2, this.getUid()));
                 insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
                 break;
             case "load":

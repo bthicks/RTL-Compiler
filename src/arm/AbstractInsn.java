@@ -4,6 +4,8 @@ import java.util.List;
 
 public abstract class AbstractInsn implements Insn {
 
+    protected int uid;
+
     public abstract String toARM();
 
     //public abstract List<Integer> getTargets();
