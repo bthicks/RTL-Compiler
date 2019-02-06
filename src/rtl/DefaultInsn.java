@@ -74,7 +74,7 @@ public class DefaultInsn extends AbstractInsn {
                 if (sources.get(1) instanceof rtl.RegisterValue) {
                     insns.add(new LdrInsn(r2, new ImmediateValue(Integer.toString(stack.get(sources.get(1).getValue())))));
                 } else {
-                    insns.add(new LdrInsn(r2, new ImmediateValue(Integer.toString(sources.get(1).getValue()))));
+                    insns.add(new MovInsn(r2, new ImmediateValue(Integer.toString(sources.get(1).getValue())), ""));
                 }
 
                 insns.add(new AddInsn(r0, r1, r2, this.getUid()));
@@ -82,8 +82,8 @@ public class DefaultInsn extends AbstractInsn {
                 break;
             case "load":
                 insns.add(new LdrInsn(r0, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
-                if (target.getValue() <= 3) {
-                    insns.add(new StrInsn(r0, new RegisterValue(Integer.toString(target.getValue()))));
+                if (target instanceof  rtl.RegisterValue && target.getValue() <= 3) {
+                    //insns.add(new StrInsn(r0, new RegisterValue(Integer.toString(target.getValue()))));
                 } else {
                     insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
                 }
