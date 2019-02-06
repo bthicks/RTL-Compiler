@@ -72,7 +72,7 @@ public class DefaultInsn extends AbstractInsn {
                 insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
 
                 if (sources.get(1) instanceof rtl.RegisterValue) {
-                    insns.add(new LdrInsn(r2, new RegisterValue(Integer.toString(stack.get(sources.get(1).getValue())))));
+                    insns.add(new LdrInsn(r2, new ImmediateValue(Integer.toString(stack.get(sources.get(1).getValue())))));
                 } else {
                     insns.add(new LdrInsn(r2, new ImmediateValue(Integer.toString(sources.get(1).getValue()))));
                 }
