@@ -51,7 +51,6 @@ public class ARMGenerator {
                 for (arm.Insn insn : block.getArmInsns()) {
                     armCode.append(insn.toARM());
                 }
-                armCode.append("\n");
             }
 
             // stack teardown

@@ -79,14 +79,14 @@ public class DefaultInsn extends AbstractInsn {
                 insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
                 break;
             case "move":
-                //System.out.println(getUid() + ": " + sources.get(0).getValue());
                 if (sources.get(0) instanceof rtl.RegisterValue) {
-                    if (sources.get(0).getValue() <= 3) {
+                    if (target.getValue() <= 3) {
                         insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(sources.get(0).getValue()))));
                         insns.add(new MovInsn(r0, r1, ""));
                     } else {
                         insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
                         insns.add(new MovInsn(r0, r1, ""));
+                        insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
                     }
                 } else {
                     insns.add(new MovInsn(r0, new ImmediateValue(Integer.toString(sources.get(0).getValue())), ""));
