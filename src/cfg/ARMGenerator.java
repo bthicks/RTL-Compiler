@@ -69,12 +69,12 @@ public class ARMGenerator {
     // returns mapping of virtual register numbers to their offset on the stack
     private static HashMap<Integer, Integer> getLookUpTable(int max) {
         HashMap<Integer, Integer> stack = new HashMap<>();
-        int offset = 4;
+        int offset = -4;
         int min = 105; // 105 is the smallest virtual register seen in RTL
 
         while (max >= min) {
             stack.put(max, offset);
-            offset += 4;
+            offset -= 4;
             max--;
         }
 

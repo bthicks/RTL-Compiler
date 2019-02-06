@@ -62,6 +62,11 @@ public class DefaultInsn extends AbstractInsn {
         arm.Value r1 = new arm.RegisterValue("1");
         arm.Value r2 = new arm.RegisterValue("2");
 
+        for (Value source : sources) {
+            remapValue(source, stack);
+        }
+        remapValue(target, stack);
+
         switch (operation) {
             case "add":
                 insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
@@ -75,11 +80,19 @@ public class DefaultInsn extends AbstractInsn {
                 break;
             case "move":
                 //System.out.println(getUid() + ": " + sources.get(0).getValue());
-                //insns.add(new MovInsn(r0, new ImmediateValue(Integer.toString(sources.get(0).getValue())), ""));
-                //insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
+                if (sources.get(0) instanceof rtl.RegisterValue) {
+                    if (sources.get(0).getValue() <= 3) {
+                        insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(sources.get(0).getValue()))));
+                        insns.add(new MovInsn(r0, r1, ""));
+                    } else {
+                        insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
+                        insns.add(new MovInsn(r0, r1, ""));
+                    }
+                } else {
+                    insns.add(new MovInsn(r0, new ImmediateValue(Integer.toString(sources.get(0).getValue())), ""));
+                    insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
+                }
 
-                //insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(sources.get(0).getValue()))));
-                //insns.add(new MovInsn(r0, r1, ""));
                 break;
             case "store":
                 if (sources.get(0) instanceof rtl.RegisterValue) {
@@ -100,17 +113,13 @@ public class DefaultInsn extends AbstractInsn {
                 } else {
                     insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
                 }
-
-                //System.out.println(getUid());
-
-                //insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
                 break;
         }
 
         return insns;
     }
 
-    private static void remapValue(HashMap<Integer, Integer> stack, Value register) {
+    private static void remapValue(Value register, HashMap<Integer, Integer> stack) {
         if (!(register instanceof rtl.RegisterValue)) {
             return;
         }
@@ -118,8 +127,12 @@ public class DefaultInsn extends AbstractInsn {
         int value = register.getValue();
         int offset = register.getOffset();
 
+        if (stack.get(value + (offset / 4)) == null) {
+            return;
+        }
+
         if (value == 105 && offset < 0) {
-            register.setValue(stack.get(value + (offset / 4)));
+            register.setValue(value + (offset / 4));
         }
     }
 }

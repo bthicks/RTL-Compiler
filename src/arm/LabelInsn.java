@@ -9,6 +9,6 @@ public class LabelInsn extends AbstractInsn {
 
     @Override
     public String toARM() {
-        return "." + label.toString() + ":\n";
+        return label.toString() + ":\n";
     }
 }
