@@ -81,7 +81,7 @@ class RTLprocesser:
             if "reg" in instruction[1][0] or "const" in instruction[1][0]:
                 new_insn["operation"] = "store"
             elif "plus" in instruction[1][0]:
-                new_insn["operation"] = "add"
+                new_insn["operation"] = "store"
             else:
                 print("GET_SET", new_insn["uid"], instruction)
         else:
