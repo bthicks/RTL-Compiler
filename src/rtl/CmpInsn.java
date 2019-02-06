@@ -64,7 +64,7 @@ public class CmpInsn extends AbstractInsn {
                         new arm.ImmediateValue(Integer.toString(source.getValue())), "", this.getUid()));
             }
         }
-        insns.add(new arm.CmpInsn(new arm.RegisterValue("0"), new arm.RegisterValue("1")));
+        insns.add(new arm.CmpInsn(new arm.RegisterValue("0"), new arm.RegisterValue("1"), this.getUid()));
 
         return insns;
     }

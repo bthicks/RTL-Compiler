@@ -80,7 +80,7 @@ public class JumpInsn extends AbstractInsn {
     @Override
     public List<arm.Insn> toARM(HashMap<Integer, Integer> stack) {
         List<arm.Insn> insns = new LinkedList<>();
-        insns.add(new BInsn(new arm.LabelValue(Integer.toString(labelRef)), condition));
+        insns.add(new BInsn(new arm.LabelValue(Integer.toString(labelRef)), condition, this.getUid()));
 
         return insns;
     }

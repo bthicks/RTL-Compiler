@@ -14,7 +14,7 @@ public class MovInsn extends AbstractInsn {
 
     @Override
     public String toARM() {
-        return formatARM("mov", condition + "\t" + r1.toString() + ", " + operand2.toString());
+        return formatARM("mov" + condition, r1.toString() + ", " + operand2.toString());
     }
 
     @Override
