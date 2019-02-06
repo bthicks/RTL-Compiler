@@ -65,6 +65,30 @@ class RTLprocesser:
 
     @staticmethod
     @debug_prints(debug=False)
+    def _get_set_operation(instruction, new_insn):
+        if "reg" in instruction[0][0]:
+            if "mem" in instruction[1][0]:
+                new_insn["operation"] = "load"
+            elif "reg" in instruction[1][0] or "const" in instruction[1][0]:
+                new_insn["operation"] = "move"
+            elif "plus" in instruction[1][0]:
+                new_insn["operation"] = "add"
+            elif "compare" in instruction[1][0]:
+                pass
+            else:
+                print("GET_SET", new_insn["uid"], instruction)
+        elif "mem" in instruction[0][0]:
+            if "reg" in instruction[1][0] or "const" in instruction[1][0]:
+                new_insn["operation"] = "store"
+            elif "plus" in instruction[1][0]:
+                new_insn["operation"] = "add"
+            else:
+                print("GET_SET", new_insn["uid"], instruction)
+        else:
+            print("GET_SET", new_insn["uid"], instruction)
+
+    @staticmethod
+    @debug_prints(debug=False)
     def _process_set(instruction, new_insn):
         """An RTL instruction of form: (set lval x).
 
@@ -114,6 +138,8 @@ class RTLprocesser:
             result(instruction[1], new_insn)
         else:
             print("SET", new_insn["uid"], instruction[1], file=sys.stderr)
+
+        RTLprocesser._get_set_operation(instruction, new_insn)
 
     @staticmethod
     def _process_return(*args):
