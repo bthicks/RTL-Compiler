@@ -58,7 +58,7 @@ public class CallInsn extends AbstractInsn {
     @Override
     public List<arm.Insn> toARM(HashMap<Integer, Integer> stack) {
         List<arm.Insn> insns = new LinkedList<>();
-        insns.add(new BInsn(new SpecialValue(function), ""));
+        insns.add(new BInsn(new SpecialValue(function), "l"));
 
         return insns;
     }

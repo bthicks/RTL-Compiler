@@ -11,7 +11,7 @@ public class StrInsn extends AbstractInsn {
 
     @Override
     public String toARM() {
-        if (address instanceof RegisterValue) {
+        if (address instanceof ImmediateValue) {
             return "\tstr\t" + r1.toString() + ", [fp, " + address.toString() + "]\n";
         }
         else {

@@ -19,4 +19,8 @@ public abstract class AbstractValue implements Value {
     }
 
     public abstract String toString();
+
+    public void setValue(int value) {
+        this.value = value;
+    }
 }

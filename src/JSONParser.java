@@ -22,13 +22,15 @@ public class JSONParser {
             List<Value> sources;
             String condition;
             String function;
+            String operation;
 
             switch (expCode) {
                 case "insn":
                     target = parseTarget(jsonInsn.optJSONObject("target"));
                     sources = parseSources(jsonInsn.getJSONArray("sources"));
+                    operation = jsonInsn.getString("operation");
                     insns.add(new DefaultInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target,
-                            sources));
+                            sources, operation));
                     break;
                 case "jump_insn":
                     //target = parseTarget(jsonInsn.optJSONObject("target"));

@@ -7,4 +7,6 @@ public interface Value {
     public int getOffset();
 
     public String toString();
+
+    public void setValue(int value);
 }
