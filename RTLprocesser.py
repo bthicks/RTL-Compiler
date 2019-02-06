@@ -48,6 +48,8 @@ class RTLprocesser:
             RTLprocesser._process_plus(instruction[1], new_insn, mem=True)
         elif "symbol" in instruction[1][0]:
             RTLprocesser._process_symbol_ref(instruction[1], new_insn)
+        else:
+            print("PROCESS_MEM", new_insn["uid"], instruction)
 
     @staticmethod
     def _process_plus(instruction, new_insn, mem=False):
@@ -163,8 +165,10 @@ class RTLprocesser:
     @staticmethod
     @debug_prints(debug=False)
     def _process_call(instruction, new_insn):
-        if "mem" in instruction[1][0]:
-            RTLprocesser._process_mem(instruction[1:][0], new_insn)
+        if "mem" in instruction[0][0]:
+            RTLprocesser._process_mem(instruction[0], new_insn)
+        else:
+            print("PROCESS_CALL", new_insn["uid"], instruction)
 
     @staticmethod
     def _process_use(instruction, new_insn):
@@ -203,6 +207,7 @@ class RTLprocesser:
         pass
 
     @staticmethod
+    @debug_prints(debug=False)
     def _process_parallel(instruction, new_insn):
         """An RTL instruction representing parallel computations
 
@@ -218,6 +223,7 @@ class RTLprocesser:
             "return": RTLprocesser._process_return,
             "simple_return": RTLprocesser._process_return,
             "clobber": RTLprocesser._process_clobber,
+            "use": lambda x, y: RTLprocesser._get_register(x[0], y)
         }
 
         for insn in instruction:
@@ -225,7 +231,9 @@ class RTLprocesser:
 
             if function is not None:
                 function(insn[1:], new_insn)
-        RTLprocesser._get_register(instruction[0][1], new_insn)
+            else:
+                print("PROCESS_PARALLEL", new_insn["uid"], insn)
+        # RTLprocesser._get_register(instruction[0][1], new_insn)
 
     @staticmethod
     def _process_trap_if(instruction, new_insn):
@@ -363,6 +371,8 @@ class RTLprocesser:
 
         if instruction[5][0] == "parallel":
             RTLprocesser._process_parallel(instruction[5][1], new_insn)
+        else:
+            print("PROCESS_CALL_INSN", new_insn["uid"], instruction)
 
         RTLprocesser._set_register(new_insn, "symbol_ref", 0, 0)
 
