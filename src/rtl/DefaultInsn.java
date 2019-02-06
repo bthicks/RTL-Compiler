@@ -82,7 +82,11 @@ public class DefaultInsn extends AbstractInsn {
                 break;
             case "load":
                 insns.add(new LdrInsn(r0, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())))));
-                insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
+                if (target.getValue() <= 3) {
+                    insns.add(new StrInsn(r0, new RegisterValue(Integer.toString(target.getValue()))));
+                } else {
+                    insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue())))));
+                }
                 break;
             case "move":
                 if (sources.get(0) instanceof rtl.RegisterValue) {
