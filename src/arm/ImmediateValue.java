@@ -8,6 +8,6 @@ public class ImmediateValue extends AbstractValue {
 
     @Override
     public String toString() {
-        return "#-" + this.getValue();
+        return "#" + this.getValue();
     }
 }
