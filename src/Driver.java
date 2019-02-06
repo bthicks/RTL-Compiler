@@ -24,6 +24,9 @@ public class Driver {
 
         String filename = args[0];
         List<CFG> program = parseJSON(filename);
+        for (CFG cfg : program) {
+            cfg.sortCFG();
+        }
 
         //DotGenerator.toDot(filename, cfg);
         ARMGenerator.toARM(program);
