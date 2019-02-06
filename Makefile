@@ -6,7 +6,7 @@ DRIVER=Driver
 
 
 all: $(DRIVER)
-	java -cp $(BUILD) $(DRIVER) $(FILE2)
+	java -cp $(BUILD);$(JAR) $(DRIVER) $(FILE2)
 
 $(DRIVER): $(SOURCE)
 	python3 $(PARSER) $(FILE)
