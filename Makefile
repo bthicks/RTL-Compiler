@@ -4,12 +4,18 @@ JAR=lib/json-20180813.jar
 SOURCE=sources.txt
 DRIVER=Driver
 
+# C stuff
+CC=gcc
+FLAGS=-o $(FILE).o 
+TARGET=a.out
+
 
 all: $(DRIVER)
-	java -cp $(BUILD):$(JAR) $(DRIVER) $(FILE2)
+	java -cp $(BUILD):$(JAR) $(DRIVER) $(FILE).json
+	$(CC) $(FILE).s $(FLAGS) 
 
 $(DRIVER): $(SOURCE)
-	python3 $(PARSER) $(FILE)
+	python3 $(PARSER) $(FILE).c.*.expand
 	javac -cp $(JAR) @$(SOURCE) -d $(BUILD)
 
 $(SOURCE):
