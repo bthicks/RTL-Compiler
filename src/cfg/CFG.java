@@ -2,6 +2,8 @@ package cfg;
 
 import rtl.Insn;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -93,5 +95,9 @@ public class CFG {
                 System.out.print("\t" + insn.toString());
             }
         }
+    }
+
+    public void sortCFG() {
+        Collections.sort(basicBlocks, (a, b) -> a.getLabel() - b.getLabel());
     }
 }
