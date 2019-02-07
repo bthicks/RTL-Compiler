@@ -70,20 +70,20 @@ class RTLprocesser:
     def _get_set_operation(instruction, new_insn):
         if "reg" in instruction[0][0]:
             if "mem" in instruction[1][0]:
-                new_insn["operation"] = "load"
+                new_insn["type"] = "load_insn"
             elif "reg" in instruction[1][0] or "const" in instruction[1][0]:
-                new_insn["operation"] = "move"
+                new_insn["type"] = "move_insn"
             elif "plus" in instruction[1][0]:
-                new_insn["operation"] = "add"
+                new_insn["type"] = "add_insn"
             elif "compare" in instruction[1][0]:
                 pass
             else:
                 print("GET_SET", new_insn["uid"], instruction)
         elif "mem" in instruction[0][0]:
             if "reg" in instruction[1][0] or "const" in instruction[1][0]:
-                new_insn["operation"] = "store"
+                new_insn["type"] = "store_insn"
             elif "plus" in instruction[1][0]:
-                new_insn["operation"] = "store"
+                new_insn["type"] = "store_insn"
             else:
                 print("GET_SET", new_insn["uid"], instruction)
         else:
