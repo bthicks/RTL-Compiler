@@ -5,15 +5,16 @@ public class SubInsn extends AbstractInsn {
     private Value r2;
     private Value operand2;
 
-    public SubInsn(Value r1, Value r2, Value operand2) {
+    public SubInsn(Value r1, Value r2, Value operand2, int uid) {
         this.r1 = r1;
         this.r2 = r2;
         this.operand2 = operand2;
+        this.uid = uid;
     }
 
     @Override
     public String toARM() {
-        return "\tsub\t" + r1.toString() + ", " + r2.toString() + ", " + operand2.toString() + "\n";
+        return formatARM("sub", r1.toString() + ", " + r2.toString() + ", " + operand2.toString());
     }
 
     @Override
