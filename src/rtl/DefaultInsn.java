@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+@Deprecated
 public class DefaultInsn extends AbstractInsn {
 
     private Value target;
@@ -77,7 +78,7 @@ public class DefaultInsn extends AbstractInsn {
                     insns.add(new MovInsn(r2, new ImmediateValue(Integer.toString(sources.get(1).getValue())), "", this.getUid()));
                 }
 
-                insns.add(new AddInsn(r0, r1, r2, this.getUid()));
+                insns.add(new arm.AddInsn(r0, r1, r2, this.getUid()));
                 insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue()))), this.getUid()));
                 break;
             case "load":
@@ -87,22 +88,6 @@ public class DefaultInsn extends AbstractInsn {
                 } else {
                     insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue()))), this.getUid()));
                 }
-                break;
-            case "move":
-                if (sources.get(0) instanceof rtl.RegisterValue) {
-                    if (target.getValue() <= 3) {
-                        insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue()))), this.getUid()));
-                        insns.add(new MovInsn(r0, r1, "", this.getUid()));
-                    } else {
-                        insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue()))), this.getUid()));
-                        insns.add(new MovInsn(r0, r1, "", this.getUid()));
-                        insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue()))), this.getUid()));
-                    }
-                } else {
-                    insns.add(new MovInsn(r0, new ImmediateValue(Integer.toString(sources.get(0).getValue())), "", this.getUid()));
-                    insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue()))), this.getUid()));
-                }
-
                 break;
             case "store":
                 if (sources.get(0) instanceof rtl.RegisterValue) {
@@ -127,22 +112,5 @@ public class DefaultInsn extends AbstractInsn {
         }
 
         return insns;
-    }
-
-    private static void remapValue(Value register, HashMap<Integer, Integer> stack) {
-        if (!(register instanceof rtl.RegisterValue)) {
-            return;
-        }
-
-        int value = register.getValue();
-        int offset = register.getOffset();
-
-        if (stack.get(value + (offset / 4)) == null) {
-            return;
-        }
-
-        if (value == 105 && offset < 0) {
-            register.setValue(value + (offset / 4));
-        }
     }
 }

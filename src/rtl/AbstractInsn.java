@@ -44,4 +44,21 @@ public abstract class AbstractInsn implements Insn {
     public abstract String toDot();
 
     public abstract List<arm.Insn> toARM(HashMap<Integer, Integer> stack);
+
+    protected static void remapValue(Value register, HashMap<Integer, Integer> stack) {
+        if (!(register instanceof rtl.RegisterValue)) {
+            return;
+        }
+
+        int value = register.getValue();
+        int offset = register.getOffset();
+
+        if (stack.get(value + (offset / 4)) == null) {
+            return;
+        }
+
+        if (value == 105 && offset < 0) {
+            register.setValue(value + (offset / 4));
+        }
+    }
 }

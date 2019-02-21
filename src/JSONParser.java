@@ -22,15 +22,27 @@ public class JSONParser {
             List<Value> sources;
             String condition;
             String function;
-            String operation;
 
             switch (expCode) {
-                case "insn":
+                case "move_insn":
                     target = parseTarget(jsonInsn.optJSONObject("target"));
                     sources = parseSources(jsonInsn.getJSONArray("sources"));
-                    operation = jsonInsn.getString("operation");
-                    insns.add(new DefaultInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target,
-                            sources, operation));
+                    insns.add(new MoveInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target, sources));
+                    break;
+                case "load_insn":
+                    target = parseTarget(jsonInsn.optJSONObject("target"));
+                    sources = parseSources(jsonInsn.getJSONArray("sources"));
+                    insns.add(new LoadInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target, sources));
+                    break;
+                case "store_insn":
+                    target = parseTarget(jsonInsn.optJSONObject("target"));
+                    sources = parseSources(jsonInsn.getJSONArray("sources"));
+                    insns.add(new StoreInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target, sources));
+                    break;
+                case "add_insn":
+                    target = parseTarget(jsonInsn.optJSONObject("target"));
+                    sources = parseSources(jsonInsn.getJSONArray("sources"));
+                    insns.add(new AddInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target, sources));
                     break;
                 case "jump_insn":
                     //target = parseTarget(jsonInsn.optJSONObject("target"));
@@ -38,7 +50,7 @@ public class JSONParser {
                     condition = jsonInsn.getString("condition");
                     int labelRef = jsonInsn.getInt("label_ref");
                     insns.add(new JumpInsn(expCode, uid, prevInsn, nextInsn, basicBlock, null,
-                              null, labelRef, condition));
+                            null, labelRef, condition));
                     break;
                 case "call_insn/i":
                 case "call_insn":
