@@ -1,11 +1,13 @@
 package arm;
 
+import java.util.List;
+
 public interface Insn {
     public String toARM();
 
-    //public Value getTarget();
+    public String getTarget();
 
-    //public List<Value> getSources();
+    public List<String> getSources();
 
     public void allocateTarget(String real);
 

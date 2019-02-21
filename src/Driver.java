@@ -30,6 +30,7 @@ public class Driver {
 
         //DotGenerator.toDot(filename, cfg);
         ARMGenerator.toARM(program);
+        //ARMGenerator.allocateRegisters(program);
         ARMGenerator.writeARM(filename, program);
 
         for (CFG cfg : program) {

@@ -1,5 +1,6 @@
 package arm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractInsn implements Insn {
@@ -12,9 +13,13 @@ public abstract class AbstractInsn implements Insn {
 
     public abstract String toARM();
 
-    //public abstract List<Integer> getTargets();
+    public String getTarget() {
+        return null;
+    }
 
-    //public abstract List<Integer> getSources();
+    public List<String> getSources() {
+        return new ArrayList<>();
+    }
 
     public void allocateTarget(String real) {}
 

@@ -27,6 +27,13 @@ public class ARMGenerator {
         }
     }
 
+    // TODO: register allocation
+    public static void allocateRegisters(List<CFG> program) {
+        for (CFG cfg : program) {
+            cfg.LVA();
+        }
+    }
+
     // write ARM insns in CFG to .s file
     public static void writeARM(String filename, List<CFG> program) {
         filename = filename.replace(".json", ".s");

@@ -100,4 +100,30 @@ public class CFG {
     public void sortCFG() {
         Collections.sort(basicBlocks, (a, b) -> a.getLabel() - b.getLabel());
     }
+
+    public void LVA() {
+        boolean changed = true;
+
+        // Reverse list of basic blocks to run algorithm from bottom up
+        Collections.reverse(basicBlocks);
+
+        // Generate def and use sets in each block
+        for (BasicBlock block : basicBlocks) {
+            block.generateDefAndUseSets();
+        }
+
+        // Dataflow iterative analysis
+        while (changed) {
+            changed = false;
+
+            for (BasicBlock block : basicBlocks) {
+                if (block.LVA()) {
+                    changed = true;
+                }
+            }
+        }
+
+        // Un-reverse list
+        Collections.reverse(basicBlocks);
+    }
 }
