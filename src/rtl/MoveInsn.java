@@ -39,6 +39,24 @@ public class MoveInsn extends AbstractInsn {
     @Override
     public List<Insn> toARM(HashMap<Integer, Integer> stack) {
         List<arm.Insn> insns = new LinkedList<>();
+        arm.Value r0, r1;
+
+        r0 = new arm.RegisterValue(Integer.toString(target.getValue()));
+
+        if (sources.get(0) instanceof RegisterValue) {
+            r1 = new arm.RegisterValue(Integer.toString(sources.get(0).getValue()));
+        } else {
+            r1 = new arm.ImmediateValue(Integer.toString(sources.get(0).getValue()));
+        }
+
+        insns.add(new MovInsn(r0, r1, "", this.getUid()));
+
+        return insns;
+    }
+
+    /*@Override
+    public List<Insn> toARM(HashMap<Integer, Integer> stack) {
+        List<arm.Insn> insns = new LinkedList<>();
         arm.Value r0 = new arm.RegisterValue("0");
         arm.Value r1 = new arm.RegisterValue("1");
 
@@ -62,5 +80,5 @@ public class MoveInsn extends AbstractInsn {
         }
 
         return insns;
-    }
+    }*/
 }

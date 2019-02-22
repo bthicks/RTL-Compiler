@@ -3,6 +3,7 @@ package rtl;
 import arm.ImmediateValue;
 import arm.Insn;
 import arm.LdrInsn;
+import arm.RegisterValue;
 import arm.StrInsn;
 
 import java.util.ArrayList;
@@ -40,6 +41,21 @@ public class LoadInsn extends AbstractInsn {
     @Override
     public List<Insn> toARM(HashMap<Integer, Integer> stack) {
         List<arm.Insn> insns = new LinkedList<>();
+        arm.Value r0, r1;
+
+        System.out.println(target.getValue());
+
+        r0 = new arm.RegisterValue(Integer.toString(target.getValue()));
+        r1 = new arm.ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())));
+
+        insns.add(new LdrInsn(r0, r1, this.getUid()));
+
+        return insns;
+    }
+
+    /*@Override
+    public List<Insn> toARM(HashMap<Integer, Integer> stack) {
+        List<arm.Insn> insns = new LinkedList<>();
         arm.Value r0 = new arm.RegisterValue("0");
 
         for (Value source : sources) {
@@ -53,5 +69,5 @@ public class LoadInsn extends AbstractInsn {
         }
 
         return insns;
-    }
+    }*/
 }

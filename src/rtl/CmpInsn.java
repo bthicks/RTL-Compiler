@@ -50,6 +50,28 @@ public class CmpInsn extends AbstractInsn {
     @Override
     public List<arm.Insn> toARM(HashMap<Integer, Integer> stack) {
         List<arm.Insn> insns = new LinkedList<>();
+        arm.Value r0, r1;
+
+        if (sources.get(0) instanceof RegisterValue) {
+            r0 = new arm.RegisterValue(Integer.toString(sources.get(0).getValue()));
+        } else {
+            r0 = new arm.ImmediateValue(Integer.toString(sources.get(0).getValue()));
+        }
+
+        if (sources.get(1) instanceof RegisterValue) {
+            r1 = new arm.RegisterValue(Integer.toString(sources.get(1).getValue()));
+        } else {
+            r1 = new arm.ImmediateValue(Integer.toString(sources.get(1).getValue()));
+        }
+
+        insns.add(new arm.CmpInsn(r0, r1, this.getUid()));
+
+        return insns;
+    }
+
+    /*@Override
+    public List<arm.Insn> toARM(HashMap<Integer, Integer> stack) {
+        List<arm.Insn> insns = new LinkedList<>();
 
         // load sources into r0 and r1
         // cmp r0 and r1
@@ -67,5 +89,5 @@ public class CmpInsn extends AbstractInsn {
         insns.add(new arm.CmpInsn(new arm.RegisterValue("0"), new arm.RegisterValue("1"), this.getUid()));
 
         return insns;
-    }
+    }*/
 }

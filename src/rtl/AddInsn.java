@@ -39,6 +39,25 @@ public class AddInsn extends AbstractInsn {
     @Override
     public List<Insn> toARM(HashMap<Integer, Integer> stack) {
         List<arm.Insn> insns = new LinkedList<>();
+        arm.Value r0, r1, r2;
+
+        r0 = new arm.RegisterValue(Integer.toString(target.getValue()));
+        r1 = new arm.RegisterValue(Integer.toString(sources.get(0).getValue()));
+
+        if (sources.get(1) instanceof RegisterValue) {
+            r2 = new arm.RegisterValue(Integer.toString(sources.get(1).getValue()));
+        } else {
+            r2 = new arm.ImmediateValue(Integer.toString(sources.get(1).getValue()));
+        }
+
+        insns.add(new arm.AddInsn(r0, r1, r2, this.getUid()));
+
+        return insns;
+    }
+
+    /*@Override
+    public List<Insn> toARM(HashMap<Integer, Integer> stack) {
+        List<arm.Insn> insns = new LinkedList<>();
         arm.Value r0 = new arm.RegisterValue("0");
         arm.Value r1 = new arm.RegisterValue("1");
         arm.Value r2 = new arm.RegisterValue("2");
@@ -47,7 +66,10 @@ public class AddInsn extends AbstractInsn {
             remapValue(source, stack);
         }
         remapValue(target, stack);
-
+        System.out.println(target.getValue());
+        for (Value source : sources) {
+            System.out.println(source.getValue());
+        }
         insns.add(new LdrInsn(r1, new ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue()))), this.getUid()));
 
         if (sources.get(1) instanceof rtl.RegisterValue) {
@@ -60,5 +82,5 @@ public class AddInsn extends AbstractInsn {
         insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue()))), this.getUid()));
 
         return insns;
-    }
+    }*/
 }
