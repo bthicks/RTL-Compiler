@@ -2,16 +2,14 @@ package cfg;
 
 import rtl.Insn;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class CFG {
 
     private String functionName;
     private List<BasicBlock> basicBlocks;
     private int maxVirtualRegister;
+    private IntfGraph intfGraph;
 
     public CFG(String functionName, int maxVirtualRegister) {
         this.functionName = functionName;
@@ -122,6 +120,9 @@ public class CFG {
                 }
             }
         }
+
+        // Generate interference graph
+        this.intfGraph = new IntfGraph(basicBlocks);
 
         // Un-reverse list
         Collections.reverse(basicBlocks);

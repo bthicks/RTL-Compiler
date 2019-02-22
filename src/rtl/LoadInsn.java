@@ -43,7 +43,10 @@ public class LoadInsn extends AbstractInsn {
         List<arm.Insn> insns = new LinkedList<>();
         arm.Value r0, r1;
 
-        System.out.println(target.getValue());
+        for (Value source : sources) {
+            remapValue(source, stack);
+        }
+        remapValue(target, stack);
 
         r0 = new arm.RegisterValue(Integer.toString(target.getValue()));
         r1 = new arm.ImmediateValue(Integer.toString(stack.get(sources.get(0).getValue())));
