@@ -19,10 +19,14 @@ public class IntfGraph {
             List<Insn> insns = block.getArmInsns();
             Set<String> liveOut = block.getLiveOut();
 
-            // Add each register in live out set to graph
+            // Add each register in live out set to graph with edges between them
             for (String reg : liveOut) {
                 if (!intfGraph.containsKey(reg)) {
                     intfGraph.put(reg, new HashSet<>());
+                }
+
+                for (String v2 : liveOut) {
+                    addEdge(reg, v2);
                 }
             }
 
