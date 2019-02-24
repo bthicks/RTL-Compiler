@@ -38,12 +38,11 @@ public class StrInsn extends AbstractInsn {
     }
 
     @Override
-    public void allocateTarget(String real) {
-
-    }
-
-    @Override
     public void allocateSource(String virtual, String real) {
-
+        for (String source : sources) {
+            if (source.equals(virtual)) {
+                source = real;
+            }
+        }
     }
 }
