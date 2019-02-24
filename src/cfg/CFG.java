@@ -10,11 +10,13 @@ public class CFG {
     private List<BasicBlock> basicBlocks;
     private int maxVirtualRegister;
     private IntfGraph intfGraph;
+    private HashMap<String, String> registerMap;
 
     public CFG(String functionName, int maxVirtualRegister) {
         this.functionName = functionName;
         this.basicBlocks = new LinkedList<>();
         this.maxVirtualRegister = maxVirtualRegister;
+        this.registerMap = new HashMap<>();
     }
 
     public String getFunctionName() {
@@ -126,5 +128,34 @@ public class CFG {
 
         // Un-reverse list
         Collections.reverse(basicBlocks);
+    }
+
+    // TODO
+    public void colorGraph() {
+        Set<String> colors = new HashSet<>();
+
+        // registers r0-r10 available
+        // r11 = fp, r12 = ip, r13 = sp, r14 = lr, r15 = pc
+        for (int i = 0; i <= 10; i++) {
+            colors.add(Integer.toString(i));
+        }
+        
+    }
+
+    public void allocateRegisters() {
+        for (BasicBlock basicBlock : basicBlocks) {
+            for (arm.Insn insn : basicBlock.getArmInsns()) {
+                String target = insn.getTarget();
+                List<String> sources = insn.getSources();
+
+                // change target register from virtual to real
+                insn.allocateTarget(registerMap.get(target));
+
+                // change source registers from virtual to real
+                for (String source : sources) {
+                    insn.allocateSource(source, registerMap.get(source));
+                }
+            }
+        }
     }
 }

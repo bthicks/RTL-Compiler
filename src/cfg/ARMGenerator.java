@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ARMGenerator {
 
@@ -31,6 +33,8 @@ public class ARMGenerator {
     public static void allocateRegisters(List<CFG> program) {
         for (CFG cfg : program) {
             cfg.LVA();
+            cfg.colorGraph();
+            cfg.allocateRegisters();
         }
     }
 
