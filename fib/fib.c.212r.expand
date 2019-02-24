@@ -1,5 +1,5 @@
 
-;; Function fib_func (fib_func, funcdef_no=0, decl_uid=5265, cgraph_uid=0, symbol_order=0)
+;; Function main (main, funcdef_no=0, decl_uid=5265, cgraph_uid=0, symbol_order=0) (executed once)
 
 
 ;; Generating RTL for gimple basic block 2
@@ -69,7 +69,7 @@ try_optimize_cfg iteration 2
  -> 13)
 (note 16 15 20 5 [bb 5] NOTE_INSN_BASIC_BLOCK)
 (insn 20 16 21 5 (set (reg/i:SI 0 r0)
-        (reg/v:SI 113 [ <retval> ])) fib.c:14 -1
+        (reg/v:SI 113 [ <retval> ])) fib.c:13 -1
      (nil))
-(insn 21 20 0 5 (use (reg/i:SI 0 r0)) fib.c:14 -1
+(insn 21 20 0 5 (use (reg/i:SI 0 r0)) fib.c:13 -1
      (nil))

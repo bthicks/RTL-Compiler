@@ -40,7 +40,7 @@ public class LoadInsn extends AbstractInsn {
 
     @Override
     public List<Insn> toARM(HashMap<Integer, Integer> stack) {
-        List<arm.Insn> insns = new LinkedList<>();
+        /*List<arm.Insn> insns = new LinkedList<>();
         arm.Value r0, r1;
 
         for (Value source : sources) {
@@ -53,7 +53,8 @@ public class LoadInsn extends AbstractInsn {
 
         insns.add(new LdrInsn(r0, r1, this.getUid()));
 
-        return insns;
+        return insns;*/
+        return new LinkedList<>();
     }
 
     /*@Override

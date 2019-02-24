@@ -1,5 +1,5 @@
 
-;; Function main (main, funcdef_no=0, decl_uid=5265, cgraph_uid=0, symbol_order=0)
+;; Function main (main, funcdef_no=0, decl_uid=5265, cgraph_uid=0, symbol_order=0) (executed once)
 
 
 ;; Generating RTL for gimple basic block 2
@@ -8,23 +8,16 @@
 
 ;; Generating RTL for gimple basic block 4
 
-;; Generating RTL for gimple basic block 5
-
-;; Generating RTL for gimple basic block 6
-
 
 try_optimize_cfg iteration 1
 
 Merging block 3 into block 2...
 Merged blocks 2 and 3.
 Merged 2 and 3 without moving.
-Merging block 7 into block 6...
-Merged blocks 6 and 7.
-Merged 6 and 7 without moving.
-Removing jump 40.
-Merging block 8 into block 6...
-Merged blocks 6 and 8.
-Merged 6 and 8 without moving.
+Removing jump 19.
+Merging block 6 into block 5...
+Merged blocks 5 and 6.
+Merged 5 and 6 without moving.
 
 
 try_optimize_cfg iteration 2
@@ -34,113 +27,52 @@ try_optimize_cfg iteration 2
 ;;
 ;; Full RTL generated for this function:
 ;;
-(note 1 0 3 NOTE_INSN_DELETED)
-(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
-(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
-(insn 5 2 6 2 (set (reg:SI 112)
-        (const_int 0 [0])) fib.c:2 -1
+(note 1 0 6 NOTE_INSN_DELETED)
+(note 6 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 6 3 2 NOTE_INSN_FUNCTION_BEG)
+(insn 3 2 4 2 (set (reg:SI 110 [ ivtmp_3 ])
+        (const_int 10 [0xa])) fib.c:1 -1
      (nil))
-(insn 6 5 7 2 (set (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -4 [0xfffffffffffffffc])) [1 n1+0 S4 A32])
-        (reg:SI 112)) fib.c:2 -1
-     (nil))
-(insn 7 6 8 2 (set (reg:SI 113)
+(insn 4 3 5 2 (set (reg/v:SI 112 [ n2 ])
         (const_int 1 [0x1])) fib.c:2 -1
      (nil))
-(insn 8 7 9 2 (set (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -8 [0xfffffffffffffff8])) [1 n2+0 S4 A32])
-        (reg:SI 113)) fib.c:2 -1
+(insn 5 4 13 2 (set (reg/v:SI 111 [ n1 ])
+        (const_int 0 [0])) fib.c:2 -1
      (nil))
-(insn 9 8 10 2 (set (reg:SI 114)
-        (const_int 0 [0])) fib.c:3 -1
+(code_label 13 5 8 4 2 "" [1 uses])
+(note 8 13 9 4 [bb 4] NOTE_INSN_BASIC_BLOCK)
+(insn 9 8 10 4 (set (reg/v:SI 113 [ <retval> ])
+        (plus:SI (reg/v:SI 111 [ n1 ])
+            (reg/v:SI 112 [ n2 ]))) fib.c:8 -1
      (nil))
-(insn 10 9 11 2 (set (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -12 [0xfffffffffffffff4])) [1 fib+0 S4 A32])
-        (reg:SI 114)) fib.c:3 -1
+(insn 10 9 11 4 (set (reg:SI 110 [ ivtmp_3 ])
+        (plus:SI (reg:SI 110 [ ivtmp_3 ])
+            (const_int -1 [0xffffffffffffffff]))) -1
      (nil))
-(insn 11 10 12 2 (set (reg:SI 115)
-        (const_int 0 [0])) fib.c:7 -1
+(insn 11 10 12 4 (set (reg/v:SI 111 [ n1 ])
+        (reg/v:SI 112 [ n2 ])) -1
      (nil))
-(insn 12 11 13 2 (set (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -16 [0xfffffffffffffff0])) [1 i+0 S4 A32])
-        (reg:SI 115)) fib.c:7 -1
+(insn 12 11 14 4 (set (reg/v:SI 112 [ n2 ])
+        (reg/v:SI 113 [ <retval> ])) fib.c:8 -1
      (nil))
-(jump_insn 13 12 14 2 (set (pc)
-        (label_ref 27)) fib.c:7 -1
-     (nil)
- -> 27)
-(barrier 14 13 29)
-(code_label 29 14 15 4 3 "" [1 uses])
-(note 15 29 16 4 [bb 4] NOTE_INSN_BASIC_BLOCK)
-(insn 16 15 17 4 (set (reg:SI 117)
-        (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -4 [0xfffffffffffffffc])) [1 n1+0 S4 A32])) fib.c:8 -1
+(insn 14 12 15 4 (set (reg:CC 100 cc)
+        (compare:CC (reg:SI 110 [ ivtmp_3 ])
+            (const_int 0 [0]))) fib.c:7 -1
      (nil))
-(insn 17 16 18 4 (set (reg:SI 118)
-        (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -8 [0xfffffffffffffff8])) [1 n2+0 S4 A32])) fib.c:8 -1
-     (nil))
-(insn 18 17 19 4 (set (reg:SI 116)
-        (plus:SI (reg:SI 117)
-            (reg:SI 118))) fib.c:8 -1
-     (nil))
-(insn 19 18 20 4 (set (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -12 [0xfffffffffffffff4])) [1 fib+0 S4 A32])
-        (reg:SI 116)) fib.c:8 -1
-     (nil))
-(insn 20 19 21 4 (set (reg:SI 119)
-        (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -8 [0xfffffffffffffff8])) [1 n2+0 S4 A32])) fib.c:9 -1
-     (nil))
-(insn 21 20 22 4 (set (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -4 [0xfffffffffffffffc])) [1 n1+0 S4 A32])
-        (reg:SI 119)) fib.c:9 -1
-     (nil))
-(insn 22 21 23 4 (set (reg:SI 120)
-        (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -12 [0xfffffffffffffff4])) [1 fib+0 S4 A32])) fib.c:10 -1
-     (nil))
-(insn 23 22 24 4 (set (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -8 [0xfffffffffffffff8])) [1 n2+0 S4 A32])
-        (reg:SI 120)) fib.c:10 -1
-     (nil))
-(insn 24 23 25 4 (set (reg:SI 122)
-        (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -16 [0xfffffffffffffff0])) [1 i+0 S4 A32])) fib.c:7 -1
-     (nil))
-(insn 25 24 26 4 (set (reg:SI 121)
-        (plus:SI (reg:SI 122)
-            (const_int 1 [0x1]))) fib.c:7 -1
-     (nil))
-(insn 26 25 27 4 (set (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -16 [0xfffffffffffffff0])) [1 i+0 S4 A32])
-        (reg:SI 121)) fib.c:7 -1
-     (nil))
-(code_label 27 26 28 5 2 "" [1 uses])
-(note 28 27 30 5 [bb 5] NOTE_INSN_BASIC_BLOCK)
-(insn 30 28 31 5 (set (reg:SI 123)
-        (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -16 [0xfffffffffffffff0])) [1 i+0 S4 A32])) fib.c:7 -1
-     (nil))
-(insn 31 30 32 5 (set (reg:CC 100 cc)
-        (compare:CC (reg:SI 123)
-            (const_int 9 [0x9]))) fib.c:7 -1
-     (nil))
-(jump_insn 32 31 33 5 (set (pc)
-        (if_then_else (le (reg:CC 100 cc)
+(jump_insn 15 14 16 4 (set (pc)
+        (if_then_else (ne (reg:CC 100 cc)
                 (const_int 0 [0]))
-            (label_ref 29)
+            (label_ref 13)
             (pc))) fib.c:7 -1
-     (nil)
- -> 29)
-(note 33 32 34 6 [bb 6] NOTE_INSN_BASIC_BLOCK)
-(insn 34 33 35 6 (set (reg:SI 0 r0)
-        (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -12 [0xfffffffffffffff4])) [1 fib+0 S4 A32])) fib.c:12 -1
+     (int_list:REG_BR_PROB 9091 (nil))
+ -> 13)
+(note 16 15 17 5 [bb 5] NOTE_INSN_BASIC_BLOCK)
+(insn 17 16 18 5 (set (reg:SI 0 r0)
+        (reg/v:SI 113 [ <retval> ])) fib.c:12 -1
      (nil))
-(call_insn 35 34 36 6 (parallel [
+(call_insn 18 17 22 5 (parallel [
             (set (reg:SI 0 r0)
-                (call (mem:SI (symbol_ref:SI ("printint") [flags 0x41]  <function_decl 0x768ad380 printint>) [0 printint S4 A32])
+                (call (mem:SI (symbol_ref:SI ("printint") [flags 0x41]  <function_decl 0x76953380 printint>) [0 printint S4 A32])
                     (const_int 0 [0])))
             (use (const_int 0 [0]))
             (clobber (reg:SI 14 lr))
@@ -149,15 +81,8 @@ try_optimize_cfg iteration 2
     (expr_list (clobber (reg:SI 12 ip))
         (expr_list:SI (use (reg:SI 0 r0))
             (nil))))
-(insn 36 35 39 6 (set (reg:SI 110 [ _15 ])
-        (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -12 [0xfffffffffffffff4])) [1 fib+0 S4 A32])) fib.c:13 -1
+(insn 22 18 23 5 (set (reg/i:SI 0 r0)
+        (reg/v:SI 113 [ <retval> ])) fib.c:14 -1
      (nil))
-(insn 39 36 43 6 (set (reg:SI 111 [ <retval> ])
-        (reg:SI 110 [ _15 ])) -1
-     (nil))
-(insn 43 39 44 6 (set (reg/i:SI 0 r0)
-        (reg:SI 111 [ <retval> ])) fib.c:14 -1
-     (nil))
-(insn 44 43 0 6 (use (reg/i:SI 0 r0)) fib.c:14 -1
+(insn 23 22 0 5 (use (reg/i:SI 0 r0)) fib.c:14 -1
      (nil))

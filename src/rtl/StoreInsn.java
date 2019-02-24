@@ -38,7 +38,7 @@ public class StoreInsn extends AbstractInsn {
 
     @Override
     public List<Insn> toARM(HashMap<Integer, Integer> stack) {
-        List<arm.Insn> insns = new LinkedList<>();
+        /*List<arm.Insn> insns = new LinkedList<>();
         arm.Value r0 = new arm.RegisterValue("0");
         arm.Value r1 = new arm.RegisterValue("1");
 
@@ -66,6 +66,7 @@ public class StoreInsn extends AbstractInsn {
             insns.add(new StrInsn(r0, new ImmediateValue(Integer.toString(stack.get(target.getValue()))), this.getUid()));
         }
 
-        return insns;
+        return insns;*/
+        return new LinkedList<>();
     }
 }

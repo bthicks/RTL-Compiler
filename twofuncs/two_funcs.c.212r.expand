@@ -4,21 +4,16 @@
 
 ;; Generating RTL for gimple basic block 2
 
-;; Generating RTL for gimple basic block 3
-
 
 try_optimize_cfg iteration 1
 
 Merging block 3 into block 2...
 Merged blocks 2 and 3.
 Merged 2 and 3 without moving.
+Removing jump 9.
 Merging block 4 into block 2...
 Merged blocks 2 and 4.
 Merged 2 and 4 without moving.
-Removing jump 13.
-Merging block 5 into block 2...
-Merged blocks 2 and 5.
-Merged 2 and 5 without moving.
 
 
 try_optimize_cfg iteration 2
@@ -30,42 +25,30 @@ try_optimize_cfg iteration 2
 ;;
 (note 1 0 5 NOTE_INSN_DELETED)
 (note 5 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
-(insn 2 5 3 2 (set (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -4 [0xfffffffffffffffc])) [1 x+0 S4 A32])
+(insn 2 5 3 2 (set (reg/v:SI 111 [ x ])
         (reg:SI 0 r0 [ x ])) two_funcs.c:1 -1
      (nil))
-(insn 3 2 4 2 (set (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -8 [0xfffffffffffffff8])) [1 y+0 S4 A32])
+(insn 3 2 4 2 (set (reg/v:SI 112 [ y ])
         (reg:SI 1 r1 [ y ])) two_funcs.c:1 -1
      (nil))
 (note 4 3 7 2 NOTE_INSN_FUNCTION_BEG)
-(insn 7 4 8 2 (set (reg:SI 112)
-        (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -4 [0xfffffffffffffffc])) [1 x+0 S4 A32])) two_funcs.c:2 -1
+(insn 7 4 8 2 (set (reg:SI 113)
+        (plus:SI (reg/v:SI 111 [ x ])
+            (reg/v:SI 112 [ y ]))) two_funcs.c:2 -1
      (nil))
-(insn 8 7 9 2 (set (reg:SI 113)
-        (mem/c:SI (plus:SI (reg/f:SI 105 virtual-stack-vars)
-                (const_int -8 [0xfffffffffffffff8])) [1 y+0 S4 A32])) two_funcs.c:2 -1
+(insn 8 7 12 2 (set (reg:SI 110 [ <retval> ])
+        (reg:SI 113)) two_funcs.c:2 -1
      (nil))
-(insn 9 8 12 2 (set (reg:SI 110 [ _3 ])
-        (plus:SI (reg:SI 112)
-            (reg:SI 113))) two_funcs.c:2 -1
+(insn 12 8 13 2 (set (reg/i:SI 0 r0)
+        (reg:SI 110 [ <retval> ])) two_funcs.c:3 -1
      (nil))
-(insn 12 9 16 2 (set (reg:SI 111 [ <retval> ])
-        (reg:SI 110 [ _3 ])) two_funcs.c:2 -1
-     (nil))
-(insn 16 12 17 2 (set (reg/i:SI 0 r0)
-        (reg:SI 111 [ <retval> ])) two_funcs.c:3 -1
-     (nil))
-(insn 17 16 0 2 (use (reg/i:SI 0 r0)) two_funcs.c:3 -1
+(insn 13 12 0 2 (use (reg/i:SI 0 r0)) two_funcs.c:3 -1
      (nil))
 
-;; Function main (main, funcdef_no=1, decl_uid=5270, cgraph_uid=1, symbol_order=1)
+;; Function main (main, funcdef_no=1, decl_uid=5270, cgraph_uid=1, symbol_order=1) (executed once)
 
 
 ;; Generating RTL for gimple basic block 2
-
-;; Generating RTL for gimple basic block 3
 
 
 try_optimize_cfg iteration 1
@@ -73,13 +56,10 @@ try_optimize_cfg iteration 1
 Merging block 3 into block 2...
 Merged blocks 2 and 3.
 Merged 2 and 3 without moving.
+Removing jump 6.
 Merging block 4 into block 2...
 Merged blocks 2 and 4.
 Merged 2 and 4 without moving.
-Removing jump 12.
-Merging block 5 into block 2...
-Merged blocks 2 and 5.
-Merged 2 and 5 without moving.
 
 
 try_optimize_cfg iteration 2
@@ -92,32 +72,11 @@ try_optimize_cfg iteration 2
 (note 1 0 3 NOTE_INSN_DELETED)
 (note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
 (note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
-(insn 5 2 6 2 (set (reg:SI 1 r1)
-        (const_int 6 [0x6])) two_funcs.c:6 -1
+(insn 5 2 9 2 (set (reg:SI 110 [ <retval> ])
+        (const_int 7 [0x7])) -1
      (nil))
-(insn 6 5 7 2 (set (reg:SI 0 r0)
-        (const_int 1 [0x1])) two_funcs.c:6 -1
+(insn 9 5 10 2 (set (reg/i:SI 0 r0)
+        (reg:SI 110 [ <retval> ])) two_funcs.c:7 -1
      (nil))
-(call_insn 7 6 8 2 (parallel [
-            (set (reg:SI 0 r0)
-                (call (mem:SI (symbol_ref:SI ("add") [flags 0x3]  <function_decl 0x76882300 add>) [0 add S4 A32])
-                    (const_int 0 [0])))
-            (use (const_int 0 [0]))
-            (clobber (reg:SI 14 lr))
-        ]) two_funcs.c:6 -1
-     (nil)
-    (expr_list (clobber (reg:SI 12 ip))
-        (expr_list:SI (use (reg:SI 0 r0))
-            (expr_list:SI (use (reg:SI 1 r1))
-                (nil)))))
-(insn 8 7 11 2 (set (reg:SI 110 [ _3 ])
-        (reg:SI 0 r0)) two_funcs.c:6 -1
-     (nil))
-(insn 11 8 15 2 (set (reg:SI 111 [ <retval> ])
-        (reg:SI 110 [ _3 ])) -1
-     (nil))
-(insn 15 11 16 2 (set (reg/i:SI 0 r0)
-        (reg:SI 111 [ <retval> ])) two_funcs.c:7 -1
-     (nil))
-(insn 16 15 0 2 (use (reg/i:SI 0 r0)) two_funcs.c:7 -1
+(insn 10 9 0 2 (use (reg/i:SI 0 r0)) two_funcs.c:7 -1
      (nil))
