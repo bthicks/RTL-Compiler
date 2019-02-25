@@ -130,7 +130,14 @@ public class CFG {
         Collections.reverse(basicBlocks);
     }
 
-    // TODO
+    /**
+     * Color the interference graph for optimal register usage.
+     *
+     * TODO:
+     *  - Figure out spilling.
+     *  - Determine if registers should be coalesced.
+     *  - Make colors set static?
+     */
     public void colorGraph() {
         // This should probably be static (so that it isn't rebuilt everytime)
         Set<String> colors = new HashSet<>();
@@ -143,7 +150,7 @@ public class CFG {
 
         Stack<IntfGraph.Node> stack = new Stack<>();
         while (!this.intfGraph.getIntfGraph().isEmpty()) {
-
+            stack.push(this.intfGraph.removeEdge(this.intfGraph.getMostConstrained()));
         }
     }
 

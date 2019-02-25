@@ -8,6 +8,7 @@ public class IntfGraph {
 
     private Map<String, HashSet<String>> intfGraph;
 
+    // TODO: Add color field?
     public IntfGraph(List<BasicBlock> basicBlocks) {
         intfGraph = new HashMap<>();
 
