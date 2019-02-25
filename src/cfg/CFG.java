@@ -141,8 +141,9 @@ public class CFG {
 
         // Convert interference graph to list and sort by number of edges
         LinkedList<Map.Entry<String, HashSet<String>>> intfList = new LinkedList<>(intfGraph.entrySet());
-        Collections.sort(intfList, (a, b) -> a.getValue().size() - b.getValue().size());
+        Collections.sort(intfList, (a, b) -> b.getValue().size() - a.getValue().size());
         String mostConstrained = intfList.peekFirst().getKey();
+        System.out.println(mostConstrained);
 
         while (!intfList.isEmpty()) {
             // Remove node with most edges from list
