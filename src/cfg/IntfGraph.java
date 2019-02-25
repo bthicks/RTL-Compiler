@@ -50,13 +50,19 @@ public class IntfGraph {
             Collections.reverse(insns);
 
             for (arm.Insn insn : insns) {
-                // Remove target from live set
-                liveOut.remove(insn.getTarget());
+                String target = insn.getTarget();
 
-                // Add edge from target (v1) to each element in live set (v2)
-                if (insn.getTarget() != null) {
+                // Remove target from live set
+                liveOut.remove(target);
+
+                if (target != null) {
+                    // Add target node to graph
+                    if (!intfGraph.containsKey(target)) {
+                        intfGraph.put(target, new HashSet<>());
+                    }
+                    // Add edge from target (v1) to each element in live set (v2)
                     for (String v2 : liveOut) {
-                        addEdge(insn.getTarget(), v2);
+                        addEdge(target, v2);
                     }
                 }
 

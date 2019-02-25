@@ -49,6 +49,7 @@ public class AddInsn extends AbstractInsn {
     @Override
     public void allocateTarget(String real) {
         this.r1.setValue(real);
+        this.target = real;
     }
 
     @Override
@@ -57,6 +58,12 @@ public class AddInsn extends AbstractInsn {
             if (source.equals(virtual)) {
                 source = real;
             }
+        }
+        if (r2.getValue().equals(virtual) && r2 instanceof RegisterValue) {
+            r2.setValue(real);
+        }
+        if (operand2.getValue().equals(virtual) && operand2 instanceof RegisterValue) {
+            operand2.setValue(real);
         }
     }
 }
