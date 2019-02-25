@@ -48,7 +48,8 @@ public class LdrInsn extends AbstractInsn {
 
     @Override
     public void allocateTarget(String real) {
-        target = real;
+        this.r1.setValue(real);
+        this.target = real;
     }
 
     @Override
@@ -57,6 +58,9 @@ public class LdrInsn extends AbstractInsn {
             if (source.equals(virtual)) {
                 source = real;
             }
+        }
+        if (offset.getValue().equals(virtual) && offset instanceof RegisterValue) {
+            offset.setValue(real);
         }
     }
 }

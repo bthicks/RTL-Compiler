@@ -39,5 +39,11 @@ public class CmpInsn extends AbstractInsn {
                 source = real;
             }
         }
+        if (r1.getValue().equals(virtual) && r1 instanceof RegisterValue) {
+            r1.setValue(real);
+        }
+        if (operand2.getValue().equals(virtual) && operand2 instanceof RegisterValue) {
+            operand2.setValue(real);
+        }
     }
 }

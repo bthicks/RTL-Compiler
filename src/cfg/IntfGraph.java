@@ -6,17 +6,28 @@ import java.util.*;
 
 public class IntfGraph {
 
-    private Map<String, HashSet<String>> intfGraph;
+    private HashMap<String, HashSet<String>> intfGraph;
 
-    // TODO: Add color field?
     public IntfGraph(List<BasicBlock> basicBlocks) {
-        intfGraph = new HashMap<>();
+        intfGraph = new LinkedHashMap<>();
 
         generateIntfGraph(basicBlocks);
     }
 
-    public Map<String, HashSet<String>> getIntfGraph() {
-        return intfGraph;
+    public void add(String key) {
+        intfGraph.put(key, new HashSet<>());
+    }
+
+    public void remove(String key) {
+        intfGraph.remove(key);
+    }
+
+    public HashSet<String> get(String key) {
+        return intfGraph.get(key);
+    }
+
+    public boolean isEmpty() {
+        return intfGraph.isEmpty();
     }
 
     private void generateIntfGraph(List<BasicBlock> basicBlocks) {
@@ -39,12 +50,20 @@ public class IntfGraph {
             Collections.reverse(insns);
 
             for (arm.Insn insn : insns) {
-                // Remove target from live set
-                liveOut.remove(insn.getTarget());
+                String target = insn.getTarget();
 
-                // Add edge from target (v1) to each element in live set (v2)
-                for (String v2 : liveOut) {
-                    addEdge(insn.getTarget(), v2);
+                // Remove target from live set
+                liveOut.remove(target);
+
+                if (target != null) {
+                    // Add target node to graph
+                    if (!intfGraph.containsKey(target)) {
+                        intfGraph.put(target, new HashSet<>());
+                    }
+                    // Add edge from target (v1) to each element in live set (v2)
+                    for (String v2 : liveOut) {
+                        addEdge(target, v2);
+                    }
                 }
 
                 // Add each source to live set
@@ -54,6 +73,10 @@ public class IntfGraph {
             // Un-reverse insns
             Collections.reverse(insns);
         }
+    }
+
+    public Set<Map.Entry<String, HashSet<String>>> entrySet() {
+        return intfGraph.entrySet();
     }
 
     public void addEdge(String v1, String v2) {
@@ -68,54 +91,8 @@ public class IntfGraph {
         intfGraph.get(v2).add(v1);
     }
 
-    /**
-     * Remove an edge from the interference graph.
-     * This method will also remove connections from other nodes to the returned key.
-     *
-     * @param key -- The key of the element in the graph.
-     * @return A Node representing the element.
-     */
-    public Node removeEdge(String key) {
-        Set<String> edges = intfGraph.remove(key);
-
-        for (String edge : edges) {
-            HashSet<String> adjacentEdges = intfGraph.get(edge);
-            adjacentEdges.remove(key);
-            intfGraph.put(edge, adjacentEdges);
-        }
-
-        return new Node(key, edges);
-    }
-
-    /**
-     * Get the most constrained vertex (vertex with most edges) from the intfGraph.
-     *
-     * @return The most constrained vertex if there are nodes in the graph, else null.
-     *
-     * TODO:
-     *  - Remove virtual registers first?
-     *  - Add max constraint before needing to spill.
-     */
-    public String getMostConstrained() {
-        int maxConstraints = Integer.MIN_VALUE;
-        String maxConstraintKey = null;
-
-        for (String key : intfGraph.keySet()) {
-            if (maxConstraints < intfGraph.get(key).size()) {
-                maxConstraintKey = key;
-            }
-        }
-
-        return maxConstraintKey;
-    }
-
-    class Node {
-        public String key;
-        public Set<String> edges;
-
-        public Node(String key, Set<String> edges) {
-            this.key = key;
-            this.edges = edges;
-        }
+    public void removeEdge(String v1, String v2) {
+        intfGraph.get(v1).remove(v2);
+        intfGraph.get(v2).remove(v1);
     }
 }

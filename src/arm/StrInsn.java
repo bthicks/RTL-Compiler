@@ -44,5 +44,11 @@ public class StrInsn extends AbstractInsn {
                 source = real;
             }
         }
+        if (r1.getValue().equals(virtual) && r1 instanceof RegisterValue) {
+            r1.setValue(real);
+        }
+        if (address.getValue().equals(virtual) && address instanceof RegisterValue) {
+            address.setValue(real);
+        }
     }
 }
