@@ -15,8 +15,10 @@ LIB_A=libutil.a
 
 all: java $(TARGET)
 
+c: $(TARGET)
+
 $(TARGET):
-	$(CC) -c -o $(LIB_O) addwithprint/cpe431util.c
+	$(CC) -c -o $(LIB_O) test/addwithprint/cpe431util.c
 	ar rcs $(LIB_A) $(LIB_O)
 	$(CC) $(FILE).s -L. -lutil $(FLAGS)
 
