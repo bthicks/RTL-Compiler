@@ -9,9 +9,25 @@ public class IntfGraph {
     private HashMap<String, HashSet<String>> intfGraph;
 
     public IntfGraph(List<BasicBlock> basicBlocks) {
-        intfGraph = new HashMap<>();
+        intfGraph = new LinkedHashMap<>();
 
         generateIntfGraph(basicBlocks);
+    }
+
+    public void add(String key) {
+        intfGraph.put(key, new HashSet<>());
+    }
+
+    public void remove(String key) {
+        intfGraph.remove(key);
+    }
+
+    public HashSet<String> get(String key) {
+        return intfGraph.get(key);
+    }
+
+    public boolean isEmpty() {
+        return intfGraph.isEmpty();
     }
 
     private void generateIntfGraph(List<BasicBlock> basicBlocks) {
@@ -38,8 +54,10 @@ public class IntfGraph {
                 liveOut.remove(insn.getTarget());
 
                 // Add edge from target (v1) to each element in live set (v2)
-                for (String v2 : liveOut) {
-                    addEdge(insn.getTarget(), v2);
+                if (insn.getTarget() != null) {
+                    for (String v2 : liveOut) {
+                        addEdge(insn.getTarget(), v2);
+                    }
                 }
 
                 // Add each source to live set
@@ -51,7 +69,11 @@ public class IntfGraph {
         }
     }
 
-    private void addEdge(String v1, String v2) {
+    public Set<Map.Entry<String, HashSet<String>>> entrySet() {
+        return intfGraph.entrySet();
+    }
+
+    public void addEdge(String v1, String v2) {
         if (!intfGraph.containsKey(v1)) {
             intfGraph.put(v1, new HashSet<>());
         }
@@ -61,5 +83,10 @@ public class IntfGraph {
 
         intfGraph.get(v1).add(v2);
         intfGraph.get(v2).add(v1);
+    }
+
+    public void removeEdge(String v1, String v2) {
+        intfGraph.get(v1).remove(v2);
+        intfGraph.get(v2).remove(v1);
     }
 }

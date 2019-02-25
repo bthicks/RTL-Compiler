@@ -130,16 +130,76 @@ public class CFG {
         Collections.reverse(basicBlocks);
     }
 
-    // TODO
     public void colorGraph() {
-        Set<String> colors = new HashSet<>();
+        List<String> colors = new LinkedList<>();
+        Stack<String> stack = new Stack<>();
+        int k = 11;  // number of colors
 
-        // registers r0-r10 available
+        // Registers r0-r10 available
         // r11 = fp, r12 = ip, r13 = sp, r14 = lr, r15 = pc
         for (int i = 0; i <= 10; i++) {
             colors.add(Integer.toString(i));
         }
-        
+
+        // Convert interference graph to list and sort by number of edges
+        LinkedList<Map.Entry<String, HashSet<String>>> intfList = new LinkedList<>(intfGraph.entrySet());
+        Collections.sort(intfList, (a, b) -> a.getValue().size() - b.getValue().size());
+
+        while (!intfList.isEmpty()) {
+            // Remove node with most edges from list
+            Map.Entry<String, HashSet<String>> v1 = intfList.removeFirst();
+
+            // Only remove real registers once all virtuals have been removed
+            if (Integer.parseInt(v1.getKey()) <= 15 && containsVirtual(intfList)) {
+                intfList.add(v1);
+                continue;
+            }
+
+            // Remove edges between node and its neighbors
+            for (Map.Entry<String, HashSet<String>> v2 : intfList) {
+                v2.getValue().remove(v1);
+            }
+
+            // Push register number onto stack
+            stack.push(v1.getKey());
+        }
+
+        HashMap<String, HashSet<String>> newGraph = new HashMap<>();
+
+        while (!stack.isEmpty()) {
+            String v1 = stack.pop();
+
+            newGraph.put(v1, new HashSet<>());
+
+            for (String v2 : intfGraph.get(v1)) {
+                if (newGraph.containsKey(v2)) {
+                    newGraph.get(v1).add(v2);
+                    newGraph.get(v2).add(v1);
+                }
+            }
+
+            // If real register, color as same register number
+            if (Integer.parseInt(v1) <= 15) {
+                registerMap.put(v1, v1);
+            } else {
+                // Get list of taken colors
+                LinkedList<String> availableColors = new LinkedList<>(colors);
+                for (String intf : newGraph.get(v1)) {
+                    availableColors.remove(registerMap.get(intf));
+                }
+                registerMap.put(v1, availableColors.getFirst());
+            }
+        }
+    }
+
+    // Helper function for colorGraph
+    private boolean containsVirtual(List<Map.Entry<String, HashSet<String>>> list) {
+        for (Map.Entry<String, HashSet<String>> node : list) {
+            if (Integer.parseInt(node.getKey()) > 15) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void allocateRegisters() {

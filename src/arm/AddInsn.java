@@ -48,7 +48,7 @@ public class AddInsn extends AbstractInsn {
 
     @Override
     public void allocateTarget(String real) {
-        this.target = real;
+        this.r1.setValue(real);
     }
 
     @Override
