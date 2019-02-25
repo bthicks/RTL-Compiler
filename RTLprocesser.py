@@ -77,6 +77,8 @@ class RTLprocesser:
                 new_insn["type"] = "add_insn"
             elif "compare" in instruction[1][0]:
                 pass
+            elif "call" in instruction[1][0]:
+                pass
             else:
                 print("GET_SET", new_insn["uid"], instruction)
         elif "mem" in instruction[0][0]:
