@@ -1,0 +1,201 @@
+
+;; Function regtest1 (regtest1, funcdef_no=0, decl_uid=5554, cgraph_uid=0, symbol_order=0)
+
+
+;; Generating RTL for gimple basic block 2
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Removing jump 40.
+Merging block 4 into block 2...
+Merged blocks 2 and 4.
+Merged 2 and 4 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 4 NOTE_INSN_DELETED)
+(note 4 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(insn 2 4 3 2 (set (reg/v:SI 137 [ a ])
+        (reg:SI 0 r0 [ a ])) "regtest1.c":4 -1
+     (nil))
+(note 3 2 6 2 NOTE_INSN_FUNCTION_BEG)
+(call_insn 6 3 7 2 (parallel [
+            (set (reg:SI 0 r0)
+                (call (mem:SI (symbol_ref:SI ("getint") [flags 0x41] <function_decl 0x76b58e88 getint>) [0 getint S4 A32])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+            (clobber (reg:SI 14 lr))
+        ]) "regtest1.c":6 -1
+     (nil)
+    (expr_list (clobber (reg:SI 12 ip))
+        (nil)))
+(insn 7 6 8 2 (set (reg/v:SI 122 [ v1 ])
+        (reg:SI 0 r0)) "regtest1.c":6 -1
+     (nil))
+(call_insn 8 7 9 2 (parallel [
+            (set (reg:SI 0 r0)
+                (call (mem:SI (symbol_ref:SI ("getint") [flags 0x41] <function_decl 0x76b58e88 getint>) [0 getint S4 A32])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+            (clobber (reg:SI 14 lr))
+        ]) "regtest1.c":7 -1
+     (nil)
+    (expr_list (clobber (reg:SI 12 ip))
+        (nil)))
+(insn 9 8 10 2 (set (reg/v:SI 123 [ v2 ])
+        (reg:SI 0 r0)) "regtest1.c":7 -1
+     (nil))
+(insn 10 9 11 2 (set (reg/v:SI 124 [ v3 ])
+        (plus:SI (reg/v:SI 122 [ v1 ])
+            (reg/v:SI 137 [ a ]))) "regtest1.c":8 -1
+     (nil))
+(insn 11 10 12 2 (set (reg/v:SI 125 [ v4 ])
+        (plus:SI (reg/v:SI 123 [ v2 ])
+            (reg/v:SI 137 [ a ]))) "regtest1.c":9 -1
+     (nil))
+(insn 12 11 13 2 (set (reg/v:SI 126 [ v5 ])
+        (plus:SI (reg/v:SI 124 [ v3 ])
+            (reg/v:SI 125 [ v4 ]))) "regtest1.c":10 -1
+     (nil))
+(call_insn 13 12 14 2 (parallel [
+            (set (reg:SI 0 r0)
+                (call (mem:SI (symbol_ref:SI ("getint") [flags 0x41] <function_decl 0x76b58e88 getint>) [0 getint S4 A32])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+            (clobber (reg:SI 14 lr))
+        ]) "regtest1.c":11 -1
+     (nil)
+    (expr_list (clobber (reg:SI 12 ip))
+        (nil)))
+(insn 14 13 15 2 (set (reg/v:SI 127 [ v6 ])
+        (reg:SI 0 r0)) "regtest1.c":11 -1
+     (nil))
+(call_insn 15 14 16 2 (parallel [
+            (set (reg:SI 0 r0)
+                (call (mem:SI (symbol_ref:SI ("getint") [flags 0x41] <function_decl 0x76b58e88 getint>) [0 getint S4 A32])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+            (clobber (reg:SI 14 lr))
+        ]) "regtest1.c":12 -1
+     (nil)
+    (expr_list (clobber (reg:SI 12 ip))
+        (nil)))
+(insn 16 15 17 2 (set (reg/v:SI 128 [ v7 ])
+        (reg:SI 0 r0)) "regtest1.c":12 -1
+     (nil))
+(insn 17 16 18 2 (set (reg/v:SI 129 [ v8 ])
+        (plus:SI (reg/v:SI 127 [ v6 ])
+            (const_int 1 [0x1]))) "regtest1.c":13 -1
+     (nil))
+(insn 18 17 19 2 (set (reg/v:SI 130 [ v9 ])
+        (plus:SI (reg/v:SI 128 [ v7 ])
+            (const_int -1 [0xffffffffffffffff]))) "regtest1.c":14 -1
+     (nil))
+(insn 19 18 20 2 (set (reg/v:SI 131 [ v10 ])
+        (plus:SI (reg/v:SI 129 [ v8 ])
+            (reg/v:SI 130 [ v9 ]))) "regtest1.c":15 -1
+     (nil))
+(call_insn 20 19 21 2 (parallel [
+            (set (reg:SI 0 r0)
+                (call (mem:SI (symbol_ref:SI ("getint") [flags 0x41] <function_decl 0x76b58e88 getint>) [0 getint S4 A32])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+            (clobber (reg:SI 14 lr))
+        ]) "regtest1.c":16 -1
+     (nil)
+    (expr_list (clobber (reg:SI 12 ip))
+        (nil)))
+(insn 21 20 22 2 (set (reg/v:SI 132 [ v11 ])
+        (reg:SI 0 r0)) "regtest1.c":16 -1
+     (nil))
+(call_insn 22 21 23 2 (parallel [
+            (set (reg:SI 0 r0)
+                (call (mem:SI (symbol_ref:SI ("getint") [flags 0x41] <function_decl 0x76b58e88 getint>) [0 getint S4 A32])
+                    (const_int 0 [0])))
+            (use (const_int 0 [0]))
+            (clobber (reg:SI 14 lr))
+        ]) "regtest1.c":17 -1
+     (nil)
+    (expr_list (clobber (reg:SI 12 ip))
+        (nil)))
+(insn 23 22 24 2 (set (reg/v:SI 133 [ v12 ])
+        (reg:SI 0 r0)) "regtest1.c":17 -1
+     (nil))
+(insn 24 23 25 2 (set (reg/v:SI 134 [ v14 ])
+        (plus:SI (reg/v:SI 132 [ v11 ])
+            (reg/v:SI 133 [ v12 ]))) "regtest1.c":19 -1
+     (nil))
+(insn 25 24 26 2 (set (reg:SI 139)
+        (plus:SI (reg/v:SI 122 [ v1 ])
+            (reg/v:SI 123 [ v2 ]))) "regtest1.c":22 -1
+     (nil))
+(insn 26 25 27 2 (set (reg:SI 140)
+        (plus:SI (reg:SI 139)
+            (reg/v:SI 124 [ v3 ]))) "regtest1.c":22 -1
+     (nil))
+(insn 27 26 28 2 (set (reg:SI 141)
+        (plus:SI (reg:SI 140)
+            (reg/v:SI 125 [ v4 ]))) "regtest1.c":22 -1
+     (nil))
+(insn 28 27 29 2 (set (reg:SI 142)
+        (plus:SI (reg:SI 141)
+            (reg/v:SI 126 [ v5 ]))) "regtest1.c":22 -1
+     (nil))
+(insn 29 28 30 2 (set (reg:SI 143)
+        (plus:SI (reg:SI 142)
+            (reg/v:SI 127 [ v6 ]))) "regtest1.c":22 -1
+     (nil))
+(insn 30 29 31 2 (set (reg:SI 144)
+        (plus:SI (reg:SI 143)
+            (reg/v:SI 128 [ v7 ]))) "regtest1.c":22 -1
+     (nil))
+(insn 31 30 32 2 (set (reg:SI 145)
+        (plus:SI (reg:SI 144)
+            (reg/v:SI 129 [ v8 ]))) "regtest1.c":22 -1
+     (nil))
+(insn 32 31 33 2 (set (reg:SI 146)
+        (plus:SI (reg:SI 145)
+            (reg/v:SI 130 [ v9 ]))) "regtest1.c":22 -1
+     (nil))
+(insn 33 32 34 2 (set (reg:SI 147)
+        (plus:SI (reg:SI 146)
+            (reg/v:SI 131 [ v10 ]))) "regtest1.c":22 -1
+     (nil))
+(insn 34 33 35 2 (set (reg:SI 148)
+        (plus:SI (reg:SI 147)
+            (reg/v:SI 132 [ v11 ]))) "regtest1.c":22 -1
+     (nil))
+(insn 35 34 36 2 (set (reg:SI 149)
+        (plus:SI (reg:SI 148)
+            (reg/v:SI 132 [ v11 ]))) "regtest1.c":22 -1
+     (nil))
+(insn 36 35 37 2 (set (reg:SI 150)
+        (plus:SI (reg:SI 149)
+            (reg/v:SI 134 [ v14 ]))) "regtest1.c":22 -1
+     (nil))
+(insn 37 36 38 2 (set (reg:SI 151 [ v15 ])
+        (plus:SI (reg/v:SI 137 [ a ])
+            (reg/v:SI 134 [ v14 ]))) "regtest1.c":20 -1
+     (nil))
+(insn 38 37 39 2 (set (reg:SI 138)
+        (plus:SI (reg:SI 150)
+            (reg:SI 151 [ v15 ]))) "regtest1.c":22 -1
+     (nil))
+(insn 39 38 43 2 (set (reg:SI 136 [ <retval> ])
+        (reg:SI 138)) "regtest1.c":22 -1
+     (nil))
+(insn 43 39 44 2 (set (reg/i:SI 0 r0)
+        (reg:SI 136 [ <retval> ])) "regtest1.c":23 -1
+     (nil))
+(insn 44 43 0 2 (use (reg/i:SI 0 r0)) "regtest1.c":23 -1
+     (nil))
