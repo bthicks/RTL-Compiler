@@ -132,6 +132,7 @@ public class CFG {
 
     // TODO
     public void colorGraph() {
+        // This should probably be static (so that it isn't rebuilt everytime)
         Set<String> colors = new HashSet<>();
 
         // registers r0-r10 available
@@ -139,7 +140,11 @@ public class CFG {
         for (int i = 0; i <= 10; i++) {
             colors.add(Integer.toString(i));
         }
-        
+
+        Stack<IntfGraph.Node> stack = new Stack<>();
+        while (!this.intfGraph.getIntfGraph().isEmpty()) {
+
+        }
     }
 
     public void allocateRegisters() {

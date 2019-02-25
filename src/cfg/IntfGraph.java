@@ -6,12 +6,16 @@ import java.util.*;
 
 public class IntfGraph {
 
-    private HashMap<String, HashSet<String>> intfGraph;
+    private Map<String, HashSet<String>> intfGraph;
 
     public IntfGraph(List<BasicBlock> basicBlocks) {
         intfGraph = new HashMap<>();
 
         generateIntfGraph(basicBlocks);
+    }
+
+    public Map<String, HashSet<String>> getIntfGraph() {
+        return intfGraph;
     }
 
     private void generateIntfGraph(List<BasicBlock> basicBlocks) {
@@ -51,7 +55,7 @@ public class IntfGraph {
         }
     }
 
-    private void addEdge(String v1, String v2) {
+    public void addEdge(String v1, String v2) {
         if (!intfGraph.containsKey(v1)) {
             intfGraph.put(v1, new HashSet<>());
         }
@@ -61,5 +65,56 @@ public class IntfGraph {
 
         intfGraph.get(v1).add(v2);
         intfGraph.get(v2).add(v1);
+    }
+
+    /**
+     * Remove an edge from the interference graph.
+     * This method will also remove connections from other nodes to the returned key.
+     *
+     * @param key -- The key of the element in the graph.
+     * @return A Node representing the element.
+     */
+    public Node removeEdge(String key) {
+        Set<String> edges = intfGraph.remove(key);
+
+        for (String edge : edges) {
+            HashSet<String> adjacentEdges = intfGraph.get(edge);
+            adjacentEdges.remove(key);
+            intfGraph.put(edge, adjacentEdges);
+        }
+
+        return new Node(key, edges);
+    }
+
+    /**
+     * Get the most constrained vertex (vertex with most edges) from the intfGraph.
+     *
+     * @return The most constrained vertex if there are nodes in the graph, else null.
+     *
+     * TODO:
+     *  - Remove virtual registers first?
+     *  - Add max constraint before needing to spill.
+     */
+    public String getMostConstrained() {
+        int maxConstraints = Integer.MIN_VALUE;
+        String maxConstraintKey = null;
+
+        for (String key : intfGraph.keySet()) {
+            if (maxConstraints < intfGraph.get(key).size()) {
+                maxConstraintKey = key;
+            }
+        }
+
+        return maxConstraintKey;
+    }
+
+    class Node {
+        public String key;
+        public Set<String> edges;
+
+        public Node(String key, Set<String> edges) {
+            this.key = key;
+            this.edges = edges;
+        }
     }
 }
