@@ -5,7 +5,6 @@ import rtl.Insn;
 import java.util.*;
 
 public class CFG {
-
     private String functionName;
     private List<BasicBlock> basicBlocks;
     private int maxVirtualRegister;
@@ -130,20 +129,20 @@ public class CFG {
         Collections.reverse(basicBlocks);
     }
 
-    public void colorGraph() {
+    public String colorGraph() {
         List<String> colors = new LinkedList<>();
         Stack<String> stack = new Stack<>();
-        int k = 11;  // number of colors
 
         // Registers r0-r10 available
         // r11 = fp, r12 = ip, r13 = sp, r14 = lr, r15 = pc
-        for (int i = 0; i <= 10; i++) {
+        for (int i = 0; i < 13; i++) {
             colors.add(Integer.toString(i));
         }
 
         // Convert interference graph to list and sort by number of edges
         LinkedList<Map.Entry<String, HashSet<String>>> intfList = new LinkedList<>(intfGraph.entrySet());
         Collections.sort(intfList, (a, b) -> a.getValue().size() - b.getValue().size());
+        String mostConstrained = intfList.peekFirst().getKey();
 
         while (!intfList.isEmpty()) {
             // Remove node with most edges from list
@@ -187,9 +186,15 @@ public class CFG {
                 for (String intf : newGraph.get(v1)) {
                     availableColors.remove(registerMap.get(intf));
                 }
-                registerMap.put(v1, availableColors.getFirst());
+
+                if (availableColors.size() > 0) {
+                    registerMap.put(v1, availableColors.getFirst());
+                } else {  // Need to spill
+                    return mostConstrained;
+                }
             }
         }
+        return null;
     }
 
     // Helper function for colorGraph

@@ -1,8 +1,9 @@
 package rtl;
 
-import arm.*;
 import arm.ImmediateValue;
-import arm.RegisterValue;
+import arm.LdrInsn;
+import arm.MovInsn;
+import arm.StrInsn;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class DefaultInsn extends AbstractInsn {
     private String operation;
 
     public DefaultInsn(String expCode, int uid, int prevInsn, int nextInsn, int basicBlock,
-                Value target, List<Value> sources, String operation) {
+                       Value target, List<Value> sources, String operation) {
         super(expCode, uid, prevInsn, nextInsn, basicBlock);
         this.target = target;
         this.sources = sources;
@@ -59,9 +60,9 @@ public class DefaultInsn extends AbstractInsn {
     @Override
     public List<arm.Insn> toARM(HashMap<Integer, Integer> stack) {
         List<arm.Insn> insns = new LinkedList<>();
-        arm.Value r0 = new arm.RegisterValue("0");
-        arm.Value r1 = new arm.RegisterValue("1");
-        arm.Value r2 = new arm.RegisterValue("2");
+        arm.Value r0 = new arm.RegisterValue("0", false);
+        arm.Value r1 = new arm.RegisterValue("1", false);
+        arm.Value r2 = new arm.RegisterValue("2", false);
 
         for (Value source : sources) {
             remapValue(source, stack);

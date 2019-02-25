@@ -1,8 +1,7 @@
 package rtl;
 
-import arm.ImmediateValue;
 import arm.Insn;
-import arm.*;
+import arm.MovInsn;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,10 +40,10 @@ public class MoveInsn extends AbstractInsn {
         List<arm.Insn> insns = new LinkedList<>();
         arm.Value r0, r1;
 
-        r0 = new arm.RegisterValue(Integer.toString(target.getValue()));
+        r0 = new arm.RegisterValue(Integer.toString(target.getValue()), false);
 
         if (sources.get(0) instanceof RegisterValue) {
-            r1 = new arm.RegisterValue(Integer.toString(sources.get(0).getValue()));
+            r1 = new arm.RegisterValue(Integer.toString(sources.get(0).getValue()), false);
         } else {
             r1 = new arm.ImmediateValue(Integer.toString(sources.get(0).getValue()));
         }

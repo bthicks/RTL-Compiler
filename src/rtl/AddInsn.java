@@ -41,11 +41,11 @@ public class AddInsn extends AbstractInsn {
         List<arm.Insn> insns = new LinkedList<>();
         arm.Value r0, r1, r2;
 
-        r0 = new arm.RegisterValue(Integer.toString(target.getValue()));
-        r1 = new arm.RegisterValue(Integer.toString(sources.get(0).getValue()));
+        r0 = new arm.RegisterValue(Integer.toString(target.getValue()), false);
+        r1 = new arm.RegisterValue(Integer.toString(sources.get(0).getValue()), false);
 
         if (sources.get(1) instanceof RegisterValue) {
-            r2 = new arm.RegisterValue(Integer.toString(sources.get(1).getValue()));
+            r2 = new arm.RegisterValue(Integer.toString(sources.get(1).getValue()), false);
         } else {
             r2 = new arm.ImmediateValue(Integer.toString(sources.get(1).getValue()));
         }

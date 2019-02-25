@@ -1,7 +1,7 @@
 package arm;
 
 public abstract class AbstractValue implements Value {
-    private String value;
+    protected String value;
 
     public AbstractValue(String value) {
         this.value = value;

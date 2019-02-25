@@ -31,9 +31,20 @@ public class ARMGenerator {
 
     // TODO: register allocation
     public static void allocateRegisters(List<CFG> program) {
+        String mostConstrained;
         for (CFG cfg : program) {
             cfg.LVA();
-            cfg.colorGraph();
+
+            mostConstrained = cfg.colorGraph();
+
+            // TODO: Change to while
+            if (mostConstrained != null) {
+                System.out.println("Most Constrained: " + mostConstrained);
+
+                // spillRegister(mostConstrained)
+                mostConstrained = cfg.colorGraph();
+            }
+
             cfg.allocateRegisters();
         }
     }

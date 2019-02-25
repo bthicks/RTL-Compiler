@@ -53,13 +53,13 @@ public class CmpInsn extends AbstractInsn {
         arm.Value r0, r1;
 
         if (sources.get(0) instanceof RegisterValue) {
-            r0 = new arm.RegisterValue(Integer.toString(sources.get(0).getValue()));
+            r0 = new arm.RegisterValue(Integer.toString(sources.get(0).getValue()), false);
         } else {
             r0 = new arm.ImmediateValue(Integer.toString(sources.get(0).getValue()));
         }
 
         if (sources.get(1) instanceof RegisterValue) {
-            r1 = new arm.RegisterValue(Integer.toString(sources.get(1).getValue()));
+            r1 = new arm.RegisterValue(Integer.toString(sources.get(1).getValue()), false);
         } else {
             r1 = new arm.ImmediateValue(Integer.toString(sources.get(1).getValue()));
         }
