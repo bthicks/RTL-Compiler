@@ -37,6 +37,7 @@ public class ARMGenerator {
 
             while (spilledReg != null) {
                 cfg.spillRegister(spilledReg);
+                cfg.LVA();
                 spilledReg = cfg.colorGraph();
             }
 
