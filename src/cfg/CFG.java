@@ -10,12 +10,14 @@ public class CFG {
     private int maxVirtualRegister;
     private IntfGraph intfGraph;
     private HashMap<String, String> registerMap;
+    private Set<String> spilledRegisters;
 
     public CFG(String functionName, int maxVirtualRegister) {
         this.functionName = functionName;
         this.basicBlocks = new LinkedList<>();
         this.maxVirtualRegister = maxVirtualRegister;
         this.registerMap = new HashMap<>();
+        this.spilledRegisters = new HashSet<>();
     }
 
     public String getFunctionName() {
@@ -37,6 +39,10 @@ public class CFG {
 
     public int getMaxVirtualRegister() {
         return maxVirtualRegister;
+    }
+
+    public Set<String> getSpilledRegisters() {
+        return spilledRegisters;
     }
 
     public BasicBlock addBasicBlock(BasicBlock basicBlock) {
@@ -142,8 +148,9 @@ public class CFG {
         // Convert interference graph to list and sort by number of edges
         LinkedList<Map.Entry<String, HashSet<String>>> intfList = new LinkedList<>(intfGraph.entrySet());
         Collections.sort(intfList, (a, b) -> b.getValue().size() - a.getValue().size());
-        String mostConstrained = intfList.peekFirst().getKey();
-        System.out.println(mostConstrained);
+
+        // Get most constrained register that hasn't been spilled
+        String mostConstrained = getMostConstrainedReg(intfList);
 
         while (!intfList.isEmpty()) {
             // Remove node with most edges from list
@@ -198,6 +205,17 @@ public class CFG {
         return null;
     }
 
+    private String getMostConstrainedReg(LinkedList<Map.Entry<String, HashSet<String>>> intfList) {
+        for (Map.Entry<String, HashSet<String>> entry : intfList) {
+            String reg = entry.getKey();
+
+            if (!spilledRegisters.contains(reg)) {
+                return reg;
+            }
+        }
+        return null;
+    }
+
     // Helper function for colorGraph
     private boolean containsVirtual(List<Map.Entry<String, HashSet<String>>> list) {
         for (Map.Entry<String, HashSet<String>> node : list) {
@@ -220,6 +238,27 @@ public class CFG {
                 // change source registers from virtual to real
                 for (String source : sources) {
                     insn.allocateSource(source, registerMap.get(source));
+                }
+            }
+        }
+    }
+
+    public void spillRegister(String spilled) {
+        spilledRegisters.add(spilled);
+        int i = 1;
+
+        for (BasicBlock basicBlock : basicBlocks) {
+            for (arm.Insn insn : basicBlock.getArmInsns()) {
+                for (String source : insn.getSources()) {
+                    if (source.equals(spilled)) {
+                        insn.allocateSource(spilled, spilled + "_" + Integer.toString(i++));
+                        // add load before this insn
+                    }
+                }
+
+                if (insn.getTarget() != null && insn.getTarget().equals(spilled)) {
+                    insn.allocateTarget(spilled + "_" + Integer.toString(i++));
+                    // add store after this insn
                 }
             }
         }
