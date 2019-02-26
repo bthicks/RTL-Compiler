@@ -18,6 +18,10 @@ public class CFG {
         this.maxVirtualRegister = maxVirtualRegister;
         this.registerMap = new HashMap<>();
         this.spilledRegisters = new HashSet<>();
+
+        for (int i = 0; i < 13; i++) {
+            spilledRegisters.add(Integer.toString(i));
+        }
     }
 
     public String getFunctionName() {
@@ -210,6 +214,7 @@ public class CFG {
             String reg = entry.getKey();
 
             if (!spilledRegisters.contains(reg)) {
+                System.out.println("most constrained: " + reg);
                 return reg;
             }
         }
@@ -244,25 +249,32 @@ public class CFG {
     }
 
     public void spillRegister(String spilled) {
-        spilledRegisters.add(spilled);
-        int i = 1;
+        System.out.println(spilled);
+        //spilledRegisters.add(spilled);
+        int i = 0;
 
         for (BasicBlock basicBlock : basicBlocks) {
             for (arm.Insn insn : basicBlock.getArmInsns()) {
                 for (String source : insn.getSources()) {
                     if (source.equals(spilled)) {
-                        spilledRegisters.add(spilled + Integer.toString(i++));
-                        insn.allocateSource(spilled, spilled + Integer.toString(i));
+                        String spilledboi = spilled + Integer.toString(i++);
+
+                        spilledRegisters.add(spilledboi);
+                        insn.allocateSource(spilled, spilledboi);
                         // add load before this insn
                     }
                 }
 
                 if (insn.getTarget() != null && insn.getTarget().equals(spilled)) {
-                    spilledRegisters.add(spilled + Integer.toString(i++));
-                    insn.allocateTarget(spilled + Integer.toString(i));
+                    String spilledgorl = spilled + Integer.toString(i++);
+
+                    spilledRegisters.add(spilledgorl);
+                    insn.allocateTarget(spilledgorl);
                     // add store after this insn
                 }
             }
         }
+        System.out.println(spilledRegisters.toString());
+        System.out.println(i);
     }
 }
