@@ -24,6 +24,10 @@ public class CFG {
         }
     }
 
+    public IntfGraph getIntfGraph() {
+        return intfGraph;
+    }
+
     public String getFunctionName() {
         return functionName;
     }
@@ -143,6 +147,8 @@ public class CFG {
         List<String> colors = new LinkedList<>();
         Stack<String> stack = new Stack<>();
 
+        registerMap.clear();
+
         // Registers r0-r10 available
         // r11 = fp, r12 = ip, r13 = sp, r14 = lr, r15 = pc
         for (int i = 0; i < 13; i++) {
@@ -214,7 +220,6 @@ public class CFG {
             String reg = entry.getKey();
 
             if (!spilledRegisters.contains(reg)) {
-                System.out.println("most constrained: " + reg);
                 return reg;
             }
         }
@@ -249,7 +254,6 @@ public class CFG {
     }
 
     public void spillRegister(String spilled) {
-        System.out.println(spilled);
         //spilledRegisters.add(spilled);
         int i = 0;
 
@@ -274,7 +278,5 @@ public class CFG {
                 }
             }
         }
-        System.out.println(spilledRegisters.toString());
-        System.out.println(i);
     }
 }

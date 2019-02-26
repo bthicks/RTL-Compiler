@@ -103,7 +103,7 @@ public class IntfGraph {
         stringBuilder.append("IntfGraph:\n");
         for (String key : intfGraph.keySet()) {
             stringBuilder.append(key).append(": ");
-            
+
             for (String val : intfGraph.get(key)) {
                 stringBuilder.append(val).append(" ");
             }
