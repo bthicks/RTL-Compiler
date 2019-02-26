@@ -54,11 +54,12 @@ public class LdrInsn extends AbstractInsn {
 
     @Override
     public void allocateSource(String virtual, String real) {
-        for (String source : sources) {
-            if (source.equals(virtual)) {
-                source = real;
+        for (int i = 0; i < sources.size(); i++) {
+            if (sources.get(i).equals(virtual)) {
+                sources.set(i, real);
             }
         }
+
         if (offset.getValue().equals(virtual) && offset instanceof RegisterValue) {
             offset.setValue(real);
         }

@@ -1,5 +1,6 @@
 package arm;
 
+import java.sql.SQLOutput;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,11 +52,12 @@ public class MovInsn extends AbstractInsn {
 
     @Override
     public void allocateSource(String virtual, String real) {
-        for (String source : sources) {
-            if (source.equals(virtual)) {
-                source = real;
+        for (int i = 0; i < sources.size(); i++) {
+            if (sources.get(i).equals(virtual)) {
+                sources.set(i, real);
             }
         }
+
         if (operand2.getValue().equals(virtual) && operand2 instanceof RegisterValue) {
             operand2.setValue(real);
         }
