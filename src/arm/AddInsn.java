@@ -55,7 +55,6 @@ public class AddInsn extends AbstractInsn {
     @Override
     public void allocateSource(String virtual, String real) {
         for (int i = 0; i < sources.size(); i++) {
-            System.out.println(sources.get(i) == null);
             if (sources.get(i).equals(virtual)) {
                 sources.set(i, real);
             }
