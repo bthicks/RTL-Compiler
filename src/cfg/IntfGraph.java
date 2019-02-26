@@ -95,4 +95,21 @@ public class IntfGraph {
         intfGraph.get(v1).remove(v2);
         intfGraph.get(v2).remove(v1);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("IntfGraph:\n");
+        for (String key : intfGraph.keySet()) {
+            stringBuilder.append(key).append(": ");
+            
+            for (String val : intfGraph.get(key)) {
+                stringBuilder.append(val).append(" ");
+            }
+            stringBuilder.append("\n");
+        }
+
+        return stringBuilder.toString();
+    }
 }
