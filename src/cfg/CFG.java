@@ -251,13 +251,15 @@ public class CFG {
             for (arm.Insn insn : basicBlock.getArmInsns()) {
                 for (String source : insn.getSources()) {
                     if (source.equals(spilled)) {
-                        insn.allocateSource(spilled, spilled + "_" + Integer.toString(i++));
+                        spilledRegisters.add(spilled + Integer.toString(i++));
+                        insn.allocateSource(spilled, spilled + Integer.toString(i));
                         // add load before this insn
                     }
                 }
 
                 if (insn.getTarget() != null && insn.getTarget().equals(spilled)) {
-                    insn.allocateTarget(spilled + "_" + Integer.toString(i++));
+                    spilledRegisters.add(spilled + Integer.toString(i++));
+                    insn.allocateTarget(spilled + Integer.toString(i));
                     // add store after this insn
                 }
             }
