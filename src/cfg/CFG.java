@@ -101,7 +101,7 @@ public class CFG {
     }
 
     public void LVA() {
-        boolean changed = true;
+        boolean changed;
 
         // Reverse list of basic blocks to run algorithm from bottom up
         Collections.reverse(basicBlocks);
@@ -112,7 +112,7 @@ public class CFG {
         }
 
         // Dataflow iterative analysis
-        while (changed) {
+        do {
             changed = false;
 
             for (BasicBlock block : basicBlocks) {
@@ -120,7 +120,7 @@ public class CFG {
                     changed = true;
                 }
             }
-        }
+        } while (changed);
 
         // Generate interference graph
         this.intfGraph = new IntfGraph(basicBlocks);
