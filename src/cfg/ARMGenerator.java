@@ -32,7 +32,6 @@ public class ARMGenerator {
     public static void allocateRegisters(List<CFG> program) {
         for (CFG cfg : program) {
             cfg.LVA();
-
             String spilledReg = cfg.colorGraph();
 
             while (spilledReg != null) {
@@ -61,11 +60,11 @@ public class ARMGenerator {
             // stack setup
             armCode.append(cfg.getFunctionName()).append(":\n");
 
-            armCode.append("\tpush\t{lr");
+            /*armCode.append("\tpush\t{lr");
             for (String reg : cfg.getCalleeSaved()) {
                 armCode.append(", r").append(reg);
             }
-            armCode.append("}\n");
+            armCode.append("}\n");*/
 
             armCode.append("\tmov\tfp, sp\n");
             armCode.append("\tsub\tsp, sp, #" + Integer.toString((cfg.getMaxVirtualRegister() - 104) * 4) + "\n");
@@ -80,11 +79,11 @@ public class ARMGenerator {
             // stack teardown
             armCode.append("\tadd\tsp, sp, #" + Integer.toString((cfg.getMaxVirtualRegister() - 104) * 4) + "\n");
 
-            armCode.append("\tpop\t{pc");
+            /*armCode.append("\tpop\t{pc");
             for (String reg : cfg.getCalleeSaved()) {
                 armCode.append(", r").append(reg);
             }
-            armCode.append("}\n");
+            armCode.append("}\n");*/
         }
 
         // write ARM code to .s file

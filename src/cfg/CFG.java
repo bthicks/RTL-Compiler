@@ -141,6 +141,8 @@ public class CFG {
         // Generate interference graph
         this.intfGraph = new IntfGraph(basicBlocks);
 
+        System.out.println(intfGraph.toString());
+
         // Un-reverse list
         Collections.reverse(basicBlocks);
     }
@@ -257,7 +259,6 @@ public class CFG {
                 for (String source : sources) {
                     insn.allocateSource(source, registerMap.get(source));
                     if (source != null && Integer.parseInt(registerMap.get(source)) > 3) {
-                        System.out.println(source);
                         calleeSaved.add(registerMap.get(source));
                     }
                 }

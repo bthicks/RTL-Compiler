@@ -5,6 +5,8 @@ import java.util.List;
 public interface Insn {
     public String toARM();
 
+    public int getUid();
+
     public String getTarget();
 
     public List<String> getSources();

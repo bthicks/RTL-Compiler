@@ -45,15 +45,15 @@ public class IntfGraph {
     private void generateIntfGraph(List<BasicBlock> basicBlocks) {
         for (BasicBlock block : basicBlocks) {
             List<Insn> insns = block.getArmInsns();
-            Set<String> liveOut = block.getLiveOut();
+            Set<String> liveSet = new HashSet<>(block.getLiveOut());
 
             // Add each register in live out set to graph with edges between them
-            for (String reg : liveOut) {
+            for (String reg : liveSet) {
                 if (!intfGraph.containsKey(reg)) {
                     intfGraph.put(reg, new HashSet<>());
                 }
 
-                for (String v2 : liveOut) {
+                for (String v2 : liveSet) {
                     addEdge(reg, v2);
                 }
             }
@@ -65,7 +65,7 @@ public class IntfGraph {
                 String target = insn.getTarget();
 
                 // Remove target from live set
-                liveOut.remove(target);
+                liveSet.remove(target);
 
                 if (target != null) {
                     // Add target node to graph
@@ -73,13 +73,20 @@ public class IntfGraph {
                         intfGraph.put(target, new HashSet<>());
                     }
                     // Add edge from target (v1) to each element in live set (v2)
-                    for (String v2 : liveOut) {
+                    for (String v2 : liveSet) {
                         addEdge(target, v2);
                     }
                 }
 
                 // Add each source to live set
-                liveOut.addAll(insn.getSources());
+                for (String source : insn.getSources()) {
+                    liveSet.add(source);
+
+                    // Add source node to graph
+                    if (!intfGraph.containsKey(source)) {
+                        intfGraph.put(source, new HashSet<>());
+                    }
+                }
             }
 
             // Un-reverse insns

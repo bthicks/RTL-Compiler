@@ -13,6 +13,10 @@ public abstract class AbstractInsn implements Insn {
 
     public abstract String toARM();
 
+    public int getUid() {
+        return uid;
+    }
+
     public String getTarget() {
         return null;
     }

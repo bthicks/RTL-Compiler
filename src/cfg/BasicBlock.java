@@ -92,8 +92,8 @@ public class BasicBlock {
     }
 
     public boolean LVA() {
-        Set<String> prevLiveIn = liveIn;
-        Set<String> prevLiveOut = liveOut;
+        Set<String> prevLiveIn = new HashSet<>(liveIn);
+        Set<String> prevLiveOut = new HashSet<>(liveOut);
 
         for (BasicBlock successor : successors) {
             liveOut.addAll(successor.getLiveIn());
@@ -103,9 +103,8 @@ public class BasicBlock {
         liveIn.removeAll(defs);
         liveIn.addAll(uses);
 
-
         // Return true if either the live in or live out set changed
-        return ((liveIn != prevLiveIn) || (liveOut != prevLiveOut));
+        return ((!liveIn.equals(prevLiveIn)) || (!liveOut.equals(prevLiveOut)));
     }
 
     public void clearLiveRanges() {
