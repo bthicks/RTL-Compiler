@@ -22,6 +22,18 @@ public class IntfGraph {
         intfGraph.remove(key);
     }
 
+    public boolean containsKey(String key) {
+        return intfGraph.containsKey(key);
+    }
+
+    public Set<String> keySet() {
+        return intfGraph.keySet();
+    }
+
+    public Collection<HashSet<String>> values() {
+        return intfGraph.values();
+    }
+
     public HashSet<String> get(String key) {
         return intfGraph.get(key);
     }

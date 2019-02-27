@@ -18,10 +18,6 @@ public class CFG {
         this.maxVirtualRegister = maxVirtualRegister;
         this.registerMap = new HashMap<>();
         this.spilledRegisters = new HashSet<>();
-
-        for (int i = 0; i < 13; i++) {
-            spilledRegisters.add(Integer.toString(i));
-        }
     }
 
     public IntfGraph getIntfGraph() {
@@ -149,7 +145,7 @@ public class CFG {
 
         registerMap.clear();
 
-        // Registers r0-r10 available
+        // Registers r0-r12 available
         // r11 = fp, r12 = ip, r13 = sp, r14 = lr, r15 = pc
         for (int i = 0; i < 13; i++) {
             colors.add(Integer.toString(i));
@@ -199,7 +195,7 @@ public class CFG {
             if (Integer.parseInt(v1) <= 15) {
                 registerMap.put(v1, v1);
             } else {
-                // Get list of taken colors
+                // Get list of available colors
                 LinkedList<String> availableColors = new LinkedList<>(colors);
                 for (String intf : newGraph.get(v1)) {
                     availableColors.remove(registerMap.get(intf));
@@ -212,6 +208,7 @@ public class CFG {
                 }
             }
         }
+g
         return null;
     }
 
@@ -219,7 +216,7 @@ public class CFG {
         for (Map.Entry<String, HashSet<String>> entry : intfList) {
             String reg = entry.getKey();
 
-            if (!spilledRegisters.contains(reg)) {
+            if (!spilledRegisters.contains(reg) && Integer.parseInt(reg) > 15) {
                 return reg;
             }
         }
