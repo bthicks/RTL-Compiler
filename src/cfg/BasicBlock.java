@@ -107,4 +107,11 @@ public class BasicBlock {
         // Return true if either the live in or live out set changed
         return ((liveIn != prevLiveIn) || (liveOut != prevLiveOut));
     }
+
+    public void clearLiveRanges() {
+        uses.clear();
+        defs.clear();
+        liveIn.clear();
+        liveOut.clear();
+    }
 }

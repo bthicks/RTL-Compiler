@@ -92,6 +92,10 @@ public class IntfGraph {
     }
 
     public void addEdge(String v1, String v2) {
+        if (v1.equals(v2)) {
+            return;
+        }
+
         if (!intfGraph.containsKey(v1)) {
             intfGraph.put(v1, new HashSet<>());
         }

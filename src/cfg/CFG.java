@@ -118,6 +118,7 @@ public class CFG {
 
         // Generate def and use sets in each block
         for (BasicBlock block : basicBlocks) {
+            block.clearLiveRanges();
             block.generateDefAndUseSets();
         }
 
@@ -147,7 +148,7 @@ public class CFG {
 
         // Registers r0-r12 available
         // r11 = fp, r12 = ip, r13 = sp, r14 = lr, r15 = pc
-        for (int i = 0; i < 13; i++) {
+        for (int i = 0; i < 2; i++) {
             colors.add(Integer.toString(i));
         }
 
@@ -251,7 +252,6 @@ public class CFG {
     }
 
     public void spillRegister(String spilled) {
-        //spilledRegisters.add(spilled);
         int i = 0;
 
         for (BasicBlock basicBlock : basicBlocks) {
