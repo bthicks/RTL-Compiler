@@ -11,6 +11,7 @@ public class CFG {
     private IntfGraph intfGraph;
     private HashMap<String, String> registerMap;
     private Set<String> spilledRegisters;
+    private Set<String> calleeSaved;
 
     public CFG(String functionName, int maxVirtualRegister) {
         this.functionName = functionName;
@@ -22,6 +23,10 @@ public class CFG {
 
     public IntfGraph getIntfGraph() {
         return intfGraph;
+    }
+
+    public Set<String> getCalleeSaved() {
+        return calleeSaved;
     }
 
     public String getFunctionName() {
@@ -234,6 +239,8 @@ public class CFG {
     }
 
     public void allocateRegisters() {
+        calleeSaved = new HashSet<>();
+
         for (BasicBlock basicBlock : basicBlocks) {
             for (arm.Insn insn : basicBlock.getArmInsns()) {
                 String target = insn.getTarget();
@@ -241,10 +248,17 @@ public class CFG {
 
                 // change target register from virtual to real
                 insn.allocateTarget(registerMap.get(target));
+                if (target != null && Integer.parseInt(registerMap.get(target)) > 3) {
+                    calleeSaved.add(registerMap.get(target));
+                }
 
                 // change source registers from virtual to real
                 for (String source : sources) {
                     insn.allocateSource(source, registerMap.get(source));
+                    if (source != null && Integer.parseInt(registerMap.get(source)) > 3) {
+                        System.out.println(source);
+                        calleeSaved.add(registerMap.get(source));
+                    }
                 }
             }
         }
