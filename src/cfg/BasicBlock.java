@@ -62,6 +62,10 @@ public class BasicBlock {
         return uses;
     }
 
+    public void setArmInsns(List<arm.Insn> insns) {
+        this.armInsns = insns;
+    }
+
     public void addRtlInsn(rtl.Insn insn) {
         rtlInsns.add(insn);
     }

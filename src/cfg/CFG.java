@@ -1,5 +1,9 @@
 package cfg;
 
+import arm.ImmediateValue;
+import arm.LdrInsn;
+import arm.RegisterValue;
+import arm.StrInsn;
 import rtl.Insn;
 
 import java.util.*;
@@ -12,6 +16,7 @@ public class CFG {
     private HashMap<String, String> registerMap;
     private Set<String> spilledRegisters;
     private Set<String> calleeSaved;
+    private int spillOffset;
 
     public CFG(String functionName, int maxVirtualRegister) {
         this.functionName = functionName;
@@ -19,6 +24,7 @@ public class CFG {
         this.maxVirtualRegister = maxVirtualRegister;
         this.registerMap = new HashMap<>();
         this.spilledRegisters = new HashSet<>();
+        this.spillOffset = 0;
     }
 
     public IntfGraph getIntfGraph() {
@@ -52,6 +58,10 @@ public class CFG {
 
     public Set<String> getSpilledRegisters() {
         return spilledRegisters;
+    }
+
+    public int getSpillOffset() {
+        return spillOffset;
     }
 
     public BasicBlock addBasicBlock(BasicBlock basicBlock) {
@@ -111,6 +121,14 @@ public class CFG {
         }
     }
 
+    public void printInsns() {
+        for (BasicBlock block : this.basicBlocks) {
+            for (arm.Insn insn : block.getArmInsns()) {
+                System.out.println(insn.toARM());
+            }
+        }
+    }
+
     public void sortCFG() {
         Collections.sort(basicBlocks, (a, b) -> a.getLabel() - b.getLabel());
     }
@@ -141,8 +159,6 @@ public class CFG {
         // Generate interference graph
         this.intfGraph = new IntfGraph(basicBlocks);
 
-        System.out.println(intfGraph.toString());
-
         // Un-reverse list
         Collections.reverse(basicBlocks);
     }
@@ -155,7 +171,7 @@ public class CFG {
 
         // Registers r0-r12 available
         // r11 = fp, r12 = ip, r13 = sp, r14 = lr, r15 = pc
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 13; i++) {
             colors.add(Integer.toString(i));
         }
 
@@ -267,28 +283,43 @@ public class CFG {
     }
 
     public void spillRegister(String spilled) {
-        int i = 0;
+        int spillNum = 0;
 
         for (BasicBlock basicBlock : basicBlocks) {
+            List<arm.Insn> newInsns = new LinkedList<>();
+
             for (arm.Insn insn : basicBlock.getArmInsns()) {
+
                 for (String source : insn.getSources()) {
                     if (source.equals(spilled)) {
-                        String spilledboi = spilled + Integer.toString(i++);
+                        String spilledboi = spilled + Integer.toString(spillNum++);
 
                         spilledRegisters.add(spilledboi);
                         insn.allocateSource(spilled, spilledboi);
+
                         // add load before this insn
+                        newInsns.add(new LdrInsn(new RegisterValue(spilledboi),
+                                new ImmediateValue(Integer.toString(spillOffset)), insn.getUid()));
                     }
                 }
 
+                newInsns.add(insn);
+
                 if (insn.getTarget() != null && insn.getTarget().equals(spilled)) {
-                    String spilledgorl = spilled + Integer.toString(i++);
+                    String spilledgorl = spilled + Integer.toString(spillNum++);
 
                     spilledRegisters.add(spilledgorl);
                     insn.allocateTarget(spilledgorl);
+
                     // add store after this insn
+                    newInsns.add(new StrInsn(new RegisterValue(spilledgorl),
+                            new ImmediateValue(Integer.toString(spillOffset)), insn.getUid()));
                 }
             }
+
+            basicBlock.setArmInsns(newInsns);
         }
+
+        spillOffset += 4;
     }
 }
