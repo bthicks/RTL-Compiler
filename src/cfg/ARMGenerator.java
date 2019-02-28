@@ -84,7 +84,7 @@ public class ARMGenerator {
             }
 
             armCode.append("\tpop\t{");
-            for (String reg : cfg.getCalleeSaved()) {
+            for (String reg : calleeSaved) {
                 armCode.append("r").append(reg).append(", ");
             }
             armCode.append("pc}\n");
