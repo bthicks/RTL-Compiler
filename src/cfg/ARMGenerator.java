@@ -3,10 +3,7 @@ package cfg;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ARMGenerator {
 
@@ -34,12 +31,10 @@ public class ARMGenerator {
             cfg.LVA();
             String spilledReg = cfg.colorGraph();
 
-            System.out.println(cfg.getIntfGraph().toString());
             while (spilledReg != null) {
                 cfg.spillRegister(spilledReg);
                 cfg.LVA();
                 spilledReg = cfg.colorGraph();
-                System.out.println(cfg.getIntfGraph().toString());
             }
 
             cfg.allocateRegisters();
@@ -62,11 +57,15 @@ public class ARMGenerator {
             // stack setup
             armCode.append(cfg.getFunctionName()).append(":\n");
 
-            armCode.append("\tpush\t{lr");
-            for (String reg : cfg.getCalleeSaved()) {
-                armCode.append(", r").append(reg);
+            List<String> calleeSaved = new ArrayList<>(cfg.getCalleeSaved());
+            Collections.sort(calleeSaved, (a, b) -> Integer.parseInt(a) - Integer.parseInt(b));
+
+            armCode.append("\tpush\t{");
+
+            for (String reg : calleeSaved) {
+                armCode.append("r").append(reg).append(", ");
             }
-            armCode.append("}\n");
+            armCode.append("lr}\n");
 
             if (cfg.getSpillOffset() > 0) {
                 armCode.append("\tsub\tsp, sp, #" + Integer.toString(cfg.getSpillOffset()) + "\n");
@@ -84,11 +83,11 @@ public class ARMGenerator {
                 armCode.append("\tadd\tsp, sp, #" + Integer.toString(cfg.getSpillOffset()) + "\n");
             }
 
-            armCode.append("\tpop\t{pc");
+            armCode.append("\tpop\t{");
             for (String reg : cfg.getCalleeSaved()) {
-                armCode.append(", r").append(reg);
+                armCode.append("r").append(reg).append(", ");
             }
-            armCode.append("}\n");
+            armCode.append("pc}\n");
         }
 
         // write ARM code to .s file
