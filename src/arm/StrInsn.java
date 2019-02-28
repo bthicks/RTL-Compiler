@@ -25,7 +25,7 @@ public class StrInsn extends AbstractInsn {
     @Override
     public String toARM() {
         if (address instanceof ImmediateValue) {
-            return formatARM("str", r1.toString() + ", [fp, " + address.toString() + "]");
+            return formatARM("str", r1.toString() + ", [sp, " + address.toString() + "]");
         }
         else {
             return formatARM("str", r1.toString() + ", [" + address.toString() + "]");

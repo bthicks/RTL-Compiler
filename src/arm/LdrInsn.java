@@ -32,7 +32,7 @@ public class LdrInsn extends AbstractInsn {
             return formatARM("ldr", r1.toString() + ", [" + offset.toString() + "]");
         }
         else {
-            return formatARM("ldr", r1.toString() + ", [fp, " + offset.toString() + "]");
+            return formatARM("ldr", r1.toString() + ", [sp, " + offset.toString() + "]");
         }
     }
 

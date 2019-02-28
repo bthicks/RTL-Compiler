@@ -44,6 +44,11 @@ public class JSONParser {
                     sources = parseSources(jsonInsn.getJSONArray("sources"));
                     insns.add(new AddInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target, sources));
                     break;
+                case "sub_insn":
+                    target = parseTarget(jsonInsn.optJSONObject("target"));
+                    sources = parseSources(jsonInsn.getJSONArray("sources"));
+                    insns.add(new SubInsn(expCode, uid, prevInsn, nextInsn, basicBlock, target, sources));
+                    break;
                 case "jump_insn":
                     //target = parseTarget(jsonInsn.optJSONObject("target"));
                     //sources = parseSources(jsonInsn.getJSONArray("sources"));
