@@ -46,6 +46,8 @@ class RTLprocesser:
     def _process_mem(instruction, new_insn):
         if "plus" in instruction[1][0]:
             RTLprocesser._process_plus(instruction[1], new_insn, mem=True)
+        elif "minus" in instruction[1][0]:
+            RTLprocesser._process_plus(instruction[1], new_insn, mem=True)
         elif "symbol" in instruction[1][0]:
             RTLprocesser._process_symbol_ref(instruction[1], new_insn)
         else:
@@ -75,6 +77,8 @@ class RTLprocesser:
                 new_insn["type"] = "move_insn"
             elif "plus" in instruction[1][0]:
                 new_insn["type"] = "add_insn"
+            elif "minus" in instruction[1][0]:
+                new_insn["type"] = "sub_insn"
             elif "compare" in instruction[1][0]:
                 pass
             elif "call" in instruction[1][0]:
@@ -85,6 +89,8 @@ class RTLprocesser:
             if "reg" in instruction[1][0] or "const" in instruction[1][0]:
                 new_insn["type"] = "store_insn"
             elif "plus" in instruction[1][0]:
+                new_insn["type"] = "store_insn"
+            elif "minus" in instruction[1][0]:
                 new_insn["type"] = "store_insn"
             else:
                 print("GET_SET", new_insn["uid"], instruction)
@@ -125,6 +131,7 @@ class RTLprocesser:
             "reg": RTLprocesser._get_register,
             "const_int": RTLprocesser._get_register,
             "plus": RTLprocesser._process_plus,
+            "minus": RTLprocesser._process_minus,
             "mem": RTLprocesser._process_mem,
             "compare": RTLprocesser._process_compare,
             "unspec": RTLprocesser._process_unspec,
