@@ -258,7 +258,7 @@ public class CFG {
     }
 
     public void allocateRegisters() {
-        calleeSaved = new HashSet<>();
+        calleeSaved = new LinkedHashSet<>();
 
         for (BasicBlock basicBlock : basicBlocks) {
             for (arm.Insn insn : basicBlock.getArmInsns()) {
