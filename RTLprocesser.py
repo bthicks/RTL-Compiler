@@ -54,6 +54,10 @@ class RTLprocesser:
             print("PROCESS_MEM", new_insn["uid"], instruction)
 
     @staticmethod
+    def _process_minus(instruction, new_insn, mem=False):
+        RTLprocesser._process_plus(instruction, new_insn, mem)
+
+    @staticmethod
     def _process_plus(instruction, new_insn, mem=False):
         if mem:
             RTLprocesser._get_register(instruction, new_insn, mem)
