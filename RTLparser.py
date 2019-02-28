@@ -70,7 +70,7 @@ def parse(file_name):
         while True:
             name = ""
             for line in infile:
-                match = re.match(";; Function (?P<name>([A-Z]|[a-z])*)", line)
+                match = re.match(";; Function (?P<name>([A-Z]|[a-z]|[0-9])*)", line)
                 if match:
                     name = match.group('name')
                 elif ";; Full RTL generated for this function:" in line:
