@@ -34,10 +34,12 @@ public class ARMGenerator {
             cfg.LVA();
             String spilledReg = cfg.colorGraph();
 
+            System.out.println(cfg.getIntfGraph().toString());
             while (spilledReg != null) {
                 cfg.spillRegister(spilledReg);
                 cfg.LVA();
                 spilledReg = cfg.colorGraph();
+                System.out.println(cfg.getIntfGraph().toString());
             }
 
             cfg.allocateRegisters();

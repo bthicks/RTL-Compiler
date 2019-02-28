@@ -143,6 +143,8 @@ public class CFG {
         for (BasicBlock block : basicBlocks) {
             block.clearLiveRanges();
             block.generateDefAndUseSets();
+            System.out.println("Defs: " + block.getDefs());
+            System.out.println("Uses: " + block.getUses());
         }
 
         // Dataflow iterative analysis
@@ -155,6 +157,11 @@ public class CFG {
                 }
             }
         } while (changed);
+
+        for (BasicBlock block : basicBlocks) {
+            System.out.println("Live ins: " + block.getLiveIn());
+            System.out.println("Live out: " + block.getLiveOut());
+        }
 
         // Generate interference graph
         this.intfGraph = new IntfGraph(basicBlocks);

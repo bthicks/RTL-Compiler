@@ -397,7 +397,7 @@ class RTLprocesser:
 
         if instruction[5][2][0] == "if_then_else":
             RTLprocesser._process_if_then_else(instruction[5][2], new_insn)
-        elif instruction[5][2][0] == "label_ref":
+        elif "label_ref" in instruction[5][2][0]:
             new_insn["condition"] = ""
             new_insn["label_ref"] = int(instruction[5][2][1])
         else:
