@@ -46,11 +46,17 @@ public class ARMGenerator {
         filename = filename.replace(".json", ".s");
         File file = new File(filename);
         StringBuilder armCode = new StringBuilder();
+        List<String> globals = new LinkedList<>();
+
+        // get function names for .global
+        for (CFG cfg : program) {
+            globals.add(cfg.getFunctionName());
+        }
 
         // append ARM file header
         armCode.append(".arch\tarmv7-a\n");
         armCode.append(".text\n");
-        armCode.append(".global main\n\n");
+        armCode.append(".global " + String.join(", ", globals) + "\n\n");
 
         // for every function in program
         for (CFG cfg : program) {
