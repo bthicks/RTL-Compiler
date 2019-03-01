@@ -37,4 +37,5 @@ test:
 
 clean:
 	rm -rf $(BUILD)/* $(SOURCE) $(TARGET) $(LIB_A) $(LIB_O)
+	rm -rf test/*/*.s test/*/*.json
 
