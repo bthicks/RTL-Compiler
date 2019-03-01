@@ -171,9 +171,10 @@ public class CFG {
 
         // Registers r0-r12 available
         // r11 = fp, r12 = ip, r13 = sp, r14 = lr, r15 = pc
-        for (int i = 0; i < 13; i++) {
+        for (int i = 1; i < 9; i++) {
             colors.add(Integer.toString(i));
         }
+        colors.add("10");
 
         // Convert interference graph to list and sort by number of edges
         LinkedList<Map.Entry<String, HashSet<String>>> intfList = new LinkedList<>(intfGraph.entrySet());
