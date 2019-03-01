@@ -56,15 +56,15 @@ public class CallInsn extends AbstractInsn {
     @Override
     public List<arm.Insn> toARM(HashMap<Integer, Integer> stack) {
         List<arm.Insn> insns = new LinkedList<>();
-        List<arm.Value> callerSaved = new ArrayList<arm.Value>();
-        callerSaved.add(new arm.RegisterValue("0", false));
-        callerSaved.add(new arm.RegisterValue("1", false));
-        callerSaved.add(new arm.RegisterValue("2", false));
-        callerSaved.add(new arm.RegisterValue("3", false));
+//        List<arm.Value> callerSaved = new ArrayList<arm.Value>();
+//        callerSaved.add(new arm.RegisterValue("0", false));
+//        callerSaved.add(new arm.RegisterValue("1", false));
+//        callerSaved.add(new arm.RegisterValue("2", false));
+//        callerSaved.add(new arm.RegisterValue("3", false));
 
-        insns.add(new PushInsn(callerSaved));
+//        insns.add(new PushInsn(callerSaved));
         insns.add(new BInsn(new SpecialValue(function), "l", this.getUid()));
-        insns.add(new PopInsn(callerSaved));
+//        insns.add(new PopInsn(callerSaved));
 
         return insns;
     }
