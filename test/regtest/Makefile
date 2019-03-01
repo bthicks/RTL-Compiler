@@ -1,11 +1,11 @@
-CXX = g++
-CXXFLAGS = -g -Wall -O1
-CXXSRCS = driver.cpp
+CC = gcc
+CFLAGS = -g -Wall -O1
+CSRCS = driver.c regtest1.s regtest2.s
 BIN = regtest
 
 all:
-	$(CXX) $(CXXFLAGS) -c $(CXXSRCS) $(FILE)
-	$(CXX) $(CXXFLAGS) -o $(BIN) *.o
+	$(CC) $(CFLAGS) -c $(CSRCS)
+	$(CC) $(CFLAGS) -o $(BIN) *.o
 
 clean:
 	rm -f $(BIN) *.o
