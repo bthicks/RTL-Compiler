@@ -1,19 +1,24 @@
 package arm;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BInsn extends AbstractInsn {
     private final Value label;
     private final String condition;
-    private String target;
+//    private String target;
+    private List<String> sources;
 
     public BInsn(Value label, String condition, int uid) {
         this.label = label;
         this.condition = condition;
         this.uid = uid;
+        this.sources = new ArrayList<>();
 
-        if (condition.equals("l")) {
-            this.target = "0";
-        } else {
-            this.target = null;
+        if (condition.equals("l")) {  // Call Insn
+            for (int i = 0; i < 4; i++) {
+                this.sources.add(Integer.toString(i));
+            }
         }
     }
 
@@ -23,7 +28,7 @@ public class BInsn extends AbstractInsn {
     }
 
     @Override
-    public String getTarget() {
-        return target;
+    public List<String> getSources() {
+        return sources;
     }
 }
