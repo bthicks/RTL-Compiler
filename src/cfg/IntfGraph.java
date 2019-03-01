@@ -1,5 +1,6 @@
 package cfg;
 
+import arm.BInsn;
 import arm.Insn;
 
 import java.util.*;
@@ -85,6 +86,23 @@ public class IntfGraph {
                     // Add source node to graph
                     if (!intfGraph.containsKey(source)) {
                         intfGraph.put(source, new HashSet<>());
+                    }
+                }
+
+                // Add interferences for call insns
+                if (insn instanceof BInsn && ((BInsn) insn).getCondition().equals("l")) {
+                    for (int i = 0; i < 4; i++) {
+                        if (!intfGraph.containsKey(Integer.toString(i))) {
+                            intfGraph.put(Integer.toString(i), new HashSet<>());
+                        }
+
+                        for (int j = i + 1; j < 4; j++) {
+                            addEdge(Integer.toString(i), Integer.toString(j));
+                        }
+
+                        for (String v2 : liveSet) {
+                            addEdge(Integer.toString(i), v2);
+                        }
                     }
                 }
             }
