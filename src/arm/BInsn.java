@@ -12,6 +12,10 @@ public class BInsn extends AbstractInsn {
 
     @Override
     public String toARM() {
-        return formatARM("b" + condition, label.toString());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(formatARM("push", "{r0, r1, r2, r3}"));
+        stringBuilder.append(formatARM("b" + condition, label.toString()));
+        stringBuilder.append(formatARM("pop", "{r0, r1, r2, r3}"));
+        return stringBuilder.toString();
     }
 }
