@@ -91,17 +91,21 @@ public class IntfGraph {
 
                 // Add interferences for call insns
                 if (insn instanceof BInsn && ((BInsn) insn).getCondition().equals("l")) {
-                    for (int i = 0; i < 4; i++) {
-                        if (!intfGraph.containsKey(Integer.toString(i))) {
-                            intfGraph.put(Integer.toString(i), new HashSet<>());
-                        }
+                    for (int i = 0; i < 13; i++) {
+                        if (i < 4 || i == 12) {
+                            if (!intfGraph.containsKey(Integer.toString(i))) {
+                                intfGraph.put(Integer.toString(i), new HashSet<>());
+                            }
 
-                        for (int j = i + 1; j < 4; j++) {
-                            addEdge(Integer.toString(i), Integer.toString(j));
-                        }
+                            for (int j = i + 1; j < 13; j++) {
+                                if (j < 4 || j == 12) {
+                                    addEdge(Integer.toString(i), Integer.toString(j));
+                                }
+                            }
 
-                        for (String v2 : liveSet) {
-                            addEdge(Integer.toString(i), v2);
+                            for (String v2 : liveSet) {
+                                addEdge(Integer.toString(i), v2);
+                            }
                         }
                     }
                 }
