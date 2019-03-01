@@ -11,9 +11,9 @@ public class PushInsn extends AbstractInsn {
 
     @Override
     public String toARM() {
-        return "\tpush\t{" + String.join(",",
-                registers.toString().replace("[", "").replace("]",
-                        "")) + "}\n";
+        String s = String.join(", ", registers.toString()).replaceAll("\\[|\\]", "");
+
+        return "\tpush\t{" + s + "}\n";
     }
 
     @Override
