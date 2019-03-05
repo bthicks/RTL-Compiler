@@ -39,6 +39,14 @@ public class MovInsn extends AbstractInsn {
         return target;
     }
 
+    public Value getR1() {
+        return r1;
+    }
+
+    public Value getOperand2() {
+        return operand2;
+    }
+
     @Override
     public List<String> getSources() {
         return sources;

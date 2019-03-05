@@ -7,4 +7,6 @@ public interface Value {
     public void setValue(String value);
 
     public String toString();
+
+    public boolean equals(Object other);
 }
