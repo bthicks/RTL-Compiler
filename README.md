@@ -1,7 +1,7 @@
-# Milestone 2
+# Milestone 3
 
 ## Summary
-Parse RTL into JSON using Python and compile into `ARMv7` assembly using Java.
+Parse RTL into JSON using Python and compile into `ARMv7` assembly using Java. Allocate registers using a graph coloring algorithm.
 
 ## Authors
   - Brian Hicks (bthicks)
