@@ -7,7 +7,6 @@ import java.util.List;
 import cfg.ARMGenerator;
 import cfg.BasicBlock;
 import cfg.CFG;
-import cfg.Optimizations;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -32,7 +31,6 @@ public class Driver {
         //DotGenerator.toDot(filename, cfg);
         ARMGenerator.toARM(program);
         ARMGenerator.allocateRegisters(program);
-//        Optimizations.removeRedundants(program);
         ARMGenerator.writeARM(filename, program);
 
         for (CFG cfg : program) {

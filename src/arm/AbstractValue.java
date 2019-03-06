@@ -17,5 +17,4 @@ public abstract class AbstractValue implements Value {
 
     public abstract String toString();
 
-    public abstract boolean equals(Object o);
 }

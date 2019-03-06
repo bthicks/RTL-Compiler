@@ -82,6 +82,10 @@ public class BasicBlock {
         successors.add(successor);
     }
 
+    public void removeArmInsn(arm.Insn insn) {
+        armInsns.remove(insn);
+    }
+
     public void generateDefAndUseSets() {
         for (arm.Insn insn : armInsns) {
             for (String source : insn.getSources()) {

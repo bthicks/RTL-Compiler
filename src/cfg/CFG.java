@@ -1,9 +1,6 @@
 package cfg;
 
-import arm.ImmediateValue;
-import arm.LdrInsn;
-import arm.RegisterValue;
-import arm.StrInsn;
+import arm.*;
 import rtl.Insn;
 
 import java.util.*;
@@ -259,6 +256,7 @@ public class CFG {
 
     public void allocateRegisters() {
         calleeSaved = new LinkedHashSet<>();
+        List<arm.Insn> redundantInsns = new LinkedList<>();
 
         for (BasicBlock basicBlock : basicBlocks) {
             for (arm.Insn insn : basicBlock.getArmInsns()) {
@@ -278,6 +276,21 @@ public class CFG {
                         calleeSaved.add(registerMap.get(source));
                     }
                 }
+
+                // keep track of redundant instructions
+                if (insn instanceof MovInsn) {
+                    target = registerMap.get(target);
+                    String source = registerMap.get(sources.get(0));
+
+                    if (target.equals(source)) {
+                        redundantInsns.add(insn);
+                    }
+                }
+            }
+
+            // remove redundant insns
+            for (arm.Insn insn : redundantInsns) {
+                basicBlock.removeArmInsn(insn);
             }
         }
     }
