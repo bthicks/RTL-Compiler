@@ -278,7 +278,7 @@ public class CFG {
                 }
 
                 // keep track of redundant instructions
-                if (insn instanceof MovInsn) {
+                if (insn instanceof MovInsn && insn.getSources().size() > 0) {
                     target = registerMap.get(target);
                     String source = registerMap.get(sources.get(0));
 
