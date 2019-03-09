@@ -278,20 +278,20 @@ public class CFG {
                 }
 
                 // keep track of redundant instructions
-//                if (insn instanceof MovInsn) {
-//                    target = registerMap.get(target);
-//                    String source = registerMap.get(sources.get(0));
-//
-//                    if (target.equals(source)) {
-//                        redundantInsns.add(insn);
-//                    }
-//                }
+                if (insn instanceof MovInsn && insn.getSources().size() > 0) {
+                    target = registerMap.get(target);
+                    String source = registerMap.get(sources.get(0));
+
+                    if (target.equals(source)) {
+                        redundantInsns.add(insn);
+                    }
+                }
             }
 
             // remove redundant insns
-//            for (arm.Insn insn : redundantInsns) {
-//                basicBlock.removeArmInsn(insn);
-//            }
+            for (arm.Insn insn : redundantInsns) {
+                basicBlock.removeArmInsn(insn);
+            }
         }
     }
 
