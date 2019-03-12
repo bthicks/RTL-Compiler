@@ -36,7 +36,9 @@ public class Driver {
         for (CFG cfg : program) {
             for (BasicBlock basicBlock : cfg.getBasicBlocks()) {
                 System.out.println("Basic Block: " + basicBlock.getLabel());
-                System.out.println((new DAG(basicBlock)).toString());
+                DAG dag = new DAG(basicBlock);
+                System.out.println(dag.toString());
+                basicBlock.setArmInsns(dag.topographicalSort());
             }
         }
 
