@@ -7,35 +7,66 @@ import java.util.*;
 
 public class DAG {
     private Set<Node> dag;
+    private arm.Insn label;
 
     public DAG(BasicBlock basicBlock) {
         this.dag = new HashSet<>();
+
+        if (basicBlock.getArmInsns().size() > 0) {
+            this.label = basicBlock.getArmInsns().remove(0);
+        }
+
         Map<String, Node> defs = new HashMap<>();
+        Map<String, Node> uses = new HashMap<>();
 
         for (arm.Insn insn : basicBlock.getArmInsns()) {
             Node node = new Node(insn, new HashMap<>(), new HashMap<>());
 
-            if (insn instanceof BInsn) {
+            System.out.println("UID: " + insn.getUid() + " --- defs: " + defs);
+
+            if (insn instanceof BInsn && ((BInsn) insn).getCondition().equals("l")) {
                 for (int i = 0; i < 4; i++) {
                     String source = Integer.toString(i);
                     if (defs.containsKey(source)) {
                         int weight = defs.get(source).insn instanceof LdrInsn ? 3 : 1;
                         node.addPredecessor(defs.get(source), weight);
                         defs.get(source).addSuccessor(node, weight);
+
+                    }
+                    if (uses.containsKey(insn.getTarget())) {
+                        int weight = 0;
+                        node.addPredecessor(uses.get(insn.getTarget()), weight);
+                        uses.get(insn.getTarget()).addSuccessor(node, weight);
                     }
                 }
 
+                for (int i = 0; i < 4; i++) {
+                    uses.put(Integer.toString(i), node);
+                }
+
                 defs.put("0", node);
+                uses.remove("0");
             } else {
                 for (String source : insn.getSources()) {
                     if (defs.containsKey(source)) {
                         int weight = defs.get(source).insn instanceof LdrInsn ? 3 : 1;
                         node.addPredecessor(defs.get(source), weight);
                         defs.get(source).addSuccessor(node, weight);
+
+                    }
+                    if (uses.containsKey(insn.getTarget())) {
+                        int weight = 0;
+                        node.addPredecessor(uses.get(insn.getTarget()), weight);
+                        uses.get(insn.getTarget()).addSuccessor(node, weight);
                     }
                 }
 
+                for (String source : insn.getSources()) {
+                    uses.put(source, node);
+                }
+
                 defs.put(insn.getTarget(), node);
+                uses.remove(insn.getTarget());
             }
 
             this.dag.add(node);
@@ -46,6 +77,10 @@ public class DAG {
         Queue<Node> readyList = new PriorityQueue<>();
         List<arm.Insn> schedule = new LinkedList<>();
 
+        if (label != null) {
+            schedule.add(label);
+        }
+
         for (Node node : dag) {
             if (node.predecessors.isEmpty()) {
                 readyList.add(node);
@@ -53,13 +88,16 @@ public class DAG {
         }
 
         for (Node node : readyList) {
-            for (Node successor : node.successors.keySet()) {
-                successor.removePredesessor(node);
-            }
             dag.remove(node);
         }
+
         while (!readyList.isEmpty()) {
-            schedule.add(readyList.remove().insn);
+            Node scheduled = readyList.remove();
+            for (Node successor : scheduled.successors.keySet()) {
+                successor.removePredesessor(scheduled);
+            }
+
+            schedule.add(scheduled.insn);
 
             for (Node node : dag) {
                 if (node.predecessors.isEmpty()) {
@@ -68,9 +106,6 @@ public class DAG {
             }
 
             for (Node node : readyList) {
-                for (Node successor : node.successors.keySet()) {
-                    successor.removePredesessor(node);
-                }
                 dag.remove(node);
             }
         }

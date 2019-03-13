@@ -31,6 +31,10 @@ public class BInsn extends AbstractInsn {
         return condition;
     }
 
+    public boolean isConditional() {
+        return !condition.equals("");
+    }
+
 //    @Override
 //    public List<String> getSources() {
 //        return sources;
