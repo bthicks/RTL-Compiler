@@ -41,6 +41,15 @@ public class ARMGenerator {
         }
     }
 
+    public static void scheduleInsns(List<CFG> program) {
+        for (CFG cfg : program) {
+            for (BasicBlock basicBlock : cfg.getBasicBlocks()) {
+                System.out.println("Basic Block: " + basicBlock.getLabel());
+                System.out.println((new DAG(basicBlock)).toString());
+            }
+        }
+    }
+
     // write ARM insns in CFG to .s file
     public static void writeARM(String filename, List<CFG> program) {
         filename = filename.replace(".json", ".s");

@@ -32,14 +32,7 @@ public class Driver {
         //DotGenerator.toDot(filename, cfg);
         ARMGenerator.toARM(program);
         ARMGenerator.allocateRegisters(program);
-
-        for (CFG cfg : program) {
-            for (BasicBlock basicBlock : cfg.getBasicBlocks()) {
-                System.out.println("Basic Block: " + basicBlock.getLabel());
-                System.out.println((new DAG(basicBlock)).toString());
-            }
-        }
-
+        ARMGenerator.scheduleInsns(program);
         ARMGenerator.writeARM(filename, program);
 
         for (CFG cfg : program) {
