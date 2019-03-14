@@ -26,6 +26,10 @@ public class LdrInsn extends AbstractInsn {
         }
     }
 
+    public String getAddress() {
+        return "sp" + offset.toString();
+    }
+
     @Override
     public String toARM() {
         if (offset instanceof RegisterValue) {

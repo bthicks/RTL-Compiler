@@ -1,7 +1,6 @@
 package cfg;
 
-import arm.BInsn;
-import arm.LdrInsn;
+import arm.*;
 
 import java.util.*;
 
@@ -17,12 +16,38 @@ public class DAG {
         }
 
         Map<String, Node> defs = new HashMap<>();
+        Set<Node> changesConditions = new HashSet<>();
         Map<String, Node> uses = new HashMap<>();
 
         for (arm.Insn insn : basicBlock.getArmInsns()) {
             Node node = new Node(insn, new HashMap<>(), new HashMap<>());
 
             System.out.println("UID: " + insn.getUid() + " --- defs: " + defs);
+            System.out.println("UID: " + insn.getUid() + " --- uses: " + uses);
+
+            if (insn instanceof CmpInsn || (insn instanceof BInsn && ((BInsn) insn).getCondition() != null && !((BInsn) insn).getCondition().equals("l"))) {
+                for (Node conditionChanger : changesConditions) {
+                    node.addPredecessor(conditionChanger, 0);
+                    conditionChanger.addSuccessor(node, 0);
+                }
+            }
+
+            if (insn instanceof StrInsn) {
+                if (uses.containsKey(((StrInsn) insn).getAddress())) {
+                    node.addPredecessor(uses.get(((StrInsn) insn).getAddress()), 0);
+                    uses.get(((StrInsn) insn).getAddress()).addSuccessor(node, 0);
+                    uses.remove(((StrInsn) insn).getAddress());
+                }
+                defs.put(((StrInsn) insn).getAddress(), node);
+            }
+
+            if (insn instanceof LdrInsn) {
+                if (defs.containsKey(((LdrInsn) insn).getAddress())) {
+                    node.addPredecessor(defs.get(((LdrInsn) insn).getAddress()), 0);
+                    defs.get(((LdrInsn) insn).getAddress()).addSuccessor(node, 0);
+                }
+                uses.put(((LdrInsn) insn).getAddress(), node);
+            }
 
             if (insn instanceof BInsn && ((BInsn) insn).getCondition().equals("l")) {
                 for (int i = 0; i < 4; i++) {
@@ -33,19 +58,18 @@ public class DAG {
                         defs.get(source).addSuccessor(node, weight);
 
                     }
-                    if (uses.containsKey(insn.getTarget())) {
+
+                    if (uses.containsKey(source)) {
                         int weight = 0;
-                        node.addPredecessor(uses.get(insn.getTarget()), weight);
-                        uses.get(insn.getTarget()).addSuccessor(node, weight);
+                        node.addPredecessor(uses.get(source), weight);
+                        uses.get(source).addSuccessor(node, weight);
                     }
                 }
 
                 for (int i = 0; i < 4; i++) {
                     uses.put(Integer.toString(i), node);
+                    defs.put(Integer.toString(i), node);
                 }
-
-                defs.put("0", node);
-                uses.remove("0");
             } else {
                 for (String source : insn.getSources()) {
                     if (defs.containsKey(source)) {
@@ -67,6 +91,10 @@ public class DAG {
 
                 defs.put(insn.getTarget(), node);
                 uses.remove(insn.getTarget());
+            }
+
+            if (insn instanceof MovInsn || insn instanceof AddInsn || insn instanceof SubInsn || insn instanceof CmpInsn) {
+                changesConditions.add(node);
             }
 
             this.dag.add(node);

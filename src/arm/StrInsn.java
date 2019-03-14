@@ -22,6 +22,10 @@ public class StrInsn extends AbstractInsn {
         }
     }
 
+    public String getAddress() {
+        return "sp" + address.toString();
+    }
+
     @Override
     public String toARM() {
         if (address instanceof ImmediateValue) {
