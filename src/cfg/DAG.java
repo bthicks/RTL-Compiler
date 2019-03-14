@@ -8,7 +8,7 @@ public class DAG {
     private Set<Node> dag;
     private arm.Insn label;
 
-    public DAG(BasicBlock basicBlock) {
+    DAG(BasicBlock basicBlock) {
         this.dag = new HashSet<>();
 
         if (basicBlock.getArmInsns().size() > 0) {
@@ -78,11 +78,16 @@ public class DAG {
                         defs.get(source).addSuccessor(node, weight);
 
                     }
-                    if (uses.containsKey(insn.getTarget())) {
-                        int weight = 0;
-                        node.addPredecessor(uses.get(insn.getTarget()), weight);
-                        uses.get(insn.getTarget()).addSuccessor(node, weight);
+
+                    if (insn.getUid() == 46) {
+                        System.out.println("USES: " + uses);
                     }
+                }
+
+                if (uses.containsKey(insn.getTarget())) {
+                    int weight = 0;
+                    node.addPredecessor(uses.get(insn.getTarget()), weight);
+                    uses.get(insn.getTarget()).addSuccessor(node, weight);
                 }
 
                 for (String source : insn.getSources()) {
@@ -101,7 +106,7 @@ public class DAG {
         }
     }
 
-    public List<arm.Insn> topographicalSort() {
+    List<arm.Insn> topographicalSort() {
         Queue<Node> readyList = new PriorityQueue<>();
         List<arm.Insn> schedule = new LinkedList<>();
 
@@ -154,10 +159,6 @@ public class DAG {
         return stringBuilder.toString();
     }
 
-    public Set<Node> getDag() {
-        return dag;
-    }
-
     private class Node implements Comparable<Node> {
         private arm.Insn insn;
         private Map<Node, Integer> predecessors;
@@ -169,19 +170,19 @@ public class DAG {
             this.successors = successors;
         }
 
-        public void removePredesessor(Node insn) {
+        void removePredesessor(Node insn) {
             this.predecessors.remove(insn);
         }
 
-        public void addPredecessor(Node insn, Integer weight) {
+        void addPredecessor(Node insn, Integer weight) {
             this.predecessors.put(insn, weight);
         }
 
-        public void addSuccessor(Node insn, Integer weight) {
+        void addSuccessor(Node insn, Integer weight) {
             this.successors.put(insn, weight);
         }
 
-        public int longestPathToLeaf() {
+        int longestPathToLeaf() {
             int total = 0;
 
             if (successors.isEmpty()) {
@@ -195,7 +196,7 @@ public class DAG {
             return total;
         }
 
-        public int getNumSuccessors() {
+        int getNumSuccessors() {
             return successors.size();
         }
 
